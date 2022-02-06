@@ -422,10 +422,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
-  moveAcceleration: 2
-  moveSpeed: 1
-  rotateAcceleration: 20
-  rotateSpeed: 180
+  moveSpeed: 0.4
+  rotateSpeed: 360
+  reporter: {fileID: 0}
+  colorReporter: {fileID: 0}
   doSpiral: 0
 --- !u!114 &3168876681408605485
 MonoBehaviour:

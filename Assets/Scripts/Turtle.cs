@@ -6,13 +6,11 @@ public class Turtle : MonoBehaviour
 {
     //public float moveTime = 5f;
     public bool logging = false;
-    public float moveAcceleration = 2f;
     public float moveSpeed = 5f;
-    public float rotateAcceleration = 20f;
     public float rotateSpeed = 200f;
 
-    private PositionReporter reporter;
-    private ColorReporter colorReporter;
+    public PositionReporter reporter;
+    public ColorReporter colorReporter;
 
     public bool doSpiral = false;
 
@@ -22,14 +20,7 @@ public class Turtle : MonoBehaviour
         reporter = GetComponent<PositionReporter>();
         colorReporter = GetComponent<ColorReporter>();
         //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
-        if (doSpiral)
-        {
-            StartCoroutine(DoSpiral());
-        }
-        else
-        {
-            StartCoroutine(DoSequence());
-        }
+        StartCoroutine(DoSequence());
     }
 
     private IEnumerator DoSequence()
@@ -37,50 +28,66 @@ public class Turtle : MonoBehaviour
         Debug.Log("Sequence Started!");
         reporter.ScheduleStart();
         yield return null;
-        yield return new WaitForSeconds(4);
-        yield return Move(gameObject, 0.5f, moveSpeed);
-        yield return Turn(gameObject, 80f, rotateSpeed);
-        yield return SetColor(Color.blue);
-        yield return Move(gameObject, 0.6f, moveSpeed);
-        yield return Turn(gameObject, -120f, rotateSpeed);
-        yield return Move(gameObject, 0.4f, moveSpeed);
-        yield return Turn(gameObject, 80f, rotateSpeed);
-        yield return Dive(gameObject, -40f, rotateSpeed);
-        yield return SetColor(Color.green);
-        yield return Move(gameObject, 0.4f, moveSpeed);
-        yield return new WaitForSeconds(4);
-        this.moveSpeed = 2;
-        this.rotateSpeed = 360;
-        yield return DoSpiral();
-        //yield return Turn(gameObject, -120f, rotateSpeed);
-        //yield return Move(gameObject, 5f, moveSpeed);
+        yield return Sequences.DoMain(this);
         reporter.ScheduleStop();
         Debug.Log("Sequence Done!");
-        // TODO repeat sequence button in Unity UI
+        // TODO repeat sequence button in UI
     }
 
-    private IEnumerator DoSpiral()
+    public IEnumerator Td(float distance) {
+        yield return Segment(distance, 0, 90f);
+    }
+
+    public IEnumerator Rd(float distance) {
+        yield return Segment(distance, 90f, 90f);
+    }
+
+    public IEnumerator Ld(float distance) {
+        yield return Segment(distance, -90f, 90f);
+    }
+
+    public IEnumerator Pd(float distance) {
+        yield return Segment(distance, 1800f, 90f);
+    }
+
+    public IEnumerator Segment(float distance, float roll, float turn) {
+        yield return Move(distance);
+        yield return Roll(roll);
+        yield return Turn(turn);
+    }
+
+    public IEnumerator Turn(float angle) {
+        yield return Turn(gameObject, "y", angle, rotateSpeed);
+    }
+
+    public IEnumerator Dive(float angle) {
+        yield return Turn(gameObject, "x", angle, rotateSpeed);
+    }
+
+    public IEnumerator Roll(float angle) {
+        yield return Turn(gameObject, "z", angle, rotateSpeed);
+    }
+
+    public IEnumerator Turn(GameObject objectToMove, string axis, float angle, float speed)
     {
-        Debug.Log("Sequence Started!");
-        reporter.ScheduleStart();
-        yield return null;
-        yield return new WaitForSeconds(4);
-        for (int i = 0; i < 120; i++)
+        if (logging) Debug.Log("start turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
+        // Quaternion start = objectToMove.transform.rotation;
+        Quaternion end;
+        switch (axis)
         {
-            Color lerpedColor = Color.Lerp(Color.blue, Color.green, Mathf.PingPong(Time.time, 1));
-            yield return SetColor(lerpedColor);
-            yield return Move(gameObject, 0.1f, moveSpeed);
-            yield return Turn(gameObject, 5f, rotateSpeed);
-            yield return Dive(gameObject, 5f, rotateSpeed);
+            case "x":
+                end = objectToMove.transform.rotation * Quaternion.Euler(angle, 0f, 0f);
+                break;
+            case "y":
+                end = objectToMove.transform.rotation * Quaternion.Euler(0f, angle, 0f);
+                break;
+            case "z":
+                end = objectToMove.transform.rotation * Quaternion.Euler(0f, 0f, angle);
+                break;
+            default:
+                end = objectToMove.transform.rotation;
+                break;
         }
-        reporter.ScheduleStop();
-        Debug.Log("Sequence Done!");
-    }
-
-    private IEnumerator Turn(GameObject objectToMove, float angle, float speed)
-    {
-        if (logging) Debug.Log("start turn, Y: " + objectToMove.transform.rotation.eulerAngles.y);
-        Quaternion end = objectToMove.transform.rotation * Quaternion.Euler(0f, angle, 0f);
 
         // TODO use acceleration/deceleration 
         while (objectToMove.transform.rotation != end)
@@ -88,60 +95,43 @@ public class Turtle : MonoBehaviour
             objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
-        if (logging) Debug.Log("end turn, Y: " + objectToMove.transform.rotation.eulerAngles.y);
+        if (logging) Debug.Log("end turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         yield return null;
     }
 
-    private IEnumerator Dive(GameObject objectToMove, float angle, float speed)
-    {
-        if (logging) Debug.Log("start dive, X: " + objectToMove.transform.rotation.eulerAngles.x);
-        Quaternion end = objectToMove.transform.rotation * Quaternion.Euler(angle, 0f, 0f);
-
-        // TODO use acceleration/deceleration 
-        while (objectToMove.transform.rotation != end)
-        {
-            objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
-            yield return new WaitForEndOfFrame();
-        }
-        if (logging) Debug.Log("end dive, X: " + objectToMove.transform.rotation.eulerAngles.x);
-        yield return null;
+    public IEnumerator Move(float distance) {
+        yield return Move(gameObject, distance, moveSpeed);
     }
-
-    // TODO roll and dive (combine turn and roll)
 
     public IEnumerator Move(GameObject objectToMove, float distance, float speed)
     {
         if (logging) Debug.Log("start move");
-        
+        Vector3 start = objectToMove.transform.position;
         Vector3 end = objectToMove.transform.position + objectToMove.transform.forward * distance;
+        Vector3 linearPosition = objectToMove.transform.position;
+        float dist = (end - start).sqrMagnitude;
 
-        // TODO use acceleration/deceleration 
         while (objectToMove.transform.position != end)
         {
-            objectToMove.transform.position = Vector3.MoveTowards(objectToMove.transform.position, end, speed * Time.deltaTime);
+            linearPosition = Vector3.MoveTowards(linearPosition, end, speed * Time.deltaTime);
+            float p = 1 - (end - linearPosition).sqrMagnitude / dist;
+            p = EasingFunction.EaseInOutQuart(0f, 1f, p);
+            objectToMove.transform.position = Vector3.Lerp(start, end, p);
             yield return new WaitForEndOfFrame();
         }
         if (logging) Debug.Log("end move");
         
         yield return null;
     }
-
-    //tranform.Translate(Vector3.forward* curSpeed);
- 
-    //curSpeed += acceleration;
- 
-    //if (curSpeed > maxSpeed)
-    //    curSpeed = maxSpeed;
-
-    // TODO and slowing down before stopping?
-
+    public static float easeInOutQuart(float x) {
+            return x < 0.5 ? 8 * x * x * x * x : 1 - Mathf.Pow(-2 * x + 2, 4) / 2;
+    }
 
     public IEnumerator SetColor(Color color)
     {
         colorReporter.SetColor(color);
         yield return null;
     }
-
 
     public IEnumerator MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
     {
