@@ -2,9 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Sequences {
-    public static IEnumerator DoMain(Turtle turtle) {
-        yield return DoBraid(turtle);
+public static class Sequences
+{
+    public static IEnumerator DoMain(Turtle turtle)
+    {
+        yield return DoTarget(turtle);
+    }
+
+    public static IEnumerator DoTarget(Turtle turtle)
+    {
+        yield return new WaitForSeconds(1);
+
+        for (int i = 0; i < 64; i++)
+        {
+            Vector3 target = Random.onUnitSphere;
+            yield return turtle.PointAt(target);
+            yield return turtle.MoveToTarget(target);
+            yield return turtle.SetColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
+        }
     }
 
     public static IEnumerator DoBraid(Turtle turtle)
@@ -16,7 +31,8 @@ public static class Sequences {
         colors[3] = Color.magenta;
         int c = 0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++)
+        {
 
             yield return turtle.Ld(.1f);
             yield return turtle.SetColor(NextColor(colors, ref c));
@@ -48,33 +64,45 @@ public static class Sequences {
         }
     }
 
-    public static Color NextColor(Color[] colors, ref int index) 
+    public static Color NextColor(Color[] colors, ref int index)
     {
-        index ++;
+        index++;
         return index >= colors.Length ? colors[index = 0] : colors[index];
+    }
+
+    public static Color NextColorStep(ref int index, int totalSteps, Color start, Color end)
+    {
+        index++;
+        return Color.Lerp(start, end, (float)index / (float)totalSteps);
     }
 
     public static IEnumerator DoShape(Turtle turtle)
     {
-        for (int i = 0; i < 3; i++) {
+        int c = 0;
+        for (int i = 0; i < 3; i++)
+        {
 
             for (int j = 0; j < 2; j++)
             {
+                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Td(.4f);
             }
 
             for (int j = 0; j < 2; j++)
             {
+                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Ld(.9f);
             }
 
             for (int j = 0; j < 2; j++)
             {
+                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Td(.4f);
             }
 
             for (int j = 0; j < 6; j++)
             {
+                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Rd(.3f);
             }
 

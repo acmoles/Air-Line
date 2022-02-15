@@ -68,7 +68,11 @@ public class Turtle : MonoBehaviour
         yield return Turn(gameObject, "z", angle, rotateSpeed);
     }
 
-    public IEnumerator Turn(GameObject objectToMove, string axis, float angle, float speed)
+    public IEnumerator PointAt(Vector3 target) {
+        yield return Turn(gameObject, "target", 0, rotateSpeed, target);
+    }
+
+    public IEnumerator Turn(GameObject objectToMove, string axis, float angle, float speed, Vector3? target = null)
     {
         if (logging) Debug.Log("start turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         // Quaternion start = objectToMove.transform.rotation;
@@ -83,6 +87,16 @@ public class Turtle : MonoBehaviour
                 break;
             case "z":
                 end = objectToMove.transform.rotation * Quaternion.Euler(0f, 0f, angle);
+                break;
+            case "target":
+                if (target == null)
+                {
+                    Debug.Log("no target");
+                    end = objectToMove.transform.rotation;
+                    break;
+                }
+                Vector3 direction = Vector3.Normalize(target.Value - objectToMove.transform.position);
+                end = Quaternion.LookRotation(direction, objectToMove.transform.up);
                 break;
             default:
                 end = objectToMove.transform.rotation;
@@ -99,7 +113,13 @@ public class Turtle : MonoBehaviour
         yield return null;
     }
 
+
     public IEnumerator Move(float distance) {
+        yield return Move(gameObject, distance, moveSpeed);
+    }
+
+    public IEnumerator MoveToTarget(Vector3 target) {
+        float distance = (target - gameObject.transform.position).magnitude;
         yield return Move(gameObject, distance, moveSpeed);
     }
 
