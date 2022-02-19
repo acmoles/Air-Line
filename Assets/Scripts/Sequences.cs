@@ -6,14 +6,15 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoTarget(turtle);
+        yield return DoSphere(turtle);
     }
+    
 
-    public static IEnumerator DoTarget(Turtle turtle)
+    public static IEnumerator DoSphere(Turtle turtle)
     {
         yield return new WaitForSeconds(1);
-
-        for (int i = 0; i < 64; i++)
+        // 64
+        for (int i = 0; i < 2; i++)
         {
             Vector3 target = Random.onUnitSphere;
             yield return turtle.PointAt(target);

@@ -9,12 +9,14 @@ public class Turtle : MonoBehaviour
     public float moveSpeed = 5f;
     public float rotateSpeed = 200f;
 
+    public WaypointManager waypoints;
+
     public PositionReporter reporter;
     public ColorReporter colorReporter;
 
-    public bool doSpiral = false;
+    private bool isMovingWaypoints = false;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         reporter = GetComponent<PositionReporter>();
@@ -31,44 +33,91 @@ public class Turtle : MonoBehaviour
         yield return Sequences.DoMain(this);
         reporter.ScheduleStop();
         Debug.Log("Sequence Done!");
+
+        isMovingWaypoints = true;
+        if (waypoints != null && waypoints.points.Count > 0)
+        {
+            yield return DoWaypoints();
+        }
+        yield return null;
+        isMovingWaypoints = false;
+
         // TODO repeat sequence button in UI
     }
 
-    public IEnumerator Td(float distance) {
+    public void TriggerWaypoints() {
+        // TODO how to add to waypoints while still drawing them?
+        if (!isMovingWaypoints)
+        {
+            StartCoroutine(DoWaypoints());
+        }
+    }
+
+    private IEnumerator DoWaypoints()
+    {
+        Debug.Log("Waypoints Started!");
+        reporter.ScheduleStart();
+        yield return null;
+        for (int i = 0; i < waypoints.points.Count; i++)
+        {
+            GotoTarget(waypoints.points[i]);
+        }
+        yield return null;
+        reporter.ScheduleStop();
+        Debug.Log("Waypoints Done!");
+    }
+
+    public IEnumerator GotoTarget(Vector3 target)
+    {
+        yield return PointAt(target);
+        yield return MoveToTarget(target);
+        //yield return SetColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
+    }
+
+    public IEnumerator Td(float distance)
+    {
         yield return Segment(distance, 0, 90f);
     }
 
-    public IEnumerator Rd(float distance) {
+    public IEnumerator Rd(float distance)
+    {
         yield return Segment(distance, 90f, 90f);
     }
 
-    public IEnumerator Ld(float distance) {
+    public IEnumerator Ld(float distance)
+    {
         yield return Segment(distance, -90f, 90f);
     }
 
-    public IEnumerator Pd(float distance) {
+    public IEnumerator Pd(float distance)
+    {
         yield return Segment(distance, 1800f, 90f);
     }
 
-    public IEnumerator Segment(float distance, float roll, float turn) {
+    public IEnumerator Segment(float distance, float roll, float turn)
+    {
         yield return Move(distance);
         yield return Roll(roll);
         yield return Turn(turn);
     }
 
-    public IEnumerator Turn(float angle) {
+    public IEnumerator Turn(float angle)
+    {
         yield return Turn(gameObject, "y", angle, rotateSpeed);
     }
 
-    public IEnumerator Dive(float angle) {
+    public IEnumerator Dive(float angle)
+    {
         yield return Turn(gameObject, "x", angle, rotateSpeed);
     }
 
-    public IEnumerator Roll(float angle) {
+    public IEnumerator Roll(float angle)
+    {
         yield return Turn(gameObject, "z", angle, rotateSpeed);
     }
 
-    public IEnumerator PointAt(Vector3 target) {
+    public IEnumerator PointAt(Vector3 target)
+    {
         yield return Turn(gameObject, "target", 0, rotateSpeed, target);
     }
 
@@ -114,11 +163,13 @@ public class Turtle : MonoBehaviour
     }
 
 
-    public IEnumerator Move(float distance) {
+    public IEnumerator Move(float distance)
+    {
         yield return Move(gameObject, distance, moveSpeed);
     }
 
-    public IEnumerator MoveToTarget(Vector3 target) {
+    public IEnumerator MoveToTarget(Vector3 target)
+    {
         float distance = (target - gameObject.transform.position).magnitude;
         yield return Move(gameObject, distance, moveSpeed);
     }
@@ -140,11 +191,12 @@ public class Turtle : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         if (logging) Debug.Log("end move");
-        
+
         yield return null;
     }
-    public static float easeInOutQuart(float x) {
-            return x < 0.5 ? 8 * x * x * x * x : 1 - Mathf.Pow(-2 * x + 2, 4) / 2;
+    public static float easeInOutQuart(float x)
+    {
+        return x < 0.5 ? 8 * x * x * x * x : 1 - Mathf.Pow(-2 * x + 2, 4) / 2;
     }
 
     public IEnumerator SetColor(Color color)
