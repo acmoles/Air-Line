@@ -60,7 +60,12 @@ public class Turtle : MonoBehaviour
         yield return null;
         for (int i = 0; i < waypoints.points.Count; i++)
         {
-            GotoTarget(waypoints.points[i]);
+            if (waypoints.points[i].played)
+            {
+                continue;
+            }
+            yield return GotoTarget(waypoints.points[i].position);
+            waypoints.points[i].SetPlayed();
         }
         yield return null;
         reporter.ScheduleStop();
@@ -69,6 +74,7 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator GotoTarget(Vector3 target)
     {
+        Debug.Log("goto target, " + target);
         yield return PointAt(target);
         yield return MoveToTarget(target);
         //yield return SetColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));

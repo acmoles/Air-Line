@@ -4,6 +4,23 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
+public struct Waypoint {
+    public bool played;
+    public Vector3 position;
+
+    public  Waypoint(Vector3 position)
+    {
+        this.position = position;
+        this.played = false;
+    }
+
+    public void SetPlayed()
+    {
+        this.played = true;
+    }
+}
+
+
 [ExecuteInEditMode]
 public class WaypointManager : MonoBehaviour
 {
@@ -14,35 +31,36 @@ public class WaypointManager : MonoBehaviour
     [SerializeField, HideInInspector]
     bool initialized;
 
-    public List<Vector3> points {
+    public List<Waypoint> points {
         get
         {
             if (_points == null)
             {
-                _points = new List<Vector3>();
+                _points = new List<Waypoint>();
             }
             return _points;
         }
     }
 
     [SerializeField, HideInInspector]
-    List<Vector3> _points;
+    List<Waypoint> _points;
 
-    public Transform[] waypoints;
+    public Transform[] targets;
 
 
     void Start()
     {
-        if (waypoints.Length > 0)
+        if (targets.Length > 0)
         {
             // Do something with list of waypoints
-            for (int i = 0; i < points.Count; i++) {
-                AddPoint(waypoints[i].position);
+            for (int i = 0; i < targets.Length; i++) {
+                AddPoint(targets[i].position);
             }
         }
     }
 
-    public void AddPoint(Vector3 point) {
+    public void AddPoint(Vector3 position) {
+        var point = new Waypoint(position);
         points.Add(point);
         updatedEvent.Trigger("update");
     }
@@ -53,7 +71,7 @@ public class WaypointManager : MonoBehaviour
     void OnDrawGizmos () {
         Gizmos.color = Color.green;
         for (int i = 0; i < points.Count; i++) {
-            Gizmos.DrawWireSphere(points[i], .2f);
+            Gizmos.DrawWireSphere(points[i].position, .2f);
         }
     }
 
