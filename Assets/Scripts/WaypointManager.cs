@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-public struct Waypoint {
+public class Waypoint {
     public bool played;
     public Vector3 position;
 
@@ -12,11 +12,6 @@ public struct Waypoint {
     {
         this.position = position;
         this.played = false;
-    }
-
-    public void SetPlayed()
-    {
-        this.played = true;
     }
 }
 
@@ -69,7 +64,7 @@ public class WaypointManager : MonoBehaviour
 
 #if UNITY_EDITOR
     void OnDrawGizmos () {
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.red;
         for (int i = 0; i < points.Count; i++) {
             Gizmos.DrawWireSphere(points[i].position, .2f);
         }

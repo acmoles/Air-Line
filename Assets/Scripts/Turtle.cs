@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* 
+/////UI events to hook up/////
+
+- Finish line (cap line) (see leap motion finish a line)
+- Restart line (to allow moving without painting)
+- Change radius
+- Change colour
+- Place waypoint
+- Replay sequence (on new line?)
+*/
+
 public class Turtle : MonoBehaviour
 {
     //public float moveTime = 5f;
@@ -31,22 +42,22 @@ public class Turtle : MonoBehaviour
         reporter.ScheduleStart();
         yield return null;
         yield return Sequences.DoMain(this);
-        reporter.ScheduleStop();
-        Debug.Log("Sequence Done!");
 
-        isMovingWaypoints = true;
         if (waypoints != null && waypoints.points.Count > 0)
         {
             yield return DoWaypoints();
         }
         yield return null;
-        isMovingWaypoints = false;
+
+        // Only do this when user finishes the line
+        // TODO make it possible to stop this line and start another
+        // reporter.ScheduleStop();
+        Debug.Log("Sequence Done!");
 
         // TODO repeat sequence button in UI
     }
 
     public void TriggerWaypoints() {
-        // TODO how to add to waypoints while still drawing them?
         if (!isMovingWaypoints)
         {
             StartCoroutine(DoWaypoints());
@@ -56,20 +67,33 @@ public class Turtle : MonoBehaviour
     private IEnumerator DoWaypoints()
     {
         Debug.Log("Waypoints Started!");
-        reporter.ScheduleStart();
+        isMovingWaypoints = true;
         yield return null;
+        yield return NextWaypoint();
+        yield return null;
+        Debug.Log("Waypoints Done!");
+    }
+
+    private IEnumerator NextWaypoint()
+    {
         for (int i = 0; i < waypoints.points.Count; i++)
         {
             if (waypoints.points[i].played)
             {
                 continue;
             }
+            waypoints.points[i].played = true;
             yield return GotoTarget(waypoints.points[i].position);
-            waypoints.points[i].SetPlayed();
+            if (i == waypoints.points.Count - 1)
+            {
+                Debug.Log("No more waypoints to play");
+                isMovingWaypoints = false;
+            } else {
+                Debug.Log("Played a waypoint");
+                yield return NextWaypoint();
+                break;
+            }
         }
-        yield return null;
-        reporter.ScheduleStop();
-        Debug.Log("Waypoints Done!");
     }
 
     public IEnumerator GotoTarget(Vector3 target)
