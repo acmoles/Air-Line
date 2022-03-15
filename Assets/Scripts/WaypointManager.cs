@@ -61,8 +61,6 @@ public class WaypointManager : MonoBehaviour
         updatedEvent.Trigger("update");
     }
 
-//TODO able to add waypoints in-game
-
 #if UNITY_EDITOR
     void OnDrawGizmos () {
         Gizmos.color = Color.red;

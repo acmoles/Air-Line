@@ -15,6 +15,13 @@ public class WaypointManagerEditor : Editor
 		{
 			t.points.Clear();
 		}
+
+        if (GUILayout.Button("Save"))
+		{
+            // Make gameobjects and save to points list
+            // Save between restarts? See object management
+			Debug.Log("noop");
+		}
 	}
     void OnSceneGUI()
     {

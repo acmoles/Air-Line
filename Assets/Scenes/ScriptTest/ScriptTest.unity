@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 685333038}
   - component: {fileID: 685333037}
   - component: {fileID: 685333036}
+  - component: {fileID: 685333039}
   m_Layer: 0
   m_Name: MovingTarget
   m_TagString: Untagged
@@ -396,6 +397,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685333034}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &685333039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685333034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a29a8a9c661ff4b4884a20a3e5df5923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointManager: {fileID: 2084862543}
 --- !u!1 &786177684
 GameObject:
   m_ObjectHideFlags: 0
