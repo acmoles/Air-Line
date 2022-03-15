@@ -47,9 +47,10 @@ public class WaypointManager : MonoBehaviour
     {
         if (targets.Length > 0)
         {
-            // Do something with list of waypoints
             for (int i = 0; i < targets.Length; i++) {
-                AddPoint(targets[i].position);
+                // add to points list without triggering update event
+                var point = new Waypoint(targets[i].position);
+                points.Add(point);
             }
         }
     }
