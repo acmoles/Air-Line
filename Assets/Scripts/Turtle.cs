@@ -19,6 +19,7 @@ public class Turtle : MonoBehaviour
     public bool logging = false;
     public float moveSpeed = 5f;
     public float rotateSpeed = 200f;
+    const float instantRotateSpeed = -1;
 
     public WaypointManager waypoints;
 
@@ -52,6 +53,7 @@ public class Turtle : MonoBehaviour
         // Only do this when user finishes the line
         // TODO make it possible to stop this line and start another
         // reporter.ScheduleStop();
+
         Debug.Log("Sequence Done!");
 
         // TODO repeat sequence button in UI
@@ -101,7 +103,6 @@ public class Turtle : MonoBehaviour
         Debug.Log("goto target, " + target);
         yield return PointAt(target);
         yield return MoveToTarget(target);
-        //yield return SetColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
     }
 
     public IEnumerator Td(float distance)
@@ -182,16 +183,52 @@ public class Turtle : MonoBehaviour
                 break;
         }
 
+        if (speed == instantRotateSpeed)
+        {
+            yield return RotateInstant(objectToMove, end);
+        } else {
+            yield return RotateWithSpeed(objectToMove, end, speed);
+        }
+
+        if (logging) Debug.Log("end turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
+        yield return null;
+    }
+
+    public IEnumerator RotateWithSpeed(GameObject objectToMove, Quaternion end, float speed)
+    {
         // TODO use acceleration/deceleration 
         while (objectToMove.transform.rotation != end)
         {
             objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
-        if (logging) Debug.Log("end turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
-        yield return null;
     }
 
+    public IEnumerator RotateInstant(GameObject objectToMove, Quaternion end)
+    {
+        objectToMove.transform.rotation = end;
+        yield return new WaitForEndOfFrame();
+    }
+
+    public IEnumerator TurnInstant(float angle)
+    {
+        yield return Turn(gameObject, "y", angle, instantRotateSpeed);
+    }
+
+    public IEnumerator DiveInstant(float angle)
+    {
+        yield return Turn(gameObject, "x", angle, instantRotateSpeed);
+    }
+
+    public IEnumerator RollInstant(float angle)
+    {
+        yield return Turn(gameObject, "z", angle, instantRotateSpeed);
+    }
+
+    public IEnumerator PointAtInstant(Vector3 target)
+    {
+        yield return Turn(gameObject, "target", 0, instantRotateSpeed, target);
+    }
 
     public IEnumerator Move(float distance)
     {
@@ -223,10 +260,6 @@ public class Turtle : MonoBehaviour
         if (logging) Debug.Log("end move");
 
         yield return null;
-    }
-    public static float easeInOutQuart(float x)
-    {
-        return x < 0.5 ? 8 * x * x * x * x : 1 - Mathf.Pow(-2 * x + 2, 4) / 2;
     }
 
     public IEnumerator SetColor(Color color)

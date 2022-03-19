@@ -6,7 +6,7 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoSphere(turtle);
+        yield return DoSpiral(turtle);
     }
     
 
@@ -139,7 +139,6 @@ public static class Sequences
     public static IEnumerator DoSpiral(Turtle turtle)
     {
         Debug.Log("Spiral Started!");
-        turtle.reporter.ScheduleStart();
         yield return null;
         yield return new WaitForSeconds(4);
         for (int i = 0; i < 120; i++)
@@ -147,10 +146,9 @@ public static class Sequences
             Color lerpedColor = Color.Lerp(Color.blue, Color.green, Mathf.PingPong(Time.time, 1));
             yield return turtle.SetColor(lerpedColor);
             yield return turtle.Move(0.1f);
-            yield return turtle.Turn(5f);
-            yield return turtle.Dive(5f);
+            yield return turtle.TurnInstant(5f);
+            yield return turtle.DiveInstant(5f);
         }
-        turtle.reporter.ScheduleStop();
         Debug.Log("Spiral Done!");
     }
 }
