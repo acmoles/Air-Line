@@ -21,18 +21,20 @@ public class Turtle : MonoBehaviour
     public float rotateSpeed = 200f;
     const float instantRotateSpeed = -1;
 
-    public WaypointManager waypoints;
+    [SerializeField]
+    private WaypointManager waypoints;
 
-    public PositionReporter reporter;
-    public ColorReporter colorReporter;
+    [SerializeField]
+    private PositionReporter reporter;
+
+    [SerializeField]
+    private StyleReporter styleReporter;
 
     private bool isMovingWaypoints = false;
 
 
     void Start()
     {
-        reporter = GetComponent<PositionReporter>();
-        colorReporter = GetComponent<ColorReporter>();
         //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
         StartCoroutine(DoSequence());
     }
@@ -264,7 +266,13 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator SetColor(Color color)
     {
-        colorReporter.SetColor(color);
+        styleReporter.SetColor(color);
+        yield return null;
+    }
+
+    public IEnumerator SetSize(BrushSize size)
+    {
+        styleReporter.SetBrushSize(size);
         yield return null;
     }
 

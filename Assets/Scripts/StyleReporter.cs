@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColorReporter : Detector
-{
+public enum BrushSize {
+    Small,
+    Medium,
+    Large
+}
 
+public class StyleReporter : Detector
+{
     Color _color = Color.white;
+
+    BrushSize _brushSize = BrushSize.Medium;
 
     protected bool _didChange = false;
     protected bool _shouldChange = false;
@@ -20,7 +27,7 @@ public class ColorReporter : Detector
         }
     }
 
-    public virtual bool ColorChanged
+    public virtual bool StyleChanged
     {
         get
         {
@@ -29,10 +36,26 @@ public class ColorReporter : Detector
         }
     }
 
-    public void SetColor(Color col)
+    public void SetColor(Color color)
     {
         //Debug.Log("Set color");
-        _color = col;
+        _color = color;
+        _shouldChange = true;
+    }
+
+    public BrushSize BrushSize
+    {
+        get
+        {
+            ensureUpToDate();
+            return _brushSize;
+        }
+    }
+
+    public void SetBrushSize(BrushSize size)
+    {
+        //Debug.Log("Set brushsize");
+        _brushSize = size;
         _shouldChange = true;
     }
 
@@ -49,7 +72,6 @@ public class ColorReporter : Detector
 
         if (IsActive)
         {
-
             changeState(false);
             _shouldChange = false;
         }
@@ -61,11 +83,6 @@ public class ColorReporter : Detector
                 _shouldChange = false;
             }
         }
-
-        //if (_shouldChange != _didChange)
-        //{
-        //    Debug.Log("Ensure up to date, shouldChange: " + _shouldChange + ", _didChange: " + _didChange);
-        //}
     }
 
     protected virtual void changeState(bool shouldBeActive)

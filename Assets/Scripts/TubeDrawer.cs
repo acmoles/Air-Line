@@ -5,10 +5,13 @@ using UnityEngine;
 public class TubeDrawer : MonoBehaviour
 { 
     [SerializeField]
-    private PositionReporter[] _positionReporters;
+    private PositionReporter[] PositionReporters;
 
     [SerializeField]
-    private ColorReporter[] _ColorReporters;
+    private StyleReporter styleReporter;
+
+    [SerializeField]
+    private BrushStyles brushStyles;
 
     [SerializeField]
     private Material _material;
@@ -60,21 +63,16 @@ public class TubeDrawer : MonoBehaviour
 
     void Awake()
     {
-        if (_positionReporters.Length == 0)
+        if (PositionReporters.Length == 0)
         {
             Debug.LogWarning("No detectors were specified! TubeDraw can not draw any lines without detectors.");
-        }
-
-        if (_ColorReporters.Length != 0 && _ColorReporters.Length != _positionReporters.Length)
-        {
-            Debug.LogWarning("Needs position reporter and color reporter at same index.");
         }
     }
 
     void Start()
     {
-        _drawStates = new DrawState[_positionReporters.Length];
-        for (int i = 0; i < _positionReporters.Length; i++)
+        _drawStates = new DrawState[PositionReporters.Length];
+        for (int i = 0; i < PositionReporters.Length; i++)
         {
             _drawStates[i] = new DrawState(this);
         }
@@ -82,24 +80,16 @@ public class TubeDrawer : MonoBehaviour
 
     void Update()
     {
-        if (_ColorReporters.Length != 0)
+        if (styleReporter.StyleChanged)
         {
-            for (int i = 0; i < _ColorReporters.Length; i++)
-            {
-                var reporter = _ColorReporters[i];
-                var drawState = _drawStates[i];
-
-                if (reporter.ColorChanged)
-                {
-                    _drawColor = reporter.Color;
-                    //Debug.Log("Color changed: " + _drawColor);
-                }
-            }
+            _drawColor = styleReporter.Color;
+            _drawRadius = brushStyles[(string)styleReporter.BrushSize.ToString()];
+            //Debug.Log("Color changed: " + _drawColor);
         }
 
-        for (int i = 0; i < _positionReporters.Length; i++)
+        for (int i = 0; i < PositionReporters.Length; i++)
         {
-            var reporter = _positionReporters[i];
+            var reporter = PositionReporters[i];
             var drawState = _drawStates[i];
 
             if (reporter.DidStart)
@@ -143,6 +133,7 @@ public class TubeDrawer : MonoBehaviour
         private List<Color> _colors = new List<Color>();
         private List<Color> _smoothColors = new List<Color>();
         private List<float> _radii = new List<float>();
+        private List<float> _modifiedRadii = new List<float>();
 
         private TubeDrawer _parent;
 
@@ -167,6 +158,7 @@ public class TubeDrawer : MonoBehaviour
             _colors.Clear();
             _smoothColors.Clear();
             _radii.Clear();
+            _modifiedRadii.Clear();
 
             // Create empty tube
             _tube = new Tube();
@@ -209,13 +201,13 @@ public class TubeDrawer : MonoBehaviour
 
                 if (_points.Count >= 2)
                 {
-                    UpdateRadii();
+                    ModifyRadii();
                     _tube.Create(
                         _smoothPoints.ToArray(),  // Polyline points
-                        _smoothColors.ToArray(),        // Polyline colors
+                        _smoothColors.ToArray(),  // Polyline colors
                         1f,                       // Decimation (not used currently)
                         1f,                       // Scale (not used currently)
-                        _radii.ToArray(),         // Radius at point
+                        _modifiedRadii.ToArray(),         // Radius at point
                         _parent._drawResolution   // Circle resolution
                     );
                     UpdateMesh();
@@ -279,8 +271,10 @@ public class TubeDrawer : MonoBehaviour
             _mesh.SetNormals(normals);
         }
 
-        float UpdateRadii()
+        private const float WobbleModifier = 0.16f;
+        float ModifyRadii()
         {
+            _modifiedRadii.Clear();
             // Iterate polyline length
             for (int i = 0; i < _radii.Count; i++)
             {
@@ -291,7 +285,7 @@ public class TubeDrawer : MonoBehaviour
                 //Debug.Log("taper amount: " + amount);
 
                 float progress = (float)i / _radii.Count;
-                amount += 0.16f * (Mathf.Cos(progress) * Mathf.Cos(progress * 300f) * Mathf.Cos(progress * 800f));
+                amount += WobbleModifier * (Mathf.Cos(progress) * Mathf.Cos(progress * 300f) * Mathf.Cos(progress * 800f));
                 //Debug.Log("progress: " + progress);
                 //_radii[i] = (1f - Mathf.Pow(Mathf.Abs(progress - 0.5f) * 2f, 2f)) * 0.2f;
 
@@ -301,9 +295,11 @@ public class TubeDrawer : MonoBehaviour
                     amount = 0f;
                 }
 
-                _radii[i] = amount * _parent.DrawRadius;
-                //Debug.Log(_radii[i]);
+                _modifiedRadii.Add(amount * _radii[i]);
+                //Debug.Log(_modifiedRadii[i]);
             }
+
+            // TODO enable dynamic radii along the length of the line
 
 
             return 1f;

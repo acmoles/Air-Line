@@ -6,7 +6,7 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoSpiral(turtle);
+        yield return DoTest(turtle);
     }
     
 
@@ -123,17 +123,20 @@ public static class Sequences
         yield return turtle.Move(0.5f);
         yield return turtle.Turn(80f);
         yield return turtle.SetColor(Color.blue);
+        yield return turtle.SetSize(BrushSize.Large);
         yield return turtle.Move(0.6f);
         yield return turtle.Turn(-120f);
+        yield return turtle.SetSize(BrushSize.Small);
         yield return turtle.Move(0.4f);
         yield return turtle.Turn(80f);
         yield return turtle.Dive(-40f);
         yield return turtle.SetColor(Color.green);
+        yield return turtle.SetSize(BrushSize.Medium);
         yield return turtle.Move(0.4f);
         yield return new WaitForSeconds(4);
-        turtle.moveSpeed = 2;
-        turtle.rotateSpeed = 360;
-        yield return DoSpiral(turtle);
+        // turtle.moveSpeed = 2;
+        // turtle.rotateSpeed = 360;
+        // yield return DoSpiral(turtle);
     }
 
     public static IEnumerator DoSpiral(Turtle turtle)

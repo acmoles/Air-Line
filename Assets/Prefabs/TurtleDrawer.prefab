@@ -266,10 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b58bc88bd2b6b419098fe7a93b4d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _positionReporters:
+  PositionReporters:
   - {fileID: 3168876681408605485}
-  _ColorReporters:
-  - {fileID: 3168876681408605487}
+  styleReporter: {fileID: 3168876681408605487}
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
   _material: {fileID: 2100000, guid: 9983957d1233ab045bfb8c1ec636fa00, type: 2}
   _drawColor: {r: 0.12641507, g: 1, b: 0.7399286, a: 1}
   _drawRadius: 0.02
@@ -426,8 +426,8 @@ MonoBehaviour:
   moveSpeed: 0.4
   rotateSpeed: 360
   waypoints: {fileID: 0}
-  reporter: {fileID: 0}
-  colorReporter: {fileID: 0}
+  reporter: {fileID: 3168876681408605485}
+  styleReporter: {fileID: 3168876681408605487}
 --- !u!114 &3168876681408605485
 MonoBehaviour:
   m_ObjectHideFlags: 0
