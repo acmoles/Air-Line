@@ -9,6 +9,7 @@ public class BrushStyles : ScriptableObject
     public float Small = 0.01f;
     public float Medium = 0.02f;
     public float Large = 0.04f;
+    public float WobbleModifier = 0.16f;
 
 
     // value array

@@ -15,5 +15,16 @@ public class MovingTargetEditor : Editor
 		{
 			t.OnPlace();
 		}
+
+        // TODO able to choose the size and color
+        if (GUILayout.Button("Size"))
+		{
+			t.OnSize();
+		}
+
+        if (GUILayout.Button("Red"))
+		{
+			t.OnColor();
+		}
 	}
 }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecaf4fba5e2a4063af70be577d0b1f4, type: 3}
   m_Name: BrushStyles
   m_EditorClassIdentifier: 
-  small: 0.01
-  medium: 0.02
-  large: 0.04
+  Small: 0.02
+  Medium: 0.04
+  Large: 0.08
+  WobbleModifier: 0.16

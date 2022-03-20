@@ -266,13 +266,13 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator SetColor(Color color)
     {
-        styleReporter.SetColor(color);
+        styleReporter.Color = color;
         yield return null;
     }
 
     public IEnumerator SetSize(BrushSize size)
     {
-        styleReporter.SetBrushSize(size);
+        styleReporter.BrushSize = size;
         yield return null;
     }
 

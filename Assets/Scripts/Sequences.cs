@@ -133,7 +133,7 @@ public static class Sequences
         yield return turtle.SetColor(Color.green);
         yield return turtle.SetSize(BrushSize.Medium);
         yield return turtle.Move(0.4f);
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(1);
         // turtle.moveSpeed = 2;
         // turtle.rotateSpeed = 360;
         // yield return DoSpiral(turtle);

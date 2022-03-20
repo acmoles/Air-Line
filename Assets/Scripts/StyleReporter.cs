@@ -25,22 +25,11 @@ public class StyleReporter : Detector
             ensureUpToDate();
             return _color;
         }
-    }
-
-    public virtual bool StyleChanged
-    {
-        get
+        set
         {
-            ensureUpToDate();
-            return _didChange;
+            _color = value;
+            _shouldChange = true;
         }
-    }
-
-    public void SetColor(Color color)
-    {
-        //Debug.Log("Set color");
-        _color = color;
-        _shouldChange = true;
     }
 
     public BrushSize BrushSize
@@ -50,13 +39,20 @@ public class StyleReporter : Detector
             ensureUpToDate();
             return _brushSize;
         }
+        set
+        {
+            _brushSize = value;
+            _shouldChange = true;
+        }
     }
 
-    public void SetBrushSize(BrushSize size)
+    public virtual bool StyleChanged
     {
-        //Debug.Log("Set brushsize");
-        _brushSize = size;
-        _shouldChange = true;
+        get
+        {
+            ensureUpToDate();
+            return _didChange;
+        }
     }
 
     void ensureUpToDate()

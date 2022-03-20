@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
-  moveSpeed: 0.4
+  moveSpeed: 2
   rotateSpeed: 360
   waypoints: {fileID: 0}
   reporter: {fileID: 3168876681408605485}

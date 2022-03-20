@@ -189,15 +189,16 @@ public class TubeDrawer : MonoBehaviour
             {
                 _smoothPoints.Clear();
                 _smoothColors.Clear();
+                _modifiedRadii.Clear();
 
                 _points.Add(position);
                 _colors.Add(_parent.DrawColor);
+                _radii.Add(_parent.DrawRadius);
 
                 for (int i = 0; i < _points.Count; i++)
                 {
                     AveragePoints(i);
                 }
-                _radii.Add(_parent.DrawRadius);
 
                 if (_points.Count >= 2)
                 {
@@ -223,7 +224,7 @@ public class TubeDrawer : MonoBehaviour
 
         private void UpdateMesh()
         {
-            // Post process end vertices
+            // Post-process end vertices
             for (int i = 0; i < _tube.resolution; i++)
             {
                 // Start vertices
@@ -271,21 +272,21 @@ public class TubeDrawer : MonoBehaviour
             _mesh.SetNormals(normals);
         }
 
-        private const float WobbleModifier = 0.16f;
         float ModifyRadii()
         {
-            _modifiedRadii.Clear();
             // Iterate polyline length
             for (int i = 0; i < _radii.Count; i++)
             {
+                // Tapers
                 float amount = Mathf.Min(Mathf.Min(1f, (float)i / _startTaper), Mathf.Min(1f, (float)(_radii.Count - i - 1) / _endTaper));
                 amount -= 1f;
                 amount *= amount;
                 amount = 1f - amount;
                 //Debug.Log("taper amount: " + amount);
 
+                // Wobble
                 float progress = (float)i / _radii.Count;
-                amount += WobbleModifier * (Mathf.Cos(progress) * Mathf.Cos(progress * 300f) * Mathf.Cos(progress * 800f));
+                amount += _parent.brushStyles.WobbleModifier * (Mathf.Cos(progress) * Mathf.Cos(progress * 300f) * Mathf.Cos(progress * 800f));
                 //Debug.Log("progress: " + progress);
                 //_radii[i] = (1f - Mathf.Pow(Mathf.Abs(progress - 0.5f) * 2f, 2f)) * 0.2f;
 
@@ -295,12 +296,9 @@ public class TubeDrawer : MonoBehaviour
                     amount = 0f;
                 }
 
-                _modifiedRadii.Add(amount * _radii[i]);
+                _modifiedRadii[i] = amount * _modifiedRadii[i];
                 //Debug.Log(_modifiedRadii[i]);
             }
-
-            // TODO enable dynamic radii along the length of the line
-
 
             return 1f;
         }
@@ -312,19 +310,24 @@ public class TubeDrawer : MonoBehaviour
             {
                 _smoothPoints.Add(_points[index]);
                 _smoothColors.Add(_colors[index]);
+                _modifiedRadii.Add(_radii[index]);
                 return;
             }
+
+            Vector3 acumulator = Vector3.zero;
+            Vector3 averageVector;
 
             Color colorAcumulator = Color.black;
             Color averageColor;
 
-            Vector3 acumulator = Vector3.zero;
-            Vector3 averageVector;
+            float radiusAcumulator = 0f;
+            float averageRadius;
 
             for (int i = -1; i < _amountToAverage - 1; i++)
             {
                 acumulator += _points[index + i];
                 colorAcumulator += _colors[index + i];
+                radiusAcumulator += _radii[index + i];
             }
 
             averageVector = acumulator / (float)_amountToAverage;
@@ -332,6 +335,9 @@ public class TubeDrawer : MonoBehaviour
 
             averageColor = colorAcumulator / (float)_amountToAverage;
             _smoothColors.Add(averageColor);
+
+            averageRadius = radiusAcumulator / (float)_amountToAverage;
+            _modifiedRadii.Add(averageRadius);
         }
     }
 }
