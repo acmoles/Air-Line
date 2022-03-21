@@ -14,11 +14,11 @@ public class MovingTarget : MonoBehaviour
         waypointManager.AddPoint(transform.position);
     }
 
-    public void OnSize() {
-        styleReporter.BrushSize = BrushSize.Large;
+    public void OnSize(BrushSize size) {
+        styleReporter.BrushSize = size;
     }
 
-    public void OnColor() {
-        styleReporter.Color = Color.red;
+    public void OnColor(Color color) {
+        styleReporter.Color = color;
     }
 }
