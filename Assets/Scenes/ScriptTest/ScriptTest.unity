@@ -123,18 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &42239654 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3168876681408605487, guid: cd0026b1d95734e4bab31ec3f715b4f7,
-    type: 3}
-  m_PrefabInstance: {fileID: 3168876679778140741}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c3ab88b3075b943ae131282a2890ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &318829679
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,7 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypointManager: {fileID: 2084862543}
-  styleReporter: {fileID: 42239654}
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
 --- !u!1 &786177684
 GameObject:
   m_ObjectHideFlags: 0

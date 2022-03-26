@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum BrushSize
-{
-    Small,
-    Medium,
-    Large
-}
 
-[CreateAssetMenu(fileName = "BrushStyles", menuName = "Utils/BrushStyles")]
-public class BrushStyles : ScriptableObject
+[CreateAssetMenu(fileName = "MovementSettings", menuName = "Utils/MovementSettings")]
+public class MovementSettings : ScriptableObject
 {
     [Header("Global Brush Style")]
 

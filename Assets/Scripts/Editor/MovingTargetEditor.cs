@@ -18,6 +18,20 @@ public class MovingTargetEditor : Editor
 
 		GUILayout.Space(20);
 
+		GUILayout.Label("Toggle brush up/down");
+
+		if (GUILayout.Button("Up"))
+		{
+
+		}
+
+		if (GUILayout.Button("Down"))
+		{
+
+		}
+
+		GUILayout.Space(20);
+
 		GUILayout.Label("Color");
 
         if (GUILayout.Button("Black"))
@@ -78,6 +92,21 @@ public class MovingTargetEditor : Editor
 		if (GUILayout.Button("Small"))
 		{
 			t.OnSize(BrushSize.Small);
+		}
+
+
+		GUILayout.Space(20);
+
+		GUILayout.Label("Toggle follow");
+
+		if (GUILayout.Button("On"))
+		{
+
+		}
+
+		if (GUILayout.Button("Off"))
+		{
+
 		}
 	}
 }

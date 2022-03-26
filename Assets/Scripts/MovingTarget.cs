@@ -8,17 +8,22 @@ public class MovingTarget : MonoBehaviour
     WaypointManager waypointManager;
 
     [SerializeField]
-    StyleReporter styleReporter;
+    BrushStyles brushStyles;
 
     public void OnPlace() {
         waypointManager.AddPoint(transform.position);
     }
 
     public void OnSize(BrushSize size) {
-        styleReporter.BrushSize = size;
+        brushStyles.BrushSize = size;
     }
 
     public void OnColor(Color color) {
-        styleReporter.Color = color;
+        brushStyles.Color = color;
+    }
+
+    public void OnToggleSnap(bool toggle) {
+        //TODO is snapping
+        //where this state?
     }
 }

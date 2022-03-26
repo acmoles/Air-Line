@@ -4,13 +4,14 @@ using UnityEngine;
 
 /* 
 /////UI events to hook up/////
+- Place waypoint
 
-- Finish line (cap line) (see leap motion finish a line)
-- Restart line (to allow moving without painting)
+- Toggle brush up/down (end/start line)
 - Change radius
 - Change colour
-- Place waypoint
 - Replay sequence (on new line?)
+- Follow moving target
+- Change material
 */
 
 public class Turtle : MonoBehaviour
@@ -24,13 +25,36 @@ public class Turtle : MonoBehaviour
     [SerializeField]
     private WaypointManager waypoints;
 
+
     [SerializeField]
     private PositionReporter reporter;
 
     [SerializeField]
-    private StyleReporter styleReporter;
+    private BrushStyles brushStyles;
 
+    private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
+
+    private bool brushDown = false;
+    public bool BrushDown
+    {
+        get
+        {
+            return brushDown;
+        }
+        set
+        {
+            brushDown = value;
+            if (brushDown)
+            {
+                reporter.ScheduleStart();
+            }
+            else
+            {
+                reporter.ScheduleStop();
+            }
+        }
+    }
 
 
     void Start()
@@ -41,31 +65,56 @@ public class Turtle : MonoBehaviour
 
     private IEnumerator DoSequence()
     {
-        Debug.Log("Sequence Started!");
-        reporter.ScheduleStart();
-        yield return null;
-        yield return Sequences.DoMain(this);
+        BrushDown = true;
 
+        yield return null;
+
+        // Do scripted sequence
+        Debug.Log("Sequence Started!");
+        isMovingScripted = true;
+        yield return Sequences.DoMain(this);
+        // Scripted sequence decides whether to stop the line
+        // BrushDown = false;
+        Debug.Log("Sequence Done!");
+        isMovingScripted = false;
+
+        yield return null;
+
+        // Do any waiting waypoints
         if (waypoints != null && waypoints.points.Count > 0)
         {
             yield return DoWaypoints();
         }
+        // User input decides whether to stop the line
+        // BrushDown = false;
+
         yield return null;
-
-        // Only do this when user finishes the line
-        // TODO make it possible to stop this line and start another
-        // reporter.ScheduleStop();
-
-        Debug.Log("Sequence Done!");
-
-        // TODO repeat sequence button in UI
     }
 
-    public void TriggerWaypoints() {
-        if (!isMovingWaypoints)
+    public void OnTriggerWaypoints()
+    {
+        if (!isMovingWaypoints && !isMovingScripted)
         {
             StartCoroutine(DoWaypoints());
         }
+    }
+
+    public void OnToggleFollowMovingTarget()
+    {
+        if (!isMovingWaypoints && !isMovingScripted)
+        {
+            //TODO
+            //Separate component for functionality
+        }
+        else
+        {
+            // set waiting for follow me control
+        }
+    }
+
+    public void OnToggleBrushDown()
+    {
+        BrushDown = !BrushDown;
     }
 
     private IEnumerator DoWaypoints()
@@ -92,7 +141,9 @@ public class Turtle : MonoBehaviour
             {
                 Debug.Log("No more waypoints to play");
                 isMovingWaypoints = false;
-            } else {
+            }
+            else
+            {
                 Debug.Log("Played a waypoint");
                 yield return NextWaypoint();
                 break;
@@ -188,7 +239,9 @@ public class Turtle : MonoBehaviour
         if (speed == instantRotateSpeed)
         {
             yield return RotateInstant(objectToMove, end);
-        } else {
+        }
+        else
+        {
             yield return RotateWithSpeed(objectToMove, end, speed);
         }
 
@@ -266,13 +319,13 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator SetColor(Color color)
     {
-        styleReporter.Color = color;
+        brushStyles.Color = color;
         yield return null;
     }
 
     public IEnumerator SetSize(BrushSize size)
     {
-        styleReporter.BrushSize = size;
+        brushStyles.BrushSize = size;
         yield return null;
     }
 
@@ -291,7 +344,6 @@ public class Turtle : MonoBehaviour
         if (logging) Debug.Log("end move");
     }
 
-    // Update is called once per frame
     void Update()
     {
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + (gameObject.transform.forward * 1f), Color.red);

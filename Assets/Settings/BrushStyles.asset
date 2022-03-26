@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecaf4fba5e2a4063af70be577d0b1f4, type: 3}
   m_Name: BrushStyles
   m_EditorClassIdentifier: 
-  Small: 0.02
-  Medium: 0.04
-  Large: 0.08
-  WobbleModifier: 0.16
+  color: {r: 0.984375, g: 0.015625, b: 1, a: 1}
+  brushSize: 1
+  material: {fileID: 2100000, guid: 9983957d1233ab045bfb8c1ec636fa00, type: 2}
+  small: 0.01
+  medium: 0.02
+  large: 0.04
+  wobbleModifier: 0.16
+  drawResolution: 8
+  minSegmentLength: 0.016
+  startTaper: 3
+  endTaper: 3
+  amountToAverage: 3

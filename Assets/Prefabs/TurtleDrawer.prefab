@@ -266,15 +266,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b58bc88bd2b6b419098fe7a93b4d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PositionReporters:
+  positionReporters:
   - {fileID: 3168876681408605485}
-  styleReporter: {fileID: 3168876681408605487}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
-  _material: {fileID: 2100000, guid: 9983957d1233ab045bfb8c1ec636fa00, type: 2}
-  _drawColor: {r: 0.12641507, g: 1, b: 0.7399286, a: 1}
-  _drawRadius: 0.02
-  _drawResolution: 6
-  _minSegmentLength: 0.016
 --- !u!1 &3168876681385191601
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,9 +375,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3168876681408605484}
   - component: {fileID: 3168876681408605474}
+  - component: {fileID: 4828993302806351537}
   - component: {fileID: 3168876681408605485}
-  - component: {fileID: 3168876681408605487}
   - component: {fileID: 8863005918012922179}
+  - component: {fileID: 1521074267397532643}
+  - component: {fileID: 1748377291955087104}
   m_Layer: 0
   m_Name: Turtle
   m_TagString: Untagged
@@ -424,10 +420,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logging: 0
   moveSpeed: 2
-  rotateSpeed: 360
+  rotateSpeed: 480
   waypoints: {fileID: 0}
   reporter: {fileID: 3168876681408605485}
-  styleReporter: {fileID: 3168876681408605487}
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+--- !u!114 &4828993302806351537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168876681408605475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6de5a66c14cc4cccaaee5b31dc866c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movingTarget: {fileID: 0}
 --- !u!114 &3168876681408605485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,24 +447,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2024a3ae1f6fd8947baa355e3b8027bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeactivate:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3168876681408605487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3168876681408605475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c3ab88b3075b943ae131282a2890ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnActivate:
@@ -482,7 +473,63 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3168876681408605474}
         m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
-        m_MethodName: TriggerWaypoints
+        m_MethodName: OnTriggerWaypoints
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+--- !u!114 &1521074267397532643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168876681408605475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: f9b161f13016a471c874fb0b30e9c7e0, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3168876681408605474}
+        m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
+        m_MethodName: OnToggleFollowMovingTarget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+--- !u!114 &1748377291955087104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168876681408605475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d03792a23f4074ad88381f989b318b32, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3168876681408605474}
+        m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
+        m_MethodName: OnToggleBrushDown
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
