@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c47fb4d0afb534de1b4ea9988d25b167, type: 3}
+  m_Name: MovementSettings
+  m_EditorClassIdentifier: 
+  offset: 0.1
+  offsetMovementThreshhold: 0.01
+  speed: 50
+  speedLimit: 100
+  force: 2
+  restingSpeed: 0.5
+  movingSpeed: 1
+  rotationForce: 1
+  rotationDamp: 0.2
+  hoverFrequency: 1
+  hoverAmount: 0.01

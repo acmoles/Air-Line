@@ -60,7 +60,9 @@ public class Turtle : MonoBehaviour
     void Start()
     {
         //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
-        StartCoroutine(DoSequence());
+        //StartCoroutine(DoSequence());
+
+        BrushDown = true;
     }
 
     private IEnumerator DoSequence()
@@ -105,6 +107,7 @@ public class Turtle : MonoBehaviour
         {
             //TODO
             //Separate component for functionality
+            //Turn off kinematic
         }
         else
         {

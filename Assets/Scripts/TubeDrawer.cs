@@ -11,6 +11,8 @@ public class TubeDrawer : MonoBehaviour
     private BrushStyles brushStyles;
     // TODO future enhancement: array of brushStyles objects for each position reporter
 
+    private bool scheduledRestart = false;
+
     public BrushStyles Styles
     {
         get
@@ -49,6 +51,20 @@ public class TubeDrawer : MonoBehaviour
         {
             var reporter = positionReporters[i];
             var drawState = drawStates[i];
+
+            //Restart line if point maximum is reached
+            if (drawState.points.Count > Styles.maxPoints && !scheduledRestart)
+            {
+                drawState.FinishLine();
+                scheduledRestart = true;
+                break;
+            }
+            if (scheduledRestart)
+            {
+                drawState.BeginNewLine();
+                scheduledRestart = false;
+                break;
+            }
 
             if (reporter.DidStart)
             {
@@ -157,6 +173,7 @@ public class TubeDrawer : MonoBehaviour
                 if (points.Count >= 2)
                 {
                     ModifyRadii();
+                    //ModifyColors();
                     tube.Create(
                         smoothPoints.ToArray(),  // Polyline points
                         smoothColors.ToArray(),  // Polyline colors
@@ -257,6 +274,21 @@ public class TubeDrawer : MonoBehaviour
             return 1f;
         }
 
+        float ModifyColors() {
+            // TODO rainbow-ish look
+            // Iterate polyline length
+            for (int i = 0; i < smoothColors.Count; i++)
+            {
+                // Wobble colors
+                float progress = (float)i / smoothColors.Count;
+                float amount = 1 + parent.brushStyles.wobbleModifier * (Mathf.Cos(progress) * Mathf.Cos(progress * 300f) * Mathf.Cos(progress * 800f));
+
+                smoothColors[i] = amount * smoothColors[i];
+            }
+
+            return 1f;
+        }
+
         void AveragePoints(int index)
         {
             if (index <= parent.brushStyles.startTaper + parent.brushStyles.amountToAverage
@@ -271,27 +303,32 @@ public class TubeDrawer : MonoBehaviour
             Vector3 acumulator = Vector3.zero;
             Vector3 averageVector;
 
+            float radiusAcumulator = 0f;
+            float averageRadius;
+
             Color colorAcumulator = Color.black;
             Color averageColor;
 
-            float radiusAcumulator = 0f;
-            float averageRadius;
 
             for (int i = -1; i < parent.brushStyles.amountToAverage - 1; i++)
             {
                 acumulator += points[index + i];
-                colorAcumulator += colors[index + i];
                 radiusAcumulator += radii[index + i];
+            }
+
+            for (int i = -1; i < parent.brushStyles.amountToAverageColor - 1; i++)
+            {
+                colorAcumulator += colors[index + i];
             }
 
             averageVector = acumulator / (float)parent.brushStyles.amountToAverage;
             smoothPoints.Add(averageVector);
 
-            averageColor = colorAcumulator / (float)parent.brushStyles.amountToAverage;
-            smoothColors.Add(averageColor);
-
             averageRadius = radiusAcumulator / (float)parent.brushStyles.amountToAverage;
             modifiedRadii.Add(averageRadius);
+
+            averageColor = colorAcumulator / (float)parent.brushStyles.amountToAverageColor;
+            smoothColors.Add(averageColor);
         }
     }
 }

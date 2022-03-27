@@ -24,6 +24,7 @@ public class BrushStyles : ScriptableObject
     [SerializeField]
     private Material material;
 
+    // TODO rainbow mode
     public Color Color
     {
         get
@@ -72,12 +73,14 @@ public class BrushStyles : ScriptableObject
     public float wobbleModifier = 0.16f;
     public int drawResolution = 8;
     public float minSegmentLength = 0.1f;
+    public int maxPoints = 40;
 
     [Space(10)]
 
     public int startTaper = 3;
     public int endTaper = 3;
     public int amountToAverage = 3;
+    public int amountToAverageColor = 3;
 
     void OnValidate()
     {

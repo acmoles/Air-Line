@@ -5,24 +5,41 @@ using UnityEngine;
 public class MovingTarget : MonoBehaviour
 {
     [SerializeField]
+    Transform target;
+
+    public Transform Target
+    {
+        get
+        {
+            return target;
+        }
+        set
+        { }
+    }
+
+    [SerializeField]
     WaypointManager waypointManager;
 
     [SerializeField]
     BrushStyles brushStyles;
 
-    public void OnPlace() {
+    public void OnPlace()
+    {
         waypointManager.AddPoint(transform.position);
     }
 
-    public void OnSize(BrushSize size) {
+    public void OnSize(BrushSize size)
+    {
         brushStyles.BrushSize = size;
     }
 
-    public void OnColor(Color color) {
+    public void OnColor(Color color)
+    {
         brushStyles.Color = color;
     }
 
-    public void OnToggleSnap(bool toggle) {
+    public void OnToggleSnap(bool toggle)
+    {
         //TODO is snapping
         //where this state?
     }
