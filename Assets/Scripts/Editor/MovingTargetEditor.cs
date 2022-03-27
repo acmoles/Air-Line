@@ -20,14 +20,14 @@ public class MovingTargetEditor : Editor
 
 		GUILayout.Label("Toggle brush up/down");
 
-		if (GUILayout.Button("Up"))
+		if (GUILayout.Button(BrushUpDownState.Up.ToString()))
 		{
-
+			t.OnToggleBrushUpDown(BrushUpDownState.Up.ToString());
 		}
 
-		if (GUILayout.Button("Down"))
+		if (GUILayout.Button(BrushUpDownState.Down.ToString()))
 		{
-
+			t.OnToggleBrushUpDown(BrushUpDownState.Down.ToString());
 		}
 
 		GUILayout.Space(20);
@@ -99,14 +99,14 @@ public class MovingTargetEditor : Editor
 
 		GUILayout.Label("Toggle follow");
 
-		if (GUILayout.Button("On"))
+		if (GUILayout.Button(FollowMeState.On.ToString()))
 		{
-
+			t.OnToggleFollowMe(FollowMeState.On.ToString());
 		}
 
-		if (GUILayout.Button("Off"))
+		if (GUILayout.Button(FollowMeState.Off.ToString()))
 		{
-
+			t.OnToggleFollowMe(FollowMeState.Off.ToString());
 		}
 	}
 }

@@ -9,14 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c47fb4d0afb534de1b4ea9988d25b167, type: 3}
-  m_Name: MovementSettings
+  m_Script: {fileID: 11500000, guid: 73297d1ae654d4b639b8fb981f953381, type: 3}
+  m_Name: TurtleSettings
   m_EditorClassIdentifier: 
-  offset: 0.1
-  offsetMovementThreshhold: 0.001
-  speed: 50
-  speedLimit: 100
-  force: 1.5
-  rotateSpeed: 0.5
-  hoverFrequency: 1
-  hoverAmount: 0.01
+  moveSpeed: 5
+  rotateSpeed: 200

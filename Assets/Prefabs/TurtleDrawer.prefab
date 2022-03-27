@@ -420,9 +420,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
-  moveSpeed: 2
-  rotateSpeed: 480
+  settings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
   waypoints: {fileID: 0}
+  followMe: {fileID: 4828993302806351537}
   reporter: {fileID: 3168876681408605485}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
 --- !u!114 &4828993302806351537
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168876681408605475}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6de5a66c14cc4cccaaee5b31dc866c3, type: 3}
   m_Name: 
@@ -553,7 +553,7 @@ Rigidbody:
   m_Drag: 10
   m_AngularDrag: 10
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

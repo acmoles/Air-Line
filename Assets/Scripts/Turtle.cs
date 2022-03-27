@@ -16,15 +16,16 @@ using UnityEngine;
 
 public class Turtle : MonoBehaviour
 {
-    //public float moveTime = 5f;
     public bool logging = false;
-    public float moveSpeed = 5f;
-    public float rotateSpeed = 200f;
-    const float instantRotateSpeed = -1;
 
     [SerializeField]
     private WaypointManager waypoints;
 
+    [SerializeField]
+    private TurtleSettings settings;
+
+    [SerializeField]
+    private FollowMe followMe;
 
     [SerializeField]
     private PositionReporter reporter;
@@ -34,6 +35,7 @@ public class Turtle : MonoBehaviour
 
     private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
+    private bool isWaitingToFreeDraw = false;
 
     private bool brushDown = false;
     public bool BrushDown
@@ -60,23 +62,19 @@ public class Turtle : MonoBehaviour
     void Start()
     {
         //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
-        //StartCoroutine(DoSequence());
-
+        DisableFollowMe();
+        StartCoroutine(DoSequence());
         BrushDown = true;
     }
 
     private IEnumerator DoSequence()
     {
-        BrushDown = true;
-
         yield return null;
 
         // Do scripted sequence
         Debug.Log("Sequence Started!");
         isMovingScripted = true;
         yield return Sequences.DoMain(this);
-        // Scripted sequence decides whether to stop the line
-        // BrushDown = false;
         Debug.Log("Sequence Done!");
         isMovingScripted = false;
 
@@ -87,8 +85,10 @@ public class Turtle : MonoBehaviour
         {
             yield return DoWaypoints();
         }
-        // User input decides whether to stop the line
-        // BrushDown = false;
+        else if (isWaitingToFreeDraw)
+        {
+            EnableFollowMe();
+        }
 
         yield return null;
     }
@@ -101,23 +101,50 @@ public class Turtle : MonoBehaviour
         }
     }
 
-    public void OnToggleFollowMovingTarget()
+    public void OnToggleFollowMovingTarget(string state)
     {
-        if (!isMovingWaypoints && !isMovingScripted)
+        if (state == FollowMeState.On.ToString())
         {
-            //TODO
-            //Separate component for functionality
-            //Turn off kinematic
+            // Toggle on
+            if (!isMovingWaypoints && !isMovingScripted)
+            {
+                EnableFollowMe();
+            }
+            else
+            {
+                // set waiting for follow me control
+                isWaitingToFreeDraw = true;
+            }
         }
-        else
+        else if (state == FollowMeState.Off.ToString())
         {
-            // set waiting for follow me control
+            // Toggle off
+            DisableFollowMe();
         }
     }
 
-    public void OnToggleBrushDown()
+    private void EnableFollowMe()
     {
-        BrushDown = !BrushDown;
+        isWaitingToFreeDraw = false;
+        followMe.enabled = true;
+    }
+
+    private void DisableFollowMe()
+    {
+        followMe.enabled = false;
+    }
+
+    public void OnToggleBrushDown(string state)
+    {
+        if (state == BrushUpDownState.Up.ToString())
+        {
+            BrushDown = false;
+        }
+        else if (state == BrushUpDownState.Down.ToString())
+        {
+            BrushDown = true;
+        }
+        //BrushDown = !BrushDown;
     }
 
     private IEnumerator DoWaypoints()
@@ -128,6 +155,10 @@ public class Turtle : MonoBehaviour
         yield return NextWaypoint();
         yield return null;
         Debug.Log("Waypoints Done!");
+        if (isWaitingToFreeDraw)
+        {
+            EnableFollowMe();
+        }
     }
 
     private IEnumerator NextWaypoint()
@@ -190,22 +221,22 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator Turn(float angle)
     {
-        yield return Turn(gameObject, "y", angle, rotateSpeed);
+        yield return Turn(gameObject, "y", angle, settings.rotateSpeed);
     }
 
     public IEnumerator Dive(float angle)
     {
-        yield return Turn(gameObject, "x", angle, rotateSpeed);
+        yield return Turn(gameObject, "x", angle, settings.rotateSpeed);
     }
 
     public IEnumerator Roll(float angle)
     {
-        yield return Turn(gameObject, "z", angle, rotateSpeed);
+        yield return Turn(gameObject, "z", angle, settings.rotateSpeed);
     }
 
     public IEnumerator PointAt(Vector3 target)
     {
-        yield return Turn(gameObject, "target", 0, rotateSpeed, target);
+        yield return Turn(gameObject, "target", 0, settings.rotateSpeed, target);
     }
 
     public IEnumerator Turn(GameObject objectToMove, string axis, float angle, float speed, Vector3? target = null)
@@ -239,7 +270,7 @@ public class Turtle : MonoBehaviour
                 break;
         }
 
-        if (speed == instantRotateSpeed)
+        if (speed == TurtleSettings.instantRotateSpeed)
         {
             yield return RotateInstant(objectToMove, end);
         }
@@ -270,33 +301,33 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator TurnInstant(float angle)
     {
-        yield return Turn(gameObject, "y", angle, instantRotateSpeed);
+        yield return Turn(gameObject, "y", angle, TurtleSettings.instantRotateSpeed);
     }
 
     public IEnumerator DiveInstant(float angle)
     {
-        yield return Turn(gameObject, "x", angle, instantRotateSpeed);
+        yield return Turn(gameObject, "x", angle, TurtleSettings.instantRotateSpeed);
     }
 
     public IEnumerator RollInstant(float angle)
     {
-        yield return Turn(gameObject, "z", angle, instantRotateSpeed);
+        yield return Turn(gameObject, "z", angle, TurtleSettings.instantRotateSpeed);
     }
 
     public IEnumerator PointAtInstant(Vector3 target)
     {
-        yield return Turn(gameObject, "target", 0, instantRotateSpeed, target);
+        yield return Turn(gameObject, "target", 0, TurtleSettings.instantRotateSpeed, target);
     }
 
     public IEnumerator Move(float distance)
     {
-        yield return Move(gameObject, distance, moveSpeed);
+        yield return Move(gameObject, distance, settings.moveSpeed);
     }
 
     public IEnumerator MoveToTarget(Vector3 target)
     {
         float distance = (target - gameObject.transform.position).magnitude;
-        yield return Move(gameObject, distance, moveSpeed);
+        yield return Move(gameObject, distance, settings.moveSpeed);
     }
 
     public IEnumerator Move(GameObject objectToMove, float distance, float speed)

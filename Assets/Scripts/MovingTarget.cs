@@ -5,6 +5,12 @@ using UnityEngine;
 public class MovingTarget : MonoBehaviour
 {
     [SerializeField]
+    StringEvent onToggleBrushUpDown;
+
+    [SerializeField]
+    StringEvent onToggleFollowMe;
+
+    [SerializeField]
     Transform target;
 
     public Transform Target
@@ -25,7 +31,7 @@ public class MovingTarget : MonoBehaviour
 
     public void OnPlace()
     {
-        waypointManager.AddPoint(transform.position);
+        waypointManager.AddPoint(target.transform.position);
     }
 
     public void OnSize(BrushSize size)
@@ -38,9 +44,14 @@ public class MovingTarget : MonoBehaviour
         brushStyles.Color = color;
     }
 
-    public void OnToggleSnap(bool toggle)
+    public void OnToggleFollowMe(string toggle)
     {
         //TODO is snapping
         //where this state?
+    }
+
+    public void OnToggleBrushUpDown(string toggle)
+    {
+        onToggleBrushUpDown.Trigger(toggle);
     }
 }

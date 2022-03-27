@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public enum FollowMeState
+{
+    On,
+    Off
+}
 
 [CreateAssetMenu(fileName = "MovementSettings", menuName = "Utils/MovementSettings")]
 public class MovementSettings : ScriptableObject

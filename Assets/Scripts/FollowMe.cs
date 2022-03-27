@@ -17,7 +17,7 @@ public class FollowMe : MonoBehaviour
     private Rigidbody turtleRigidbody = null;
 
     private Vector3 targetPosition = Vector3.zero;
-    public Transform targetRotationTransform;
+
     private Quaternion targetRotation;
 
     private void Start()
@@ -28,6 +28,11 @@ public class FollowMe : MonoBehaviour
     private void OnEnable()
     {
         CheckReferences();
+        turtleRigidbody.isKinematic = false;
+    }
+
+    private void OnDisable() {
+        turtleRigidbody.isKinematic = true;
     }
 
     private void CheckReferences()
