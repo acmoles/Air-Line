@@ -72,10 +72,10 @@ public class Turtle : MonoBehaviour
         yield return null;
 
         // Do scripted sequence
-        Debug.Log("Sequence Started!");
+        if (logging) Debug.Log("Sequence Started!");
         isMovingScripted = true;
         yield return Sequences.DoMain(this);
-        Debug.Log("Sequence Done!");
+        if (logging) Debug.Log("Sequence Done!");
         isMovingScripted = false;
 
         yield return null;
@@ -103,22 +103,24 @@ public class Turtle : MonoBehaviour
 
     public void OnToggleFollowMovingTarget(string state)
     {
+        if (logging) Debug.Log("State: " + state);
         if (state == FollowMeState.On.ToString())
         {
             // Toggle on
             if (!isMovingWaypoints && !isMovingScripted)
             {
+                if (logging) Debug.Log("Enable follow me");
                 EnableFollowMe();
             }
             else
             {
-                // set waiting for follow me control
+                if (logging) Debug.Log("Set waiting for follow me control");
                 isWaitingToFreeDraw = true;
             }
         }
         else if (state == FollowMeState.Off.ToString())
         {
-            // Toggle off
+            if (logging) Debug.Log("Disable follow me");
             DisableFollowMe();
         }
     }
@@ -136,12 +138,15 @@ public class Turtle : MonoBehaviour
 
     public void OnToggleBrushDown(string state)
     {
+        if (logging) Debug.Log("State: " + state);
         if (state == BrushUpDownState.Up.ToString())
         {
+            if (logging) Debug.Log("Set brush up");
             BrushDown = false;
         }
         else if (state == BrushUpDownState.Down.ToString())
         {
+            if (logging) Debug.Log("Set brush down");
             BrushDown = true;
         }
         //BrushDown = !BrushDown;
@@ -149,12 +154,12 @@ public class Turtle : MonoBehaviour
 
     private IEnumerator DoWaypoints()
     {
-        Debug.Log("Waypoints Started!");
+        if (logging) Debug.Log("Waypoints Started!");
         isMovingWaypoints = true;
         yield return null;
         yield return NextWaypoint();
         yield return null;
-        Debug.Log("Waypoints Done!");
+        if (logging) Debug.Log("Waypoints Done!");
         if (isWaitingToFreeDraw)
         {
             EnableFollowMe();
@@ -173,12 +178,12 @@ public class Turtle : MonoBehaviour
             yield return GotoTarget(waypoints.points[i].position);
             if (i == waypoints.points.Count - 1)
             {
-                Debug.Log("No more waypoints to play");
+                if (logging) Debug.Log("No more waypoints to play");
                 isMovingWaypoints = false;
             }
             else
             {
-                Debug.Log("Played a waypoint");
+                if (logging) Debug.Log("Played a waypoint");
                 yield return NextWaypoint();
                 break;
             }
@@ -187,7 +192,7 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator GotoTarget(Vector3 target)
     {
-        Debug.Log("goto target, " + target);
+        if (logging) Debug.Log("goto target, " + target);
         yield return PointAt(target);
         yield return MoveToTarget(target);
     }

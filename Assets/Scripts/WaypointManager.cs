@@ -56,6 +56,7 @@ public class WaypointManager : MonoBehaviour
     }
 
     public void AddPoint(Vector3 position) {
+        //TODO check if new waypoint is within close threshhold of previous waypoint
         var point = new Waypoint(position);
         points.Add(point);
         updatedEvent.Trigger("update");

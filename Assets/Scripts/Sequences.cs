@@ -6,7 +6,7 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoSphere(turtle);
+        yield return DoTriangle(turtle);
     }
     
 

@@ -420,8 +420,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
-  settings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
   waypoints: {fileID: 0}
+  settings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
   followMe: {fileID: 4828993302806351537}
   reporter: {fileID: 3168876681408605485}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
@@ -484,7 +484,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
 --- !u!114 &1521074267397532643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,7 +504,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3168876681408605474}
         m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
         m_MethodName: OnToggleFollowMovingTarget
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -512,7 +512,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
 --- !u!114 &1748377291955087104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,7 +532,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3168876681408605474}
         m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
         m_MethodName: OnToggleBrushDown
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -540,7 +540,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
 --- !u!54 &7246840244803453968
 Rigidbody:
   m_ObjectHideFlags: 0

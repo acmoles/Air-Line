@@ -46,8 +46,7 @@ public class MovingTarget : MonoBehaviour
 
     public void OnToggleFollowMe(string toggle)
     {
-        //TODO is snapping
-        //where this state?
+        onToggleFollowMe.Trigger(toggle);
     }
 
     public void OnToggleBrushUpDown(string toggle)
