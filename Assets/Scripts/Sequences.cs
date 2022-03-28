@@ -6,9 +6,17 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoTriangle(turtle);
+        yield return DoArc(turtle);
     }
-    
+
+    public static IEnumerator DoArc(Turtle turtle)
+    {
+        yield return new WaitForSeconds(1);
+        Vector3 controlPoint = new Vector3(1.5f, 1.75f, 1f);
+        Vector3 endPoint = new Vector3(0.5f, 2f, 0f);
+        yield return turtle.QuadraticArc(controlPoint, endPoint);
+    }
+
 
     public static IEnumerator DoSphere(Turtle turtle)
     {

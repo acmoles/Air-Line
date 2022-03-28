@@ -197,6 +197,13 @@ public class Turtle : MonoBehaviour
         yield return MoveToTarget(target);
     }
 
+     public IEnumerator GotoTargetTurnInstant(Vector3 target)
+    {
+        if (logging) Debug.Log("goto target, " + target);
+        yield return PointAtInstant(target);
+        yield return MoveToTarget(target);
+    }
+
     public IEnumerator Td(float distance)
     {
         yield return Segment(distance, 0, 90f);
@@ -386,5 +393,15 @@ public class Turtle : MonoBehaviour
     void Update()
     {
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + (gameObject.transform.forward * 1f), Color.red);
+    }
+
+    public IEnumerator QuadraticArc(Vector3 controlPoint, Vector3 endPoint) {
+        Vector3[] points = Arc.GetArc(transform.position, controlPoint, endPoint, settings.arcSegments);
+        for (int i = 0; i < points.Length; i++)
+        {
+            if (logging) Debug.Log("Arc Point: " + points[i]);
+            yield return GotoTargetTurnInstant(points[i]);
+        }
+        yield return null;
     }
 }

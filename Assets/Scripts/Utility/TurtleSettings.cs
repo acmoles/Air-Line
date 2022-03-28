@@ -18,4 +18,5 @@ public class TurtleSettings : ScriptableObject
     public float moveSpeed = 5f;
     public float rotateSpeed = 200f;
     public const float instantRotateSpeed = -1;
+    public int arcSegments = 8;
 }
