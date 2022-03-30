@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73297d1ae654d4b639b8fb981f953381, type: 3}
   m_Name: TurtleSettings
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 1
   rotateSpeed: 480
   arcSegments: 8

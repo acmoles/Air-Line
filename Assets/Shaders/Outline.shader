@@ -10,20 +10,19 @@ Shader "Unlit/Outline"
     }
     SubShader
     {
-        Tags { "Queue" = "Transparent" }
+        Tags { "Queue"="Transparent" "IgnoreProjector"="true" "RenderType"="Transparent" }
         LOD 100
 
         Pass
         {
             Cull Off
             ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha // standard alpha blending
+            Blend SrcAlpha One // additive
+            //OneMinusSrcAlpha // standard alpha blending
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
