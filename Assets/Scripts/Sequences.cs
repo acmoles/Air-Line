@@ -6,7 +6,7 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoArc(turtle);
+        yield return DoBraid(turtle);
     }
 
     public static IEnumerator DoArc(Turtle turtle)
