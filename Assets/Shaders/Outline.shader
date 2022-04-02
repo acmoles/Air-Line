@@ -56,7 +56,6 @@ Shader "Unlit/Outline"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
                 fixed4 col = _Color;
 
                 float3 normal = normalize(i.worldNormal);

@@ -5,9 +5,13 @@ Shader "Custom/VertexColored2"
         _Color ("Color", Color) = (1,1,1,1)
         _Diffuse ("Diffuse", Range(0,1)) = 0.5
         _Glossiness ("Glossiness", Range(0,1)) = 0.5
-        _SpecularAmount ("SpecularAmount", Range(0,2)) = 1.0
+        [HDR]
+        _SpecularColor ("Specular Color", Color) = (1, 1, 1, 1)
+        _SpecularAmount ("SpecularAmount", Range(0,1000)) = 100
+        [HDR]
         _RimColor ("Rim Color", Color) = (0.26,0.19,0.16,0.0)
         _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
+        _RimThreshold("Rim Threshold", Range(0, 1)) = 0.1
         _NoiseAmount ("NoiseAmount", Range(0,1)) = 0.0
     }
     SubShader
@@ -29,37 +33,7 @@ Shader "Custom/VertexColored2"
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
-
-            struct appdata
-            {
-                float4 vertexColor: COLOR; // Vertex color
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
-
-            struct v2f
-            {
-                float4 vertexColor: COLOR; // Vertex color
-                float4 vertex : SV_POSITION;
-                float3 worldNormal : NORMAL;
-                float4 screenPosition : TEXCOORD0;
-                float3 viewDir : TEXCOORD1;
-            };
-
-            uniform fixed4 _Color;
-            uniform float _Diffuse;
-            uniform float _Glossiness;
-            uniform float _SpecularAmount;
-            uniform float _RimPower;
-            uniform float _NoiseAmount;
-
-            // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-            // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-            #pragma instancing_options assumeuniformscaling
-            UNITY_INSTANCING_BUFFER_START(Props)
-                // put more per-instance properties here
-                UNITY_DEFINE_INSTANCED_PROP(float4, _RimColor)
-            UNITY_INSTANCING_BUFFER_END(Props)
+            #include "AutoLight.cginc"
 
             float noise(float2 co)
             {
@@ -80,51 +54,100 @@ Shader "Custom/VertexColored2"
                 );
             }
 
+            float3 blendScreen(float3 base, float3 blend){
+                return 1.0 - (1.0 - base) * (1.0 - blend);
+            }
+
+            struct appdata
+            {
+                float4 vertexColor: COLOR; // Vertex color
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f
+            {
+                float4 vertexColor: COLOR; // Vertex color
+                float4 vertex : SV_POSITION;
+                float3 worldNormal : NORMAL;
+                float4 screenPosition : TEXCOORD0;
+                float3 worldPosition : TEXCOORD1;
+                SHADOW_COORDS(2)
+            };
+
+            uniform fixed4 _Color;
+            uniform float _Diffuse;
+            uniform float _Glossiness;
+            uniform fixed4 _SpecularColor;
+            uniform float _SpecularAmount;
+            uniform float _RimPower;
+            uniform float _RimThreshold;
+            uniform float _NoiseAmount;
+
+            // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
+            // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
+            #pragma instancing_options assumeuniformscaling
+            UNITY_INSTANCING_BUFFER_START(Props)
+                // put more per-instance properties here
+                UNITY_DEFINE_INSTANCED_PROP(float4, _RimColor)
+            UNITY_INSTANCING_BUFFER_END(Props)
+
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.viewDir = WorldSpaceViewDir(v.vertex);
+                o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
                 o.screenPosition = ComputeScreenPos(o.vertex);
                 o.vertexColor = v.vertexColor;
+                TRANSFER_SHADOW(o)
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // Albedo comes from a vertex color or _Color if below alpha cutout threshhold
+                // Albedo comes from a vertex color
                 fixed4 col = i.vertexColor;
 
                 // Lighting
                 float3 normal = normalize(i.worldNormal);
-                float NdotL = dot(_WorldSpaceLightPos0, normal);
-                
-                // Specular
-                float3 viewDir = normalize(i.viewDir);
-                float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
-                float NdotH = dot(normal, halfVector);
-                float specularIntensity = pow(NdotH * _SpecularAmount, _Glossiness * _Glossiness);
-                //float specularIntensitySmooth = smoothstep(0.005, 0.01, specularIntensity);
+                float3 viewDirection = normalize(_WorldSpaceCameraPos - i.worldPosition);
 
-                // Rim lighting
-                half rim = 1.0 - saturate(dot (viewDir, normal));
-                rim = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow (rim, _RimPower);
+                float NdotL = saturate(dot(_WorldSpaceLightPos0, normal));
+                float shadow = SHADOW_ATTENUATION(i);
+                float lightIntensity = NdotL * shadow;
+                float4 light = lightIntensity * _LightColor0;
+
+                // Specular
+                float3 halfVector = normalize(_WorldSpaceLightPos0.xyz + viewDirection);
+                float NdotH = saturate(dot(halfVector, normal));
+                float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _SpecularAmount);
+                float4 specular = specularIntensity * _SpecularColor;
+
+                // Rim lighting light
+                float rimDot = 1.0 - saturate(dot (viewDirection, normal));
+                float rimIntensity = rimDot * pow(NdotL, _RimThreshold);
+                float rimOverlay = 2.0 * pow(rimDot, _RimPower);
+                float rim = 2.0 * UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow (rimIntensity, _RimPower);
 
                 // Noise
                 float2 screenUV = i.screenPosition.xy / i.screenPosition.w;
                 screenUV *= float2(8,6);
                 float n = 0.5 - _NoiseAmount * noise( screenUV );
-                
-                float4 light =  (_Diffuse * NdotL + n) * _LightColor0;
 
+                // Overlay
+                col.rgb = blendOverlay(col.rgb, (light + rimOverlay + n).rgb);
+                col.rgb = blendScreen(col.rgb, (specular + rim).rgb * 2.0);
+                
+                return col;
                 //col.rgb = blendOverlay(col.rgb, light.rgb);
                 //col = col + (specularIntensitySmooth);
 
-                return float4(specularIntensity, specularIntensity, specularIntensity, specularIntensity);
+                //return float4(specularIntensity, specularIntensity, specularIntensity, specularIntensity);
             }
             ENDCG
         }
+        UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
     }
     FallBack "Diffuse"
 }
