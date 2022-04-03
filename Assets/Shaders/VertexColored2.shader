@@ -13,6 +13,9 @@ Shader "Custom/VertexColored2"
         _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
         _RimThreshold("Rim Threshold", Range(0, 1)) = 0.1
         _NoiseAmount ("NoiseAmount", Range(0,1)) = 0.0
+        _DarknessAmount ("DarknessAmount", Range(0,1)) = 0.5
+        _SpecularOverdrive ("SpecularOverdrive", Range(0,5)) = 1.5
+        _RimOverdrive ("RimOverdrive", Range(0,5)) = 2.0
     }
     SubShader
     {
@@ -58,6 +61,14 @@ Shader "Custom/VertexColored2"
                 return 1.0 - (1.0 - base) * (1.0 - blend);
             }
 
+            float3 blendColorBurn(float3 base, float3 blend){
+                return 1.0 - (1.0 - base) / blend;
+            }
+
+            float3 blendColorDodge(float3 base, float3 blend){
+                return base / (1.0 - blend);
+            }
+
             struct appdata
             {
                 float4 vertexColor: COLOR; // Vertex color
@@ -83,6 +94,10 @@ Shader "Custom/VertexColored2"
             uniform float _RimPower;
             uniform float _RimThreshold;
             uniform float _NoiseAmount;
+            uniform float _DarknessAmount;
+            uniform float _SpecularOverdrive;
+            uniform float _RimOverdrive;
+
 
             // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
             // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -127,23 +142,26 @@ Shader "Custom/VertexColored2"
                 // Rim lighting light
                 float rimDot = 1.0 - saturate(dot (viewDirection, normal));
                 float rimIntensity = rimDot * pow(NdotL, _RimThreshold);
-                float rimOverlay = 2.0 * pow(rimDot, _RimPower);
-                float rim = 2.0 * UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow (rimIntensity, _RimPower);
+                float3 rim = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow(rimIntensity, _RimPower);
+
+                float rimInvert = rimDot * pow(1 - NdotL, 1 - _RimThreshold);
+                float3 rimOverlay = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow(rimInvert, _RimPower);
 
                 // Noise
                 float2 screenUV = i.screenPosition.xy / i.screenPosition.w;
                 screenUV *= float2(8,6);
-                float n = 0.5 - _NoiseAmount * noise( screenUV );
+                float n = _NoiseAmount * noise( screenUV );
+                float3 noise = float3(n, n, n);
 
-                // Overlay
-                col.rgb = blendOverlay(col.rgb, (light + rimOverlay + n).rgb);
-                col.rgb = blendScreen(col.rgb, (specular + rim).rgb * 2.0);
+                // Blends
+                col.rgb = col.rgb - _DarknessAmount*(1 - min(col.rgb, light));
+                //col.rgb = blendOverlay(col.rgb, light);
+                col.rgb = col.rgb + (noise - .5 * noise);
+                col.rgb = blendColorDodge(col.rgb, rimOverlay);
+                col.rgb = blendScreen(col.rgb, (_SpecularOverdrive*specular + _RimOverdrive*rim).rgb);
                 
                 return col;
-                //col.rgb = blendOverlay(col.rgb, light.rgb);
-                //col = col + (specularIntensitySmooth);
-
-                //return float4(specularIntensity, specularIntensity, specularIntensity, specularIntensity);
+                //return float4(rimOverlay, 1);
             }
             ENDCG
         }

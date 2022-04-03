@@ -162,7 +162,7 @@ public class TubeDrawer : MonoBehaviour
                 modifiedRadii.Clear();
 
                 points.Add(position);
-                colors.Add(parent.Styles.Color);
+                colors.Add(parent.Styles.CustomColor);
                 radii.Add(parent.Styles[(string)parent.Styles.BrushSize.ToString()]);
             
                 for (int i = 0; i < points.Count; i++)

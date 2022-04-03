@@ -31,7 +31,7 @@ public class MovingTarget : MonoBehaviour
 
     public void OnPlace()
     {
-        waypointManager.AddPoint(target.transform.position);
+        waypointManager.AddPoint(target.transform.position, brushStyles.BrushColor);
     }
 
     public void OnSize(BrushSize size)
@@ -39,9 +39,9 @@ public class MovingTarget : MonoBehaviour
         brushStyles.BrushSize = size;
     }
 
-    public void OnColor(Color color)
+    public void OnColor(BrushColor color)
     {
-        brushStyles.Color = color;
+        brushStyles.BrushColor = color;
     }
 
     public void OnToggleFollowMe(string toggle)

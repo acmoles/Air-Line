@@ -21,14 +21,18 @@ public class SetVertexColors : MonoBehaviour
 
     void OnValidate()
     {
-        SetMeshColors();
+        ValidationUtility.SafeOnValidate(() =>
+        {
+            SetMeshColors();
+        });
     }
 
     void SetMeshColors()
     {
         if (meshFilter)
         {
-            Mesh mesh = meshFilter.sharedMesh;
+            Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;
+            Mesh mesh = meshFilter.mesh = meshCopy;
             Vector3[] vertices = mesh.vertices;
 
             // create new colors array where the colors will be created.

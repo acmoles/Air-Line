@@ -10,13 +10,22 @@ public enum BrushSize
     Large
 }
 
+public enum BrushColor
+{
+    Orange,
+    Purple,
+    Blue,
+    Green
+}
+
 [CreateAssetMenu(fileName = "BrushStyles", menuName = "Utils/BrushStyles")]
 public class BrushStyles : ScriptableObject
 {
     [Header("Global Brush Style")]
 
     [SerializeField]
-    private Color color = Color.white;
+    private BrushColor color = BrushColor.Blue;
+    private Color customColor = Color.white;
 
     [SerializeField]
     private BrushSize brushSize = BrushSize.Medium;
@@ -24,8 +33,7 @@ public class BrushStyles : ScriptableObject
     [SerializeField]
     private Material material;
 
-    // TODO rainbow mode
-    public Color Color
+    public BrushColor BrushColor
     {
         get
         {
@@ -34,6 +42,34 @@ public class BrushStyles : ScriptableObject
         set
         {
             color = value;
+            switch (color)
+            {
+                case BrushColor.Purple:
+                    customColor = purple1;
+                    break;
+                case BrushColor.Blue:
+                    customColor = blue1;
+                    break;
+                case BrushColor.Orange:
+                    customColor = orange1;
+                    break;
+                case BrushColor.Green:
+                    customColor = green1;
+                    break;
+            }
+            // Trigger update event
+        }
+    }
+
+    public Color CustomColor
+    {
+        get
+        {
+            return customColor;
+        }
+        set
+        {
+            customColor = value;
             // Trigger update event
         }
     }
@@ -63,7 +99,7 @@ public class BrushStyles : ScriptableObject
             // Trigger update event
         }
     }
-    
+
 
     [Space(10)]
     [Header("Line Settings")]
@@ -82,6 +118,20 @@ public class BrushStyles : ScriptableObject
     public int amountToAverage = 3;
     public int amountToAverageColor = 3;
 
+    [Space(10)]
+    [Header("Color Settings")]
+    public Color purple1 = Color.blue;
+    public Color purple2 = Color.blue;
+    [Space(10)]
+    public Color blue1 = Color.blue;
+    public Color blue2 = Color.blue;
+    [Space(10)]
+    public Color orange1 = Color.blue;
+    public Color orange2 = Color.blue;
+    [Space(10)]
+    public Color green1 = Color.blue;
+    public Color green2 = Color.blue;
+
     void OnValidate()
     {
         small = Mathf.Max(0, small);
@@ -97,7 +147,9 @@ public class BrushStyles : ScriptableObject
     private float[] val = new float[3];
 
     // Indexer array 
-    private string[] indices = { "Small", "Medium", "Large" };
+    private string[] indices = {
+        "Small", "Medium", "Large"
+    };
 
     public float this[string index]
     {
@@ -107,4 +159,5 @@ public class BrushStyles : ScriptableObject
             return val[Array.IndexOf(indices, index)];
         }
     }
+
 }

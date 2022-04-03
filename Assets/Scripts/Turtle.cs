@@ -175,6 +175,8 @@ public class Turtle : MonoBehaviour
                 continue;
             }
             waypoints.points[i].played = true;
+            waypoints.points[i].next = false;
+            yield return SetColor(waypoints.points[i].color);
             yield return GotoTarget(waypoints.points[i].position);
             if (i == waypoints.points.Count - 1)
             {
@@ -184,6 +186,7 @@ public class Turtle : MonoBehaviour
             else
             {
                 if (logging) Debug.Log("Played a waypoint");
+                waypoints.points[i + 1].next = true;
                 yield return NextWaypoint();
                 break;
             }
@@ -363,9 +366,15 @@ public class Turtle : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator SetColor(Color color)
+    public IEnumerator SetColor(BrushColor color)
     {
-        brushStyles.Color = color;
+        brushStyles.BrushColor = color;
+        yield return null;
+    }
+
+    public IEnumerator SetCustomColor(Color color)
+    {
+        brushStyles.CustomColor = color;
         yield return null;
     }
 

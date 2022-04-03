@@ -26,7 +26,7 @@ public static class Sequences
             Vector3 target = Random.onUnitSphere;
             yield return turtle.PointAt(target);
             yield return turtle.MoveToTarget(target);
-            yield return turtle.SetColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
+            yield return turtle.SetCustomColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
         }
     }
 
@@ -43,31 +43,31 @@ public static class Sequences
         {
 
             yield return turtle.Ld(.1f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
             yield return turtle.Rd(.5f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
 
             for (int j = 0; j < 2; j++)
             {
                 yield return turtle.Rd(.6f);
-                yield return turtle.SetColor(NextColor(colors, ref c));
+                yield return turtle.SetCustomColor(NextColor(colors, ref c));
             }
 
             yield return turtle.Ld(.3f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
             yield return turtle.Rd(.1f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
             yield return turtle.Ld(.5f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
 
             for (int j = 0; j < 2; j++)
             {
                 yield return turtle.Ld(.6f);
-                yield return turtle.SetColor(NextColor(colors, ref c));
+                yield return turtle.SetCustomColor(NextColor(colors, ref c));
             }
 
             yield return turtle.Rd(.3f);
-            yield return turtle.SetColor(NextColor(colors, ref c));
+            yield return turtle.SetCustomColor(NextColor(colors, ref c));
 
         }
     }
@@ -92,25 +92,25 @@ public static class Sequences
 
             for (int j = 0; j < 2; j++)
             {
-                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
+                yield return turtle.SetCustomColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Td(.4f);
             }
 
             for (int j = 0; j < 2; j++)
             {
-                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
+                yield return turtle.SetCustomColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Ld(.9f);
             }
 
             for (int j = 0; j < 2; j++)
             {
-                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
+                yield return turtle.SetCustomColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Td(.4f);
             }
 
             for (int j = 0; j < 6; j++)
             {
-                yield return turtle.SetColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
+                yield return turtle.SetCustomColor(NextColorStep(ref c, 36, Color.cyan, Color.magenta));
                 yield return turtle.Rd(.3f);
             }
 
@@ -129,7 +129,7 @@ public static class Sequences
         yield return new WaitForSeconds(1);
         yield return turtle.Move(0.5f);
         yield return turtle.Turn(80f);
-        yield return turtle.SetColor(Color.blue);
+        yield return turtle.SetColor(BrushColor.Blue);
         yield return turtle.SetSize(BrushSize.Large);
         yield return turtle.Move(0.6f);
         yield return turtle.Turn(-120f);
@@ -137,7 +137,7 @@ public static class Sequences
         yield return turtle.Move(0.4f);
         yield return turtle.Turn(80f);
         yield return turtle.Dive(-40f);
-        yield return turtle.SetColor(Color.green);
+        yield return turtle.SetColor(BrushColor.Green);
         yield return turtle.SetSize(BrushSize.Medium);
         yield return turtle.Move(0.4f);
         yield return new WaitForSeconds(1);
@@ -154,7 +154,7 @@ public static class Sequences
         for (int i = 0; i < 120; i++)
         {
             Color lerpedColor = Color.Lerp(Color.blue, Color.green, Mathf.PingPong(Time.time, 1));
-            yield return turtle.SetColor(lerpedColor);
+            yield return turtle.SetCustomColor(lerpedColor);
             yield return turtle.Move(0.1f);
             yield return turtle.TurnInstant(5f);
             yield return turtle.DiveInstant(5f);

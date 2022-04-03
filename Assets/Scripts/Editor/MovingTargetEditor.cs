@@ -36,44 +36,25 @@ public class MovingTargetEditor : Editor
 
 		GUILayout.Label("Color");
 
-        if (GUILayout.Button("Black"))
+
+        if (GUILayout.Button("Purple"))
 		{
-			t.OnColor(Color.black);
+			t.OnColor(BrushColor.Purple);
 		}
 
-        if (GUILayout.Button("Magenta"))
+        if (GUILayout.Button("Blue"))
 		{
-			t.OnColor(Color.magenta);
+			t.OnColor(BrushColor.Blue);
 		}
 
-        if (GUILayout.Button("Red"))
+		if (GUILayout.Button("Orange"))
 		{
-			t.OnColor(Color.red);
-		}
-
-		if (GUILayout.Button("Cyan"))
-		{
-			t.OnColor(Color.cyan);
-		}
-
-		if (GUILayout.Button("Yellow"))
-		{
-			t.OnColor(Color.yellow);
+			t.OnColor(BrushColor.Orange);
 		}
 
 		if (GUILayout.Button("Green"))
 		{
-			t.OnColor(Color.green);
-		}
-
-		if (GUILayout.Button("Blue"))
-		{
-			t.OnColor(Color.blue);
-		}
-
-		if (GUILayout.Button("White"))
-		{
-			t.OnColor(Color.white);
+			t.OnColor(BrushColor.Green);
 		}
 
 

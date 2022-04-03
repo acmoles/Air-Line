@@ -6,12 +6,17 @@ using UnityEngine;
 
 public class Waypoint {
     public bool played;
+    public bool next;
     public Vector3 position;
 
-    public  Waypoint(Vector3 position)
+    public BrushColor color;
+
+    public  Waypoint(Vector3 position, BrushColor color)
     {
         this.position = position;
         this.played = false;
+        this.next = false;
+        this.color = color;
     }
 }
 
@@ -49,17 +54,18 @@ public class WaypointManager : MonoBehaviour
         {
             for (int i = 0; i < targets.Length; i++) {
                 // add to points list without triggering update event
-                var point = new Waypoint(targets[i].position);
+                var point = new Waypoint(targets[i].position, BrushColor.Orange);
                 points.Add(point);
             }
         }
     }
 
-    public void AddPoint(Vector3 position) {
+    public void AddPoint(Vector3 position, BrushColor color) {
         //TODO check if new waypoint is within close threshhold of previous waypoint
-        var point = new Waypoint(position);
+        var point = new Waypoint(position, color);
         points.Add(point);
         updatedEvent.Trigger("update");
+        //TODO add waypoint visual
     }
 
 #if UNITY_EDITOR
