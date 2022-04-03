@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class SetVertexColors : MonoBehaviour
 {
     [SerializeField]
@@ -13,6 +12,9 @@ public class SetVertexColors : MonoBehaviour
 
     [SerializeField]
     private MeshFilter meshFilter = null;
+
+    [SerializeField]
+    private MeshRenderer meshRenderer = null;
 
     void Start()
     {
@@ -29,11 +31,15 @@ public class SetVertexColors : MonoBehaviour
 
     void SetMeshColors()
     {
-        if (meshFilter)
+        if (meshFilter != null)
         {
-            Mesh meshCopy = Mesh.Instantiate(meshFilter.sharedMesh) as Mesh;
-            Mesh mesh = meshFilter.mesh = meshCopy;
-            Vector3[] vertices = mesh.vertices;
+            if (meshFilter.sharedMesh == null || meshRenderer == null)
+            {
+                return;
+            }
+            Mesh meshCopy = new Mesh();
+            meshCopy.vertices = meshFilter.sharedMesh.vertices;
+            Vector3[] vertices = meshCopy.vertices;
 
             // create new colors array where the colors will be created.
             Color[] colors = new Color[vertices.Length];
@@ -41,8 +47,16 @@ public class SetVertexColors : MonoBehaviour
             for (int i = 0; i < vertices.Length; i++)
                 colors[i] = Color.Lerp(color1, color2, vertices[i].y);
 
-            // assign the array of colors to the Mesh.
-            mesh.colors = colors;
+            meshCopy.colors = colors;
+
+            meshRenderer.additionalVertexStreams = meshCopy;
+            meshCopy.UploadMeshData(true);
         }
+    }
+
+    public void SetColors(Color col1, Color col2) {
+        color1 = col1;
+        color2 = col2;
+        SetMeshColors();
     }
 }

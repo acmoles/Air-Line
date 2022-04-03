@@ -5,15 +5,28 @@ using UnityEngine;
 
 public class WaypointVisual : MonoBehaviour
 {
+    public Waypoint waypoint = null;
+
     [SerializeField]
     private BrushStyles brushStyles = null;
 
     [SerializeField]
     private AnimationSettings settings = null;
 
+    [SerializeField]
+    private SetVertexColors pointColor = null;
+
+    [SerializeField]
+    private float scaleModifier = 0.1f;
+
     private float startedTime = 0;
     private bool hasFinished = false;
     private bool animateForward = true;
+
+    public void SetColor(BrushColor color)
+    {
+        pointColor.SetColors(brushStyles.GetPrimary(color), brushStyles.GetSecondary(color));
+    }
 
     public void AnimateIn()
     {
@@ -45,7 +58,7 @@ public class WaypointVisual : MonoBehaviour
             float animationValue = settings.inAnimationCurve.Evaluate(animationProgress);
             if (!hasFinished)
             {
-                transform.localScale = Vector3.one * animationValue;
+                transform.localScale = scaleModifier * Vector3.one * animationValue;
             }
         }
         else
@@ -53,7 +66,7 @@ public class WaypointVisual : MonoBehaviour
             float animationValue = settings.outAnimationCurve.Evaluate(animationProgress);
             if (!hasFinished)
             {
-                transform.localScale = Vector3.one * -animationValue;
+                transform.localScale = scaleModifier * Vector3.one * -animationValue;
             }
         }
 

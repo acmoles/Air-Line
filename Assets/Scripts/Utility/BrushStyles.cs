@@ -26,6 +26,7 @@ public class BrushStyles : ScriptableObject
     [SerializeField]
     private BrushColor color = BrushColor.Blue;
     private Color customColor = Color.white;
+    private Color secondaryColor = Color.white;
 
     [SerializeField]
     private BrushSize brushSize = BrushSize.Medium;
@@ -42,21 +43,8 @@ public class BrushStyles : ScriptableObject
         set
         {
             color = value;
-            switch (color)
-            {
-                case BrushColor.Purple:
-                    customColor = purple1;
-                    break;
-                case BrushColor.Blue:
-                    customColor = blue1;
-                    break;
-                case BrushColor.Orange:
-                    customColor = orange1;
-                    break;
-                case BrushColor.Green:
-                    customColor = green1;
-                    break;
-            }
+            customColor = GetPrimary(value);
+            secondaryColor = GetSecondary(value);
             // Trigger update event
         }
     }
@@ -70,7 +58,15 @@ public class BrushStyles : ScriptableObject
         set
         {
             customColor = value;
+            secondaryColor = value;
             // Trigger update event
+        }
+    }
+    public Color SecondaryColor
+    {
+        get
+        {
+            return secondaryColor;
         }
     }
 
@@ -98,6 +94,40 @@ public class BrushStyles : ScriptableObject
             material = value;
             // Trigger update event
         }
+    }
+
+    private Dictionary<BrushColor, Color> colorTranslatorPrimary;
+    private Dictionary<BrushColor, Color> colorTranslatorSecondary;
+
+    private void OnEnable()
+    {
+        colorTranslatorPrimary = new Dictionary<BrushColor, Color>()
+        {
+            {BrushColor.Purple, purple1},
+            {BrushColor.Blue, blue1},
+            {BrushColor.Orange, orange1},
+            {BrushColor.Green, green1}
+        };
+        colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
+        {
+            {BrushColor.Purple, purple2},
+            {BrushColor.Blue, blue2},
+            {BrushColor.Orange, orange2},
+            {BrushColor.Green, green2}
+        };
+        BrushColor = color;
+    }
+
+    // Getting actual colors for BrushColor
+    public Color GetPrimary(BrushColor color)
+    {
+        if (colorTranslatorPrimary == null) return Color.black;
+        return colorTranslatorPrimary[color];
+    }
+    public Color GetSecondary(BrushColor color)
+    {
+        if (colorTranslatorSecondary == null) return Color.black;
+        return colorTranslatorSecondary[color];
     }
 
 
@@ -140,6 +170,8 @@ public class BrushStyles : ScriptableObject
 
         drawResolution = Mathf.Clamp(drawResolution, 3, 24);
         minSegmentLength = Mathf.Max(0, minSegmentLength);
+
+        BrushColor = color;
     }
 
     // String access to float value from brushsize enum

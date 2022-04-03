@@ -8,7 +8,6 @@ public class Waypoint {
     public bool played;
     public bool next;
     public Vector3 position;
-
     public BrushColor color;
 
     public  Waypoint(Vector3 position, BrushColor color)
@@ -26,6 +25,9 @@ public class WaypointManager : MonoBehaviour
 {
     [SerializeField]
     StringEvent updatedEvent;
+
+    [SerializeField]
+    WaypointVisual waypointVisual;
 
 
     [SerializeField, HideInInspector]
@@ -66,6 +68,9 @@ public class WaypointManager : MonoBehaviour
         points.Add(point);
         updatedEvent.Trigger("update");
         //TODO add waypoint visual
+        WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
+        visual.SetColor(color);
+        visual.AnimateIn();
     }
 
 #if UNITY_EDITOR

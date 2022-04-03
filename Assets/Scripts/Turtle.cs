@@ -166,6 +166,7 @@ public class Turtle : MonoBehaviour
         }
     }
 
+    //TODO played and next affect the waypoint visual
     private IEnumerator NextWaypoint()
     {
         for (int i = 0; i < waypoints.points.Count; i++)
