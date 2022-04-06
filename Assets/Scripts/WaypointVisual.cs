@@ -28,6 +28,7 @@ public class WaypointVisual : MonoBehaviour
         pointColor.SetColors(brushStyles.GetPrimary(color), brushStyles.GetSecondary(color));
     }
 
+    [ContextMenu("Animate in")]
     public void AnimateIn()
     {
         transform.localScale = Vector3.zero;
@@ -36,6 +37,7 @@ public class WaypointVisual : MonoBehaviour
         animateForward = true;
     }
 
+    [ContextMenu("Animate out")]
     public void AnimateOut()
     {
         startedTime = Time.time;

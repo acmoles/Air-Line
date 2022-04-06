@@ -4,22 +4,6 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-public class Waypoint {
-    public bool played;
-    public bool next;
-    public Vector3 position;
-    public BrushColor color;
-
-    public  Waypoint(Vector3 position, BrushColor color)
-    {
-        this.position = position;
-        this.played = false;
-        this.next = false;
-        this.color = color;
-    }
-}
-
-
 [ExecuteInEditMode]
 public class WaypointManager : MonoBehaviour
 {
@@ -67,8 +51,9 @@ public class WaypointManager : MonoBehaviour
         var point = new Waypoint(position, color);
         points.Add(point);
         updatedEvent.Trigger("update");
-        //TODO add waypoint visual
+
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
+        point.visual = visual;
         visual.SetColor(color);
         visual.AnimateIn();
     }
@@ -83,4 +68,28 @@ public class WaypointManager : MonoBehaviour
 
 #endif
 
+}
+
+public class Waypoint {
+    public bool played;
+    public bool next;
+    public Vector3 position;
+    public BrushColor color;
+    public WaypointVisual visual;
+
+    public Waypoint(Vector3 position, BrushColor color)
+    {
+        this.position = position;
+        this.played = false;
+        this.next = false;
+        this.color = color;
+    }
+
+    public void AnimateInVisual() {
+        if(visual != null) visual.AnimateIn();
+    }
+
+    public void AnimateOutVisual() {
+        if(visual != null) visual.AnimateOut();
+    }
 }

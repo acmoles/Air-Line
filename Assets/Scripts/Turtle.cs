@@ -177,6 +177,7 @@ public class Turtle : MonoBehaviour
             }
             waypoints.points[i].played = true;
             waypoints.points[i].next = false;
+            waypoints.points[i].AnimateOutVisual();
             yield return SetColor(waypoints.points[i].color);
             yield return GotoTarget(waypoints.points[i].position);
             if (i == waypoints.points.Count - 1)
@@ -188,6 +189,8 @@ public class Turtle : MonoBehaviour
             {
                 if (logging) Debug.Log("Played a waypoint");
                 waypoints.points[i + 1].next = true;
+                // TODO send highlight to next
+                // OR activate highlight on next
                 yield return NextWaypoint();
                 break;
             }
