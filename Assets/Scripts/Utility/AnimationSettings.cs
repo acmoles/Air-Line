@@ -10,8 +10,11 @@ public class AnimationSettings : ScriptableObject
     [Header("Waypoint animate in")]
     public float delay = 0.4f;
     public float animationDuration = 0.4f;
-    public float finishedThreshold = 0.99f;
-    public AnimationCurve inAnimationCurve;
-    public AnimationCurve outAnimationCurve;
+    public float animationElasticAmp = 1f;
+    public float animationElasticPeriod = 0f;
+
+    [Header("Waypoint animate out")]
+    public float outDelay = 0.4f;
+    public float animationOutDuration = 0.4f;
 
 }

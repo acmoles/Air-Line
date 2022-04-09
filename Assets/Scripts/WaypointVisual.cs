@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class WaypointVisual : MonoBehaviour
 {
@@ -19,9 +20,6 @@ public class WaypointVisual : MonoBehaviour
     [SerializeField]
     private float scaleModifier = 0.1f;
 
-    private float startedTime = 0;
-    private bool hasFinished = false;
-    private bool animateForward = true;
 
     public void SetColor(BrushColor color)
     {
@@ -32,51 +30,20 @@ public class WaypointVisual : MonoBehaviour
     public void AnimateIn()
     {
         transform.localScale = Vector3.zero;
-        startedTime = Time.time;
-        hasFinished = false;
-        animateForward = true;
+        TweenParams tParams = new TweenParams().SetEase(Ease.OutElastic, settings.animationElasticAmp, settings.animationElasticPeriod);
+        DOTween.To(()=> transform.localScale, x=> transform.localScale = x, Vector3.one * scaleModifier, settings.animationDuration).SetAs(tParams);
     }
 
     [ContextMenu("Animate out")]
     public void AnimateOut()
     {
-        startedTime = Time.time;
-        hasFinished = false;
-        animateForward = false;
+        transform.localScale = Vector3.one * scaleModifier;
+        TweenParams tParams = new TweenParams().SetEase(Ease.InBack);
+        DOTween.To(()=> transform.localScale, x=> transform.localScale = x, Vector3.zero, settings.animationOutDuration).SetAs(tParams);
     }
 
     private void Start()
     {
         transform.localScale = Vector3.zero;
-    }
-
-    private void Update()
-    {
-        float currentAnimationTime = Time.time - startedTime - settings.delay;
-        float animationProgress = currentAnimationTime / settings.animationDuration;
-
-        if (animateForward)
-        {
-            float animationValue = settings.inAnimationCurve.Evaluate(animationProgress);
-            if (!hasFinished)
-            {
-                transform.localScale = scaleModifier * Vector3.one * animationValue;
-            }
-        }
-        else
-        {
-            float animationValue = settings.outAnimationCurve.Evaluate(animationProgress);
-            if (!hasFinished)
-            {
-                transform.localScale = scaleModifier * Vector3.one * -animationValue;
-            }
-        }
-
-
-
-        if (animationProgress > settings.finishedThreshold && !hasFinished)
-        {
-            hasFinished = true;
-        }
     }
 }
