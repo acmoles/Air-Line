@@ -55,7 +55,7 @@ public class WaypointManager : MonoBehaviour
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
         point.visual = visual;
         visual.SetColor(color);
-        visual.AnimateIn();
+        point.AnimateInVisual();
     }
 
 #if UNITY_EDITOR
@@ -90,6 +90,7 @@ public class Waypoint {
     }
 
     public void AnimateOutVisual() {
+        Debug.Log("animate out visual");
         if(visual != null) visual.AnimateOut();
     }
 }
