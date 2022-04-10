@@ -78,11 +78,10 @@ public class Turtle : MonoBehaviour
         if (logging) Debug.Log("Sequence Done!");
         isMovingScripted = false;
 
-        yield return null;
-
         // Do any waiting waypoints
         if (waypoints != null && waypoints.points.Count > 0)
         {
+            if (logging) Debug.Log("Sequence done, start waypoints");
             yield return DoWaypoints();
         }
         else if (isWaitingToFreeDraw)
@@ -149,7 +148,6 @@ public class Turtle : MonoBehaviour
             if (logging) Debug.Log("Set brush down");
             BrushDown = true;
         }
-        //BrushDown = !BrushDown;
     }
 
     private IEnumerator DoWaypoints()
@@ -166,7 +164,6 @@ public class Turtle : MonoBehaviour
         }
     }
 
-    //TODO played and next affect the waypoint visual
     private IEnumerator NextWaypoint()
     {
         for (int i = 0; i < waypoints.points.Count; i++)
@@ -177,7 +174,15 @@ public class Turtle : MonoBehaviour
             }
             waypoints.points[i].played = true;
             waypoints.points[i].next = false;
-            waypoints.points[i].AnimateOutVisual();
+            if(waypoints.points[i].visual != null) waypoints.points[i].visual.AnimateOut();
+
+            if (i != waypoints.points.Count - 1)
+            {
+            Waypoint nextWaypoint = waypoints.points[i + 1];
+            nextWaypoint.next = true;
+            if(nextWaypoint.visual != null) nextWaypoint.visual.SetNext(i + 1);
+            }
+
             yield return SetColor(waypoints.points[i].color);
             yield return GotoTarget(waypoints.points[i].position);
             if (i == waypoints.points.Count - 1)
@@ -188,9 +193,6 @@ public class Turtle : MonoBehaviour
             else
             {
                 if (logging) Debug.Log("Played a waypoint");
-                waypoints.points[i + 1].next = true;
-                // TODO send highlight to next
-                // OR activate highlight on next
                 yield return NextWaypoint();
                 break;
             }

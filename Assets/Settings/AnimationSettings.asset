@@ -13,44 +13,13 @@ MonoBehaviour:
   m_Name: AnimationSettings
   m_EditorClassIdentifier: 
   delay: 0.4
-  animationDuration: 0.4
-  finishedThreshold: 0.99
-  inAnimationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1.4308176
-      outSlope: 1.4308176
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.1998697
-    - serializedVersion: 3
-      time: 0.75048894
-      value: 0.9936665
-      inSlope: 1.2466913
-      outSlope: 1.2466913
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.55073965
-      outSlope: 0.55073965
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.617875
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  outAnimationCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  animationDuration: 1.6
+  animationElasticAmp: 0.2
+  animationElasticPeriod: 0.4
+  outDelay: 0.4
+  animationOutDuration: 0.4
+  activeAlpha: 0.4
+  activeIn: 0.4
+  activeInEase: 19
+  activeOut: 0.4
+  activeOutEase: 19

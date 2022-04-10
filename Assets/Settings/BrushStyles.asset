@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecaf4fba5e2a4063af70be577d0b1f4, type: 3}
   m_Name: BrushStyles
   m_EditorClassIdentifier: 
-  color: 2
-  brushSize: 1
+  color: 0
+  brushSize: 0
   material: {fileID: 2100000, guid: d7ab0041ac24d44c3a98e3544979ce9a, type: 2}
   small: 0.01
   medium: 0.02
@@ -26,11 +26,11 @@ MonoBehaviour:
   endTaper: 3
   amountToAverage: 3
   amountToAverageColor: 3
-  purple1: {r: 1, g: 0, b: 0.83533955, a: 1}
-  purple2: {r: 0.63072395, g: 0, b: 1, a: 1}
+  purple1: {r: 0.63529414, g: 0.34901962, b: 1, a: 1}
+  purple2: {r: 0.976716, g: 0.2688679, b: 1, a: 1}
   blue1: {r: 0, g: 0.41960785, b: 1, a: 1}
   blue2: {r: 0.16862746, g: 1, b: 0.015686275, a: 1}
   orange1: {r: 1, g: 0.49019608, b: 0, a: 1}
   orange2: {r: 0.8745098, g: 1, b: 0.015686275, a: 1}
-  green1: {r: 0, g: 1, b: 0.5986471, a: 1}
+  green1: {r: 0, g: 0.9150943, b: 0.4593615, a: 1}
   green2: {r: 0, g: 1, b: 0.2262168, a: 1}

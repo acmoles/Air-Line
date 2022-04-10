@@ -8,16 +8,23 @@ using UnityEngine;
 public class WaypointManager : MonoBehaviour
 {
     [SerializeField]
+    private bool logging = false;
+
+    [SerializeField]
     StringEvent updatedEvent;
 
     [SerializeField]
     WaypointVisual waypointVisual;
 
+    [SerializeField]
+    AnimationSettings animationSettings;
+
 
     [SerializeField, HideInInspector]
     bool initialized;
 
-    public List<Waypoint> points {
+    public List<Waypoint> points
+    {
         get
         {
             if (_points == null)
@@ -38,7 +45,8 @@ public class WaypointManager : MonoBehaviour
     {
         if (targets.Length > 0)
         {
-            for (int i = 0; i < targets.Length; i++) {
+            for (int i = 0; i < targets.Length; i++)
+            {
                 // add to points list without triggering update event
                 var point = new Waypoint(targets[i].position, BrushColor.Orange);
                 points.Add(point);
@@ -46,7 +54,8 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
-    public void AddPoint(Vector3 position, BrushColor color) {
+    public void AddPoint(Vector3 position, BrushColor color)
+    {
         //TODO check if new waypoint is within close threshhold of previous waypoint
         var point = new Waypoint(position, color);
         points.Add(point);
@@ -55,13 +64,20 @@ public class WaypointManager : MonoBehaviour
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
         point.visual = visual;
         visual.SetColor(color);
-        point.AnimateInVisual();
+        if (points[points.Count - 2].played)
+        {
+            if(logging) Debug.Log("New point is active");
+            point.visual.SetNext(points.Count - 1);
+        }
+        point.visual.AnimateIn();
     }
 
 #if UNITY_EDITOR
-    void OnDrawGizmos () {
+    void OnDrawGizmos()
+    {
         Gizmos.color = Color.red;
-        for (int i = 0; i < points.Count; i++) {
+        for (int i = 0; i < points.Count; i++)
+        {
             Gizmos.DrawWireSphere(points[i].position, .2f);
         }
     }
@@ -70,7 +86,8 @@ public class WaypointManager : MonoBehaviour
 
 }
 
-public class Waypoint {
+public class Waypoint
+{
     public bool played;
     public bool next;
     public Vector3 position;
@@ -83,14 +100,5 @@ public class Waypoint {
         this.played = false;
         this.next = false;
         this.color = color;
-    }
-
-    public void AnimateInVisual() {
-        if(visual != null) visual.AnimateIn();
-    }
-
-    public void AnimateOutVisual() {
-        Debug.Log("animate out visual");
-        if(visual != null) visual.AnimateOut();
     }
 }

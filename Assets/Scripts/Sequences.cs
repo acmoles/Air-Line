@@ -6,7 +6,7 @@ public static class Sequences
 {
     public static IEnumerator DoMain(Turtle turtle)
     {
-        yield return DoTriangle(turtle);
+        yield return DoSphere(turtle);
     }
 
     public static IEnumerator DoArc(Turtle turtle)
@@ -20,13 +20,14 @@ public static class Sequences
 
     public static IEnumerator DoSphere(Turtle turtle)
     {
+        const int iterations = 16;
         yield return new WaitForSeconds(1);
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < iterations; i++)
         {
             Vector3 target = Random.onUnitSphere;
             yield return turtle.PointAt(target);
             yield return turtle.MoveToTarget(target);
-            yield return turtle.SetCustomColor(NextColorStep(ref i, 64, Color.cyan, Color.magenta));
+            yield return turtle.SetCustomColor(NextColorStep(ref i, iterations, Color.cyan, Color.magenta));
         }
     }
 

@@ -23,31 +23,40 @@ Shader "Unlit/Outline"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
 
             #include "UnityCG.cginc"
 
             struct appdata
             {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
             };
 
             struct v2f
             {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : SV_POSITION;
                 float3 worldNormal : NORMAL;
                 float3 viewDir : TEXCOORD1;
             };
+      
+            UNITY_INSTANCING_BUFFER_START(Props)
+                UNITY_DEFINE_INSTANCED_PROP(float, _GlobalAlpha)
+            UNITY_INSTANCING_BUFFER_END(Props)
 
             uniform float4 _Color;
             uniform float _RimAmount;
             uniform float _RimSmoothness;
             uniform float _RimThickness;
-            uniform float _GlobalAlpha;
 
             v2f vert (appdata v)
             {
                 v2f o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.viewDir = WorldSpaceViewDir(v.vertex);
@@ -56,6 +65,7 @@ Shader "Unlit/Outline"
 
             fixed4 frag (v2f i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
                 fixed4 col = _Color;
 
                 float3 normal = normalize(i.worldNormal);
@@ -63,12 +73,15 @@ Shader "Unlit/Outline"
 
                 float4 rimDot = 1 - abs(dot(viewDir, normal));
 
-                float rimIntensity = smoothstep(_RimAmount - _RimThickness - _RimSmoothness, _RimAmount - _RimThickness, rimDot) - smoothstep(_RimAmount + _RimThickness, _RimAmount + _RimThickness + _RimSmoothness, rimDot);
-                //TODO smoothstep minus smoothstep
+                float rimInner = smoothstep(_RimAmount - _RimThickness - _RimSmoothness, _RimAmount - _RimThickness, rimDot);
+                float rimOuter = smoothstep(_RimAmount + _RimThickness, _RimAmount + _RimThickness + _RimSmoothness, rimDot);
 
-                float4 output = float4(col.rgb, rimIntensity * _GlobalAlpha);
+                float rimIntensity = rimInner - rimOuter;
+                float innerIntensity = saturate(col.a - rimInner) * UNITY_ACCESS_INSTANCED_PROP(Props, _GlobalAlpha);
+                float combinedAlpha = rimIntensity * UNITY_ACCESS_INSTANCED_PROP(Props, _GlobalAlpha) + innerIntensity;
+
+                float4 output = float4(col.rgb, combinedAlpha);
                 return output;
-                //return col;
             }
             ENDCG
         }
