@@ -1,12 +1,19 @@
+using System;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Sequences
 {
-    public static IEnumerator DoMain(Turtle turtle)
+    public static IEnumerator DoSequence(Turtle turtle, string commandString)
     {
-        yield return DoSphere(turtle);
+        Type thisType = typeof(Sequences);
+        MethodInfo methodInfo = thisType.GetMethod(commandString);
+        //TODO check methodInfo is a valid method
+        ParameterInfo[] parameters = methodInfo.GetParameters();
+        object[] parametersArray = new object[] { turtle };
+        yield return methodInfo.Invoke(null, parametersArray);
     }
 
     public static IEnumerator DoArc(Turtle turtle)
@@ -20,11 +27,11 @@ public static class Sequences
 
     public static IEnumerator DoSphere(Turtle turtle)
     {
-        const int iterations = 16;
+        const int iterations = 32;
         yield return new WaitForSeconds(1);
         for (int i = 0; i < iterations; i++)
         {
-            Vector3 target = Random.onUnitSphere;
+            Vector3 target = UnityEngine.Random.onUnitSphere;
             yield return turtle.PointAt(target);
             yield return turtle.MoveToTarget(target);
             yield return turtle.SetCustomColor(NextColorStep(ref i, iterations, Color.cyan, Color.magenta));

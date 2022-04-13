@@ -58,30 +58,38 @@ public class Turtle : MonoBehaviour
         }
     }
 
-
     void Start()
     {
         //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
         DisableFollowMe();
-        StartCoroutine(DoSequence());
+        StartSequence("Initial");
         BrushDown = true;
     }
 
-    private IEnumerator DoSequence()
+    public void StartSequence(string commandString)
+    {
+        StartCoroutine(DoSequence(commandString));
+    }
+
+    private IEnumerator DoSequence(string commandString)
     {
         yield return null;
 
-        // Do scripted sequence
-        if (logging) Debug.Log("Sequence Started!");
-        isMovingScripted = true;
-        yield return Sequences.DoMain(this);
-        if (logging) Debug.Log("Sequence Done!");
-        isMovingScripted = false;
+        if (commandString != "Initial")
+        {
+            // Do scripted sequence
+            if (logging) Debug.Log("Sequence Started!");
+            isMovingScripted = true;
+
+            yield return Sequences.DoSequence(this, commandString);
+
+            if (logging) Debug.Log("Sequence Done!");
+            isMovingScripted = false;
+        }
 
         // Do any waiting waypoints
         if (waypoints != null && waypoints.points.Count > 0)
         {
-            if (logging) Debug.Log("Sequence done, start waypoints");
             yield return DoWaypoints();
         }
         else if (isWaitingToFreeDraw)
@@ -174,13 +182,13 @@ public class Turtle : MonoBehaviour
             }
             waypoints.points[i].played = true;
             waypoints.points[i].next = false;
-            if(waypoints.points[i].visual != null) waypoints.points[i].visual.AnimateOut();
+            if (waypoints.points[i].visual != null) waypoints.points[i].visual.AnimateOut();
 
             if (i != waypoints.points.Count - 1)
             {
-            Waypoint nextWaypoint = waypoints.points[i + 1];
-            nextWaypoint.next = true;
-            if(nextWaypoint.visual != null) nextWaypoint.visual.SetNext(i + 1);
+                Waypoint nextWaypoint = waypoints.points[i + 1];
+                nextWaypoint.next = true;
+                if (nextWaypoint.visual != null) nextWaypoint.visual.SetNext(i + 1);
             }
 
             yield return SetColor(waypoints.points[i].color);
@@ -206,7 +214,7 @@ public class Turtle : MonoBehaviour
         yield return MoveToTarget(target);
     }
 
-     public IEnumerator GotoTargetTurnInstant(Vector3 target)
+    public IEnumerator GotoTargetTurnInstant(Vector3 target)
     {
         if (logging) Debug.Log("goto target, " + target);
         yield return PointAtInstant(target);
@@ -410,7 +418,8 @@ public class Turtle : MonoBehaviour
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + (gameObject.transform.forward * 1f), Color.red);
     }
 
-    public IEnumerator QuadraticArc(Vector3 controlPoint, Vector3 endPoint) {
+    public IEnumerator QuadraticArc(Vector3 controlPoint, Vector3 endPoint)
+    {
         Vector3[] points = Arc.GetArc(transform.position, controlPoint, endPoint, settings.arcSegments);
         for (int i = 0; i < points.Length; i++)
         {
