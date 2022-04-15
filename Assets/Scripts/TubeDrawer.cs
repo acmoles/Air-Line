@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TubeDrawer : MonoBehaviour
-{ 
+{
+    [SerializeField]
+    private Transform contentParent;
+
     [SerializeField]
     private PositionReporter[] positionReporters;
 
@@ -138,6 +141,7 @@ public class TubeDrawer : MonoBehaviour
             mesh.MarkDynamic();
 
             GameObject lineObj = new GameObject("Line Object");
+            lineObj.transform.parent = parent.contentParent;
             lineObj.transform.position = Vector3.zero;
             lineObj.transform.rotation = Quaternion.identity;
             lineObj.transform.localScale = Vector3.one;
@@ -164,7 +168,7 @@ public class TubeDrawer : MonoBehaviour
                 points.Add(position);
                 colors.Add(parent.Styles.CustomColor);
                 radii.Add(parent.Styles[(string)parent.Styles.BrushSize.ToString()]);
-            
+
                 for (int i = 0; i < points.Count; i++)
                 {
                     AveragePoints(i);
@@ -274,7 +278,8 @@ public class TubeDrawer : MonoBehaviour
             return 1f;
         }
 
-        float ModifyColors() {
+        float ModifyColors()
+        {
             // TODO rainbow-ish look
             // Iterate polyline length
             for (int i = 0; i < smoothColors.Count; i++)

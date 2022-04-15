@@ -20,6 +20,9 @@ public class Turtle : MonoBehaviour
     public bool logging = false;
 
     [SerializeField]
+    private Transform contentParent;
+
+    [SerializeField]
     private WaypointManager waypoints;
 
     [SerializeField]
@@ -366,6 +369,7 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator Move(GameObject objectToMove, float distance, float speed)
     {
+        distance *= contentParent.localScale.x;
         if (logging) Debug.Log("start move");
         Vector3 start = objectToMove.transform.position;
         Vector3 end = objectToMove.transform.position + objectToMove.transform.forward * distance;

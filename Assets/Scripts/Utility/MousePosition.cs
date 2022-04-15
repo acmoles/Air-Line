@@ -1,5 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 public enum PathSpace {xyz, xy, xz};
 
 public static class MouseUtility
