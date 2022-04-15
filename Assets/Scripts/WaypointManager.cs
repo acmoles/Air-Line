@@ -23,6 +23,7 @@ public class WaypointManager : MonoBehaviour
     [SerializeField, HideInInspector]
     bool initialized;
 
+    [SerializeField]
     public List<Waypoint> points
     {
         get
@@ -70,6 +71,15 @@ public class WaypointManager : MonoBehaviour
             point.visual.SetNext(points.Count - 1);
         }
         point.visual.AnimateIn();
+    }
+
+    public bool WaypointsToPlay()
+    {
+        foreach (var waypoint in points)
+        {
+            if (!waypoint.played) return true;
+        }
+        return false;
     }
 
 #if UNITY_EDITOR

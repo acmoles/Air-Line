@@ -136,7 +136,18 @@ public class BrushStyles : ScriptableObject
     public float small = 0.01f;
     public float medium = 0.02f;
     public float large = 0.04f;
-    public float wobbleModifier = 0.16f;
+
+    [SerializeField]
+    private float wobbleModifierValue = 0.16f;
+
+    public float wobbleModifier
+    {
+        get
+        {
+            return wobbleModifierValue / ((int)brushSize + 1);
+        }
+    }
+
     public int drawResolution = 8;
     public float minSegmentLength = 0.1f;
     public int maxPoints = 40;

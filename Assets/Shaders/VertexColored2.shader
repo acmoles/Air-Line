@@ -158,7 +158,7 @@ Shader "Custom/VertexColored2"
                 //col.rgb = blendOverlay(col.rgb, light);
                 col.rgb = col.rgb + (noise - .5 * noise);
                 col.rgb = blendColorDodge(col.rgb, rimOverlay);
-                col.rgb = blendScreen(col.rgb, (_SpecularOverdrive*specular + _RimOverdrive*rim).rgb);
+                col.rgb = blendScreen(col.rgb, (_SpecularOverdrive*specular + _RimOverdrive*rim + light*_DarknessAmount*.5).rgb);
                 
                 return col;
                 //return float4(rimOverlay, 1);

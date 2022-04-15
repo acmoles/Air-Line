@@ -12,6 +12,7 @@ using UnityEngine;
 - Replay sequence (on new line?)
 - Follow moving target
 - Change material
+- Debug field for max tube points
 */
 
 public class Turtle : MonoBehaviour
@@ -60,7 +61,7 @@ public class Turtle : MonoBehaviour
 
     void Start()
     {
-        //StartCoroutine(MoveOverSeconds(gameObject, endPosition, moveTime));
+        Sequences.PopulateSequenceList();
         DisableFollowMe();
         StartSequence("Initial");
         BrushDown = true;
@@ -68,7 +69,11 @@ public class Turtle : MonoBehaviour
 
     public void StartSequence(string commandString)
     {
-        StartCoroutine(DoSequence(commandString));
+        DisableFollowMe();
+        if (!isMovingWaypoints && !isMovingScripted)
+        {
+            StartCoroutine(DoSequence(commandString));
+        }
     }
 
     private IEnumerator DoSequence(string commandString)
@@ -88,7 +93,7 @@ public class Turtle : MonoBehaviour
         }
 
         // Do any waiting waypoints
-        if (waypoints != null && waypoints.points.Count > 0)
+        if (waypoints.WaypointsToPlay())
         {
             yield return DoWaypoints();
         }

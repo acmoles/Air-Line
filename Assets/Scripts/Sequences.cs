@@ -6,6 +6,16 @@ using UnityEngine;
 
 public static class Sequences
 {
+    public static List<string> sequenceList = new List<string>();
+    public static void PopulateSequenceList()
+    {
+        MethodInfo[] methods =typeof(Sequences).GetMethods();
+        foreach (var method in methods)
+        {
+            sequenceList.Add(method.Name);
+        }
+    }
+
     public static IEnumerator DoSequence(Turtle turtle, string commandString)
     {
         Type thisType = typeof(Sequences);
@@ -27,7 +37,7 @@ public static class Sequences
 
     public static IEnumerator DoSphere(Turtle turtle)
     {
-        const int iterations = 32;
+        const int iterations = 80;
         yield return new WaitForSeconds(1);
         for (int i = 0; i < iterations; i++)
         {
@@ -158,7 +168,6 @@ public static class Sequences
     {
         Debug.Log("Spiral Started!");
         yield return null;
-        yield return new WaitForSeconds(4);
         for (int i = 0; i < 120; i++)
         {
             Color lerpedColor = Color.Lerp(Color.blue, Color.green, Mathf.PingPong(Time.time, 1));
