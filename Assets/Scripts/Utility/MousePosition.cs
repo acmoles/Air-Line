@@ -1,7 +1,8 @@
-using UnityEngine;
 #if UNITY_EDITOR
+
+using UnityEngine;
 using UnityEditor;
-#endif
+
 public enum PathSpace {xyz, xy, xz};
 
 public static class MouseUtility
@@ -43,3 +44,5 @@ public static class MouseUtility
     }
 
 }
+
+#endif

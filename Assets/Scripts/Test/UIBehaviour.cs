@@ -19,5 +19,6 @@ public class UIBehaviour : MonoBehaviour
     public void OnClick()
     {
         Debug.Log("Clicked");
+        transform.localScale = transform.localScale * Random.Range(0.5f, 1.5f);
     }
 }
