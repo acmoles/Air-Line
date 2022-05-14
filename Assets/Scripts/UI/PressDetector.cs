@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestTouch : MonoBehaviour
+public class PressDetector : MonoBehaviour
 {
     [SerializeField]
     private Transform spawnable = null;
 
     [SerializeField]
-    private float zOffset = -0.5f;
+    private float zOffset = 0.02f;
 
     private InputManager inputManager = null;
 
@@ -27,12 +27,12 @@ public class TestTouch : MonoBehaviour
         inputManager.OnEndTouch -= Spawn;
     }
 
-    public void Spawn(Vector2 screenPosition, float time)
+    public void Spawn(Vector3 position, float time)
     {
-        Debug.Log("End " + screenPosition);
-        Vector3 screenCoordinates = new Vector3(screenPosition.x, screenPosition.y, Camera.main.nearClipPlane + zOffset);
-        Vector3 worldCoordinates = Camera.main.ScreenToWorldPoint(screenCoordinates);
-        Transform instance = Instantiate(spawnable, worldCoordinates, Quaternion.identity);
+        //TODO disallow touch on the bottom (UI) portion of the screen
+        Debug.Log("End " + position);
+        position.z += zOffset;
+        Transform instance = Instantiate(spawnable, position, Quaternion.identity);
         instance.GetComponent<WaypointVisual>().AnimateIn();
         instance.parent = transform;
     }

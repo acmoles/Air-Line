@@ -7,16 +7,19 @@ using UnityEngine.InputSystem.EnhancedTouch;
 [DefaultExecutionOrder(-1)]
 public class InputManager : Singleton<InputManager>
 {
-    public delegate void StartTouchEvent(Vector2 position, float time);
+    public delegate void StartTouchEvent(Vector3 position, float time);
     public event StartTouchEvent OnStartTouch;
 
-    public delegate void EndTouchEvent(Vector2 position, float time);
+    public delegate void EndTouchEvent(Vector3 position, float time);
     public event EndTouchEvent OnEndTouch;
     private TouchInput touchInput = null;
+
+    private Camera mainCamera = null;
 
     private void Awake()
     {
         touchInput = new TouchInput();
+        mainCamera = Camera.main;
     }
 
     private void OnEnable()
@@ -39,22 +42,41 @@ public class InputManager : Singleton<InputManager>
     {
         touchInput.Touch.TouchPress.started += ctx => StartTouch(ctx);
         touchInput.Touch.TouchPress.canceled += ctx => EndTouch(ctx);
-        //touchInput.Touch.TouchHold
     }
 
     private void StartTouch(InputAction.CallbackContext ctx)
     {
-        if (OnStartTouch != null) OnStartTouch(touchInput.Touch.TouchPosition.ReadValue<Vector2>(), (float)ctx.startTime);
+        if (OnStartTouch != null) OnStartTouch(TouchUtils.ScreenToWorld(mainCamera, touchInput.Touch.TouchPosition.ReadValue<Vector2>()), (float)ctx.startTime);
     }
 
     private void EndTouch(InputAction.CallbackContext ctx)
     {
         //Debug.Log("Touch ended");
-        if (OnEndTouch != null) OnEndTouch(touchInput.Touch.TouchPosition.ReadValue<Vector2>(), (float)ctx.time);
+        if (OnEndTouch != null) OnEndTouch(TouchUtils.ScreenToWorld(mainCamera, touchInput.Touch.TouchPosition.ReadValue<Vector2>()), (float)ctx.time);
     }
 
+    // Direct finger API
     private void FingerDown(Finger finger)
     {
-        if (OnStartTouch != null) OnStartTouch(finger.screenPosition, Time.time);
+        if (OnStartTouch != null) OnStartTouch(TouchUtils.ScreenToWorld(mainCamera, finger.screenPosition), Time.time);
+    }
+
+    public Vector3 PrimaryPosition()
+    {
+        return TouchUtils.ScreenToWorld(mainCamera, touchInput.Touch.TouchPosition.ReadValue<Vector2>());
+    }
+
+    public Vector3 PrimaryPosition2D()
+    {
+        return touchInput.Touch.TouchPosition.ReadValue<Vector2>();
+    }
+}
+
+public static class TouchUtils
+{
+    public static Vector3 ScreenToWorld(Camera camera, Vector2 position)
+    {
+        Vector3 screenCoordinates = new Vector3(position.x, position.y, camera.nearClipPlane);
+        return camera.ScreenToWorldPoint(screenCoordinates);
     }
 }
