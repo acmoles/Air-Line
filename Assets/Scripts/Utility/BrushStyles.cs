@@ -3,6 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// TODO system to serialize and sync BrushStyles over a network
+// Send update events POST when certain UI driven Brush Styles change
+// BrushSize
+// BrushColor
+
+// TODO brush up/down part of Brush Styles
+
+
+
+// Brush styles changed event
+
+public enum BrushUpDownState
+{
+    Up,
+    Down
+}
+
 public enum BrushSize
 {
     Small,

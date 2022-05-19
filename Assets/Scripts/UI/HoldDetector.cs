@@ -18,8 +18,8 @@ public class HoldDetector : MonoBehaviour
     private GameObject indicator = null;
 
 
-    [SerializeField]
-    private float zOffset = -0.5f;
+    // [SerializeField]
+    // private float zOffset = -0.5f;
 
 
     private Coroutine chargeCoroutine = null;

@@ -150,7 +150,7 @@ public class Turtle : MonoBehaviour
     {
         followMe.enabled = false;
     }
-
+    
     public void OnToggleBrushDown(string state)
     {
         if (logging) Debug.Log("State: " + state);

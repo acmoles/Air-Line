@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum BrushUpDownState
-{
-    Up,
-    Down
-}
-
 [CreateAssetMenu(fileName = "TurtleSettings", menuName = "Utils/TurtleSettings")]
 public class TurtleSettings : ScriptableObject
 {
