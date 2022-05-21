@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -102,6 +103,7 @@ public class TubeDrawer : MonoBehaviour
 
     }
 
+    [Serializable]
     private class DrawState
     {
         private Vector3 prevPoint = Vector3.zero;

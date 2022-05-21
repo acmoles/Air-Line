@@ -4,29 +4,51 @@ using UnityEngine;
 
 public class StateReciever : MonoBehaviour
 {
-    // TEMP to replace with values coming in over the network
     [SerializeField]
-    private StateCopier incomingState = null;
+    private bool logging = false;
 
     [SerializeField]
     private Transform transformToControl = null;
 
     [SerializeField]
-    private BrushStyles myBrushStyles = null;
+    private BrushStyles brushStylesToControl = null;
+
+    // [SerializeField]
+    // private Transform coordSystemToControl = null;
 
     [SerializeField]
-    private StateNetworkginIntermediary server = null;
+    private StateNetworkingIntermediary networkingService = null;
 
-
-    void Update()
+    private void OnEnable()
     {
-        // TODO get network values
-        transformToControl.position = incomingState.Position;
-        transformToControl.rotation = incomingState.Rotation;
+        networkingService.brushDataChanged += OnBrushStylesChanged;
+        networkingService.posRotChanged += OnPosRotChanged;
+        networkingService.coordChanged += OnCoordChanged;
     }
 
-    void GetMessage()
+    private void OnDisable()
     {
+        networkingService.brushDataChanged -= OnBrushStylesChanged;
+        networkingService.posRotChanged -= OnPosRotChanged;
+        networkingService.coordChanged -= OnCoordChanged;
+    }
 
+    private void OnBrushStylesChanged(string message)
+    {
+        brushStylesToControl.DeSerializeBrushStyles(message);
+    }
+
+    private PosRotMessage cachedIncomingMessage = new PosRotMessage();
+    private void OnPosRotChanged(string message)
+    {
+        JsonUtility.FromJsonOverwrite(message, cachedIncomingMessage);
+        if(logging) Debug.Log("PosRot revieved: " + cachedIncomingMessage);
+        transformToControl.position = cachedIncomingMessage.pos;
+        transformToControl.rotation = cachedIncomingMessage.rot;
+    }
+
+    private void OnCoordChanged(string message)
+    {
+        Debug.LogWarning("noop");
     }
 }

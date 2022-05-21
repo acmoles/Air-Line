@@ -440,7 +440,7 @@ MonoBehaviour:
   contentParent: {fileID: 866659161}
   positionReporters:
   - {fileID: 1012923677}
-  brushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
+  brushStyles: {fileID: 11400000, guid: 249c17e18ec464fcf86edc2a8cfb1ae7, type: 2}
 --- !u!1 &714870521
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +451,7 @@ GameObject:
   m_Component:
   - component: {fileID: 714870522}
   - component: {fileID: 714870524}
+  - component: {fileID: 714870523}
   m_Layer: 0
   m_Name: StateCopier
   m_TagString: Untagged
@@ -472,6 +473,34 @@ Transform:
   m_Father: {fileID: 866659161}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &714870523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714870521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 714870524}
+        m_TargetAssemblyTypeName: StateCopier, Assembly-CSharp
+        m_MethodName: OnBrushStylesChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &714870524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,7 +517,7 @@ MonoBehaviour:
   xOffset: 0.3
   transformToCopy: {fileID: 3168876679778140742}
   brushStylesToCopy: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
-  server: {fileID: 0}
+  networkingService: {fileID: 11400000, guid: 9741cb08814b34df08e0f49d682fc731, type: 2}
 --- !u!1 &810497551
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,10 +658,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5791e70b11545f4bb50c5c89465cbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incomingState: {fileID: 714870524}
+  logging: 0
   transformToControl: {fileID: 1012923676}
-  myBrushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
-  server: {fileID: 0}
+  brushStylesToControl: {fileID: 11400000, guid: 249c17e18ec464fcf86edc2a8cfb1ae7,
+    type: 2}
+  networkingService: {fileID: 11400000, guid: 9741cb08814b34df08e0f49d682fc731, type: 2}
 --- !u!1 &866659160
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,7 +764,7 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  brushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
+  logging: 0
 --- !u!114 &1012923678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
+  Event: {fileID: 11400000, guid: b09eeda66d60246eab9b34d6d775786e, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -1127,7 +1157,7 @@ PrefabInstance:
     - target: {fileID: 3168876681408605474, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}
       propertyPath: logging
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3168876681408605474, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}

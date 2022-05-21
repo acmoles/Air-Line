@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4d2a651b00f642118471f1c6c37351d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ca5e232be8a24dc5ac2faabfed0b01a, type: 3}
   m_Name: StateNetworkingIntermediary
   m_EditorClassIdentifier: 
   logging: 0
+  localTest: 1

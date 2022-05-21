@@ -60,7 +60,13 @@ public class WaypointVisual : MonoBehaviour
         }
         transform.localScale = Vector3.one * scaleModifier;
         TweenParams tParams = new TweenParams().SetEase(Ease.InBack);
-        DOTween.To(() => transform.localScale, x => transform.localScale = x, Vector3.zero, settings.animationOutDuration).SetAs(tParams);
+        Tween t = DOTween.To(() => transform.localScale, x => transform.localScale = x, Vector3.zero, settings.animationOutDuration).SetAs(tParams);
+        t.OnComplete(() =>
+        {
+            Destroy(this);
+            //Destroy(this.gameObject);
+            //TODO remove from the waypoint list?
+        });
     }
 
     [ContextMenu("Set next")]

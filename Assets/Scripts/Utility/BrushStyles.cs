@@ -28,7 +28,9 @@ public enum BrushColor
 [CreateAssetMenu(fileName = "BrushStyles", menuName = "Utils/BrushStyles")]
 public class BrushStyles : ScriptableObject
 {
-    public bool networkBrushStyles = true;
+
+    [SerializeField]
+    private bool logging = true;
 
     [SerializeField]
     private StringEvent stylesChangedEvent = null;
@@ -46,6 +48,7 @@ public class BrushStyles : ScriptableObject
     [SerializeField]
     private Material material;
 
+    [SerializeField]
     private BrushUpDownState brushToggle = BrushUpDownState.Down;
 
     public BrushColor BrushColor
@@ -59,7 +62,7 @@ public class BrushStyles : ScriptableObject
             color = value;
             customColor = GetPrimary(value);
             secondaryColor = GetSecondary(value);
-            OnStylesChanged();
+            OnStylesChanged(value.ToString());
         }
     }
 
@@ -74,7 +77,7 @@ public class BrushStyles : ScriptableObject
             color = BrushColor.Custom;
             customColor = value;
             secondaryColor = value;
-            OnStylesChanged();
+            OnStylesChanged("CustomColor");
         }
     }
     public Color SecondaryColor
@@ -94,7 +97,7 @@ public class BrushStyles : ScriptableObject
         set
         {
             brushSize = value;
-            OnStylesChanged();
+            OnStylesChanged(value.ToString());
         }
     }
 
@@ -107,7 +110,7 @@ public class BrushStyles : ScriptableObject
         set
         {
             material = value;
-            OnStylesChanged();
+            OnStylesChanged("Material");
         }
     }
 
@@ -120,7 +123,7 @@ public class BrushStyles : ScriptableObject
         set
         {
             brushToggle = value;
-            OnStylesChanged();
+            OnStylesChanged(value.ToString());
         }
     }
 
@@ -134,23 +137,25 @@ public class BrushStyles : ScriptableObject
             {BrushColor.Purple, purple1},
             {BrushColor.Blue, blue1},
             {BrushColor.Orange, orange1},
-            {BrushColor.Green, green1}
+            {BrushColor.Green, green1},
+            {BrushColor.Custom, customColor},
         };
         colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
         {
             {BrushColor.Purple, purple2},
             {BrushColor.Blue, blue2},
             {BrushColor.Orange, orange2},
-            {BrushColor.Green, green2}
+            {BrushColor.Green, green2},
+            {BrushColor.Custom, customColor},
         };
+
+        // Ensure color and secondaryColor are set correctly and trigger an update event
         BrushColor = color;
-        OnStylesChanged();
     }
 
-    private void OnStylesChanged()
+    private void OnStylesChanged(string state)
     {
-        stylesChangedEvent.Trigger("Update");
-        if(networkBrushStyles) SerializeBrushStyles();
+        stylesChangedEvent.Trigger(state);
     }
 
     // Getting actual colors for BrushColor
@@ -217,6 +222,7 @@ public class BrushStyles : ScriptableObject
         drawResolution = Mathf.Clamp(drawResolution, 3, 24);
         minSegmentLength = Mathf.Max(0, minSegmentLength);
 
+        // Ensure color and secondaryColor are set correctly and trigger an update event
         BrushColor = color;
     }
 
@@ -239,18 +245,60 @@ public class BrushStyles : ScriptableObject
     }
 
     // Networking
-
+    private BrushStylesMessage cachedOutgoingMessage = new BrushStylesMessage();
     public string SerializeBrushStyles()
     {
         // Pack Brushstyles for network transfer
-        return "Brush styles serialized";
+        cachedOutgoingMessage.brushColor = this.BrushColor;
+        cachedOutgoingMessage.customColor = this.CustomColor;
+        cachedOutgoingMessage.brushSize = this.BrushSize;
+        cachedOutgoingMessage.brushToggle = this.BrushToggle;
+
+        string body = JsonUtility.ToJson(cachedOutgoingMessage);
+
+        if (logging) Debug.Log("BrushSyles serialized: " + body);
+        return body;
     }
 
-    public void DeSerializeBrushStyles(string serializedBrushStyles)
+    private BrushStylesMessage cachedIncomingMessage = new BrushStylesMessage();
+    public void DeSerializeBrushStyles(string body)
     {
-        // Unpack Brushstyles transfer
+        if (logging) Debug.Log("BrushSyles deserialized: " + body);
+
+        // Unpack Brushstyles
+        JsonUtility.FromJsonOverwrite(body, cachedIncomingMessage);
+
         // Apply Brushstyles values to self
-        OnStylesChanged();
+        // Assume only one parameter changes on each message
+
+        if (cachedIncomingMessage.brushSize != this.BrushSize)
+        {
+            this.BrushSize = cachedIncomingMessage.brushSize;
+        }
+        else if (cachedIncomingMessage.brushToggle != this.BrushToggle)
+        {
+            this.BrushToggle = cachedIncomingMessage.brushToggle;
+        }
+        else if (cachedIncomingMessage.brushColor != this.BrushColor || cachedIncomingMessage.customColor != this.CustomColor)
+        {
+            if (cachedIncomingMessage.brushColor == BrushColor.Custom)
+            {
+                this.CustomColor = cachedIncomingMessage.customColor;
+            }
+            else
+            {
+                this.BrushColor = cachedIncomingMessage.brushColor;
+            }
+        }
+    }
+
+    [Serializable]
+    public class BrushStylesMessage
+    {
+        public BrushColor brushColor;
+        public Color customColor;
+        public BrushSize brushSize;
+        public BrushUpDownState brushToggle;
     }
 
 }

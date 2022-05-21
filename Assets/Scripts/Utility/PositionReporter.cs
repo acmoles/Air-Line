@@ -5,15 +5,14 @@ using UnityEngine;
 public class PositionReporter : Detector
 {
     // Detects and reports Turtle movement for line drawing
-
     [SerializeField]
-    private BrushStyles brushStyles = null;
+    private bool logging = false;
 
     protected int _lastUpdateFrame = -1;
     protected float _startTime = 0.0f;
     protected float _stopTime = 0.0f;
 
-    protected bool _shouldStart = false;
+    protected bool _shouldStart = true;
     protected bool _shouldStop = false;
 
     protected bool _didChange = false;
@@ -87,12 +86,14 @@ public class PositionReporter : Detector
 
     public void OnBrushStylesChanged(string state)
     {
-        if (brushStyles.BrushToggle == BrushUpDownState.Up)
+        if (state == BrushUpDownState.Up.ToString())
         {
+            if(logging) Debug.Log("Schedule Stop");
             ScheduleStop();
         }
-        else if (brushStyles.BrushToggle == BrushUpDownState.Down)
+        else if (state == BrushUpDownState.Down.ToString())
         {
+            if(logging) Debug.Log("Schedule Start");
             ScheduleStart();
         }
     }

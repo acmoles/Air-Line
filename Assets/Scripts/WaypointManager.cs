@@ -48,10 +48,13 @@ public class WaypointManager : MonoBehaviour
     {
         if (targets.Length > 0)
         {
+            System.Array values = System.Enum.GetValues(typeof(BrushColor));
+
             for (int i = 0; i < targets.Length; i++)
             {
                 // add to points list without triggering update event
-                var point = new Waypoint(targets[i].position, BrushColor.Orange);
+                BrushColor randomColor = (BrushColor)values.GetValue(Random.Range(0, values.Length - 1));
+                var point = new Waypoint(targets[i].position, randomColor);
                 points.Add(point);
             }
         }

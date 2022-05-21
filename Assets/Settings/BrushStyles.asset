@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecaf4fba5e2a4063af70be577d0b1f4, type: 3}
   m_Name: BrushStyles
   m_EditorClassIdentifier: 
-  networkBrushStyles: 1
+  logging: 0
   stylesChangedEvent: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
-  color: 0
+  color: 2
   brushSize: 0
   material: {fileID: 2100000, guid: d7ab0041ac24d44c3a98e3544979ce9a, type: 2}
+  brushToggle: 0
   small: 0.01
   medium: 0.02
   large: 0.04

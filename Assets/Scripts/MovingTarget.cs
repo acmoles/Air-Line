@@ -20,9 +20,6 @@ using UnityEngine;
 public class MovingTarget : MonoBehaviour
 {
     [SerializeField]
-    StringEvent onToggleBrushUpDown;
-
-    [SerializeField]
     StringEvent onToggleFollowMe;
 
     [SerializeField]
@@ -67,16 +64,5 @@ public class MovingTarget : MonoBehaviour
     public void OnToggleBrushUpDown(BrushUpDownState toggle)
     {
         brushStyles.BrushToggle = toggle;
-
-        //BrushUpDownState state;
-        
-        // if (Enum.TryParse<BrushUpDownState>(toggle, out state))
-        // {
-        //     brushStyles.BrushToggle = state;
-        // }
-        // else
-        // {
-        //     Debug.LogError("Brush up/down state conversion failed for " + toggle);
-        // }
     }
 }

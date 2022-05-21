@@ -2,40 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "StateNetworkginIntermediary", menuName = "Utils/StateNetworkginIntermediary")]
-public class StateNetworkginIntermediary : ScriptableObject
+[CreateAssetMenu(fileName = "StateNetworkingIntermediary", menuName = "Utils/StateNetworkingIntermediary")]
+public class StateNetworkingIntermediary : ScriptableObject
 {
     [SerializeField]
-    private bool logging = false;
+    private bool logging = true;
 
-    private string keyValue = string.Empty;
+    [SerializeField]
+    private bool localTest = true;
 
-    private List<StringEventListener> listeners = new List<StringEventListener>();
+    private string cachedBrushMessage = null;
+    public delegate void BrushDataChangedDelegate(string message);
+    public BrushDataChangedDelegate brushDataChanged;
 
-    public string KeyValue
+    private string cachedPosRotMessage = null;
+    public delegate void PosRotChangedDelegate(string message);
+    public PosRotChangedDelegate posRotChanged;
+
+    private string cachedCoordMessage = null;
+    public delegate void CoordChangedDelegate(string message);
+    public CoordChangedDelegate coordChanged;
+
+    public void PostMessage(MessageType type, string message)
     {
-        get { return keyValue; }
-        private set { }
-    }
-
-    public void Trigger(string value)
-    {
-        keyValue = value;
-        if(logging) Debug.Log("Trigger " + name + " " + value);
-
-        for (int i = listeners.Count - 1; i >= 0; i--)
+        if (localTest)
         {
-            listeners[i].OnEventRaised(value);
+            PostLocal(type, message);
+        }
+        else
+        {
+            // Send by http POST
+            // Websockets?
+            if(logging) Debug.LogWarning("noop");
         }
     }
 
-    public void RegisterListener(StringEventListener subscriber)
+    private void PostLocal(MessageType type, string message)
     {
-        listeners.Add(subscriber);
+        switch (type)
+        {
+            case MessageType.BrushStyles:
+                if(logging) Debug.Log("BrushStyles delegate invoked");
+                cachedBrushMessage = message;
+                brushDataChanged.Invoke(message);
+                break;
+            case MessageType.PosRot:
+                //if(logging) Debug.Log("PosRot delegate invoked");
+                cachedPosRotMessage = message;
+                posRotChanged.Invoke(message);
+                break;
+            case MessageType.CoordSystem:
+                if(logging) Debug.Log("Coord delegate invoked");
+                cachedCoordMessage = message;
+                coordChanged.Invoke(message);
+                break;
+        }
     }
 
-    public void UnRegisterListener(StringEventListener subscriber)
-    {
-        listeners.Remove(subscriber);
-    }
 }

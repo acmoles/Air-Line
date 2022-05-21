@@ -1,6 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum MessageType
+{
+    PosRot,
+    BrushStyles,
+    CoordSystem // TODO spatial anchors
+}
 
 public class StateCopier : MonoBehaviour
 {
@@ -9,6 +17,9 @@ public class StateCopier : MonoBehaviour
     [SerializeField]
     private float xOffset = 0.3f;
 
+    // [SerializeField]
+    // private Transform coordSystemToCopy = null;
+
     [SerializeField]
     private Transform transformToCopy = null;
 
@@ -16,28 +27,10 @@ public class StateCopier : MonoBehaviour
     private BrushStyles brushStylesToCopy = null;
 
     [SerializeField]
-    private StateNetworkginIntermediary server = null;
+    private StateNetworkingIntermediary networkingService = null;
 
-    // TEMP for testing, replace with intermediary
-    public Vector3 Position
-    {
-        get
-        {
-            Vector3 position = transformToCopy.position;
-            position.x += xOffset;
-            return position;
-        }
-    }
-    public Quaternion Rotation
-    {
-        get => transformToCopy.rotation;
-    }
-
-    public BrushStyles BrushStylesToMatch
-    {
-        get => brushStylesToCopy;
-    }
-    // END TEMP
+    private Vector3 lastPosition = Vector3.zero;
+    private Quaternion lastRotation = Quaternion.identity;
 
     void Update()
     {
@@ -49,19 +42,39 @@ public class StateCopier : MonoBehaviour
     {
         // BrushStyles handles it's own serialization
         string brushStylesMessage = brushStylesToCopy.SerializeBrushStyles();
-        PostMessage(brushStylesMessage);
+        networkingService.PostMessage(MessageType.BrushStyles, brushStylesMessage);
     }
 
+    private PosRotMessage cachedOutgoingMessage = new PosRotMessage();
     public void SendPosRot()
     {
-        // Serialize pos rot of transformToMatch
-        // If values changed (like position reporter)
-        // TODO send transform position and rotation POST
-        PostMessage("PosRot");
-    }
+        if (
+            transformToCopy.position == lastPosition
+            && transformToCopy.rotation == lastRotation
+        )
+        {
+            return;
+        }
 
-    public void PostMessage(string message)
-    {
-        // Send by POST
+        lastPosition = transformToCopy.position;
+        lastRotation = transformToCopy.rotation;
+
+        // Pack PosRot for network transfer
+        Vector3 modifiedPos = transformToCopy.position;
+        modifiedPos.x += xOffset;
+        cachedOutgoingMessage.pos = modifiedPos;
+        cachedOutgoingMessage.rot = transformToCopy.rotation;
+
+        string postBody = JsonUtility.ToJson(cachedOutgoingMessage);
+
+        if (logging) Debug.Log("PosRot sent: " + postBody);
+        networkingService.PostMessage(MessageType.PosRot, postBody);
     }
+}
+
+[Serializable]
+public class PosRotMessage
+{
+    public Vector3 pos;
+    public Quaternion rot;
 }
