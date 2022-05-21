@@ -266,6 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b58bc88bd2b6b419098fe7a93b4d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contentParent: {fileID: 0}
   positionReporters:
   - {fileID: 3168876681408605485}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
@@ -375,12 +376,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3168876681408605484}
   - component: {fileID: 3168876681408605474}
+  - component: {fileID: 7246840244803453968}
   - component: {fileID: 4828993302806351537}
   - component: {fileID: 3168876681408605485}
   - component: {fileID: 8863005918012922179}
   - component: {fileID: 1521074267397532643}
-  - component: {fileID: 1748377291955087104}
-  - component: {fileID: 7246840244803453968}
+  - component: {fileID: 8498144776496850565}
   m_Layer: 0
   m_Name: Turtle
   m_TagString: Untagged
@@ -421,11 +422,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
+  contentParent: {fileID: 0}
   waypoints: {fileID: 0}
   settings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
   followMe: {fileID: 4828993302806351537}
-  reporter: {fileID: 3168876681408605485}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+--- !u!54 &7246840244803453968
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168876681408605475}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 10
+  m_AngularDrag: 10
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &4828993302806351537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +475,7 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
 --- !u!114 &8863005918012922179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,7 +532,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1748377291955087104
+--- !u!114 &8498144776496850565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -526,13 +544,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: d03792a23f4074ad88381f989b318b32, type: 2}
+  Event: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3168876681408605474}
-        m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
-        m_MethodName: OnToggleBrushDown
+      - m_Target: {fileID: 3168876681408605485}
+        m_TargetAssemblyTypeName: PositionReporter, Assembly-CSharp
+        m_MethodName: OnBrushStylesChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -542,22 +560,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!54 &7246840244803453968
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3168876681408605475}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 10
-  m_AngularDrag: 10
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &3168876681856639726
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,19 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* 
-/////UI events to hook up/////
-- Place waypoint
-
-- Toggle brush up/down (end/start line)
-- Change radius
-- Change colour
-- Replay sequence (on new line?)
-- Follow moving target
-- Change material
-- Debug field for max tube points
-*/
-
 public class Turtle : MonoBehaviour
 {
     public bool logging = false;
@@ -32,42 +19,17 @@ public class Turtle : MonoBehaviour
     private FollowMe followMe;
 
     [SerializeField]
-    private PositionReporter reporter;
-
-    [SerializeField]
     private BrushStyles brushStyles;
 
     private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
     private bool isWaitingToFreeDraw = false;
 
-    private bool brushDown = false;
-    public bool BrushDown
-    {
-        get
-        {
-            return brushDown;
-        }
-        set
-        {
-            brushDown = value;
-            if (brushDown)
-            {
-                reporter.ScheduleStart();
-            }
-            else
-            {
-                reporter.ScheduleStop();
-            }
-        }
-    }
-
     void Start()
     {
         Sequences.PopulateSequenceList();
         DisableFollowMe();
         StartSequence("Initial");
-        BrushDown = true;
     }
 
     public void StartSequence(string commandString)
@@ -149,21 +111,6 @@ public class Turtle : MonoBehaviour
     private void DisableFollowMe()
     {
         followMe.enabled = false;
-    }
-    
-    public void OnToggleBrushDown(string state)
-    {
-        if (logging) Debug.Log("State: " + state);
-        if (state == BrushUpDownState.Up.ToString())
-        {
-            if (logging) Debug.Log("Set brush up");
-            BrushDown = false;
-        }
-        else if (state == BrushUpDownState.Down.ToString())
-        {
-            if (logging) Debug.Log("Set brush down");
-            BrushDown = true;
-        }
     }
 
     private IEnumerator DoWaypoints()
@@ -404,6 +351,12 @@ public class Turtle : MonoBehaviour
     public IEnumerator SetSize(BrushSize size)
     {
         brushStyles.BrushSize = size;
+        yield return null;
+    }
+
+    public IEnumerator SetBrushUpDown(BrushUpDownState state)
+    {
+        brushStyles.BrushToggle = state;
         yield return null;
     }
 

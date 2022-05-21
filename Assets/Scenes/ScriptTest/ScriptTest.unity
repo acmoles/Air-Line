@@ -410,7 +410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &690335328
 Transform:
   m_ObjectHideFlags: 0
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 690335327}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7b58bc88bd2b6b419098fe7a93b4d02, type: 3}
   m_Name: 
@@ -451,7 +451,6 @@ GameObject:
   m_Component:
   - component: {fileID: 714870522}
   - component: {fileID: 714870524}
-  - component: {fileID: 714870523}
   m_Layer: 0
   m_Name: StateCopier
   m_TagString: Untagged
@@ -473,34 +472,6 @@ Transform:
   m_Father: {fileID: 866659161}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &714870523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714870521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: d03792a23f4074ad88381f989b318b32, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 714870524}
-        m_TargetAssemblyTypeName: StateCopier, Assembly-CSharp
-        m_MethodName: OnToggleBrushDown
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &714870524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,6 +690,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1012923676}
   - component: {fileID: 1012923677}
+  - component: {fileID: 1012923678}
   m_Layer: 0
   m_Name: FakeTurtle
   m_TagString: Untagged
@@ -759,6 +731,35 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+--- !u!114 &1012923678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012923675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1012923677}
+        m_TargetAssemblyTypeName: PositionReporter, Assembly-CSharp
+        m_MethodName: OnBrushStylesChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1084741492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,12 +1109,12 @@ PrefabInstance:
     - target: {fileID: 3168876681274739724, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3168876681274739727, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3168876681274739727, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}
@@ -1195,7 +1196,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1748377291955087104, guid: cd0026b1d95734e4bab31ec3f715b4f7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd0026b1d95734e4bab31ec3f715b4f7, type: 3}
 --- !u!4 &3168876679778140742 stripped
 Transform:

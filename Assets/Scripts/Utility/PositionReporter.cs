@@ -6,6 +6,9 @@ public class PositionReporter : Detector
 {
     // Detects and reports Turtle movement for line drawing
 
+    [SerializeField]
+    private BrushStyles brushStyles = null;
+
     protected int _lastUpdateFrame = -1;
     protected float _startTime = 0.0f;
     protected float _stopTime = 0.0f;
@@ -79,6 +82,18 @@ public class PositionReporter : Detector
         {
             ensureUpToDate();
             return _position;
+        }
+    }
+
+    public void OnBrushStylesChanged(string state)
+    {
+        if (brushStyles.BrushToggle == BrushUpDownState.Up)
+        {
+            ScheduleStop();
+        }
+        else if (brushStyles.BrushToggle == BrushUpDownState.Down)
+        {
+            ScheduleStart();
         }
     }
 

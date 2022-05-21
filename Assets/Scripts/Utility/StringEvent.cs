@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StringEvent", menuName = "Utils/StringEvent")]
 public class StringEvent : ScriptableObject
 {
+    [SerializeField]
+    private bool logging = false;
+
     private string keyValue = string.Empty;
 
     private List<StringEventListener> listeners = new List<StringEventListener>();
@@ -18,7 +21,7 @@ public class StringEvent : ScriptableObject
     public void Trigger(string value)
     {
         keyValue = value;
-        Debug.Log("Trigger " + name + " " + value);
+        if(logging) Debug.Log("Trigger " + name + " " + value);
 
         for (int i = listeners.Count - 1; i >= 0; i--)
         {

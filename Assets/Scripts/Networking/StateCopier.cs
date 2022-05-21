@@ -18,7 +18,8 @@ public class StateCopier : MonoBehaviour
     // TEMP for testing
     public Vector3 Position
     {
-        get {
+        get
+        {
             Vector3 position = transformToCopy.position;
             position.x += xOffset;
             return position;
@@ -28,34 +29,36 @@ public class StateCopier : MonoBehaviour
     {
         get => transformToCopy.rotation;
     }
+
+    public BrushStyles BrushStylesToMatch
+    {
+        get => brushStylesToCopy;
+    }
     // END TEMP
 
     void Update()
     {
-        // TODO send transform position and rotation POST
         // Potentially debounce this?
+        SendPosRot();
     }
 
-    // TODO remove this in Turtle too
-    // Turtle shouldn't own this - but can control it through script
-    public void OnToggleBrushDown(string state)
+    public void OnBrushStylesChanged(string state)
     {
-        if (logging) Debug.Log("State: " + state);
-        if (state == BrushUpDownState.Up.ToString())
-        {
-            if (logging) Debug.Log("Set brush up networking");
-            // TODO send POST brush up
-        }
-        else if (state == BrushUpDownState.Down.ToString())
-        {
-            if (logging) Debug.Log("Set brush down networking");
-            // TODO send POST brush down
-        }
+        // BrushStyles handles it's own serialization
+        string brushStylesMessage = brushStylesToCopy.SerializeBrushStyles();
+        PostMessage(brushStylesMessage);
     }
 
-    // Switch to using this event for brush up/down
-    public void OnBrushStylesChanged(BrushStyles state)
+    public void SendPosRot()
     {
+        // Serialize pos rot of transformToMatch
+        // If values changed (like position reporter)
+        // TODO send transform position and rotation POST
+        PostMessage("PosRot");
+    }
 
+    public void PostMessage(string message)
+    {
+        // Send by POST
     }
 }

@@ -3,17 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// TODO system to serialize and sync BrushStyles over a network
-// Send update events POST when certain UI driven Brush Styles change
-// BrushSize
-// BrushColor
-
-// TODO brush up/down part of Brush Styles
-
-
-
-// Brush styles changed event
-
 public enum BrushUpDownState
 {
     Up,
@@ -32,12 +21,18 @@ public enum BrushColor
     Orange,
     Purple,
     Blue,
-    Green
+    Green,
+    Custom
 }
 
 [CreateAssetMenu(fileName = "BrushStyles", menuName = "Utils/BrushStyles")]
 public class BrushStyles : ScriptableObject
 {
+    public bool networkBrushStyles = true;
+
+    [SerializeField]
+    private StringEvent stylesChangedEvent = null;
+
     [Header("Global Brush Style")]
 
     [SerializeField]
@@ -51,6 +46,8 @@ public class BrushStyles : ScriptableObject
     [SerializeField]
     private Material material;
 
+    private BrushUpDownState brushToggle = BrushUpDownState.Down;
+
     public BrushColor BrushColor
     {
         get
@@ -62,7 +59,7 @@ public class BrushStyles : ScriptableObject
             color = value;
             customColor = GetPrimary(value);
             secondaryColor = GetSecondary(value);
-            // Trigger update event
+            OnStylesChanged();
         }
     }
 
@@ -74,9 +71,10 @@ public class BrushStyles : ScriptableObject
         }
         set
         {
+            color = BrushColor.Custom;
             customColor = value;
             secondaryColor = value;
-            // Trigger update event
+            OnStylesChanged();
         }
     }
     public Color SecondaryColor
@@ -96,7 +94,7 @@ public class BrushStyles : ScriptableObject
         set
         {
             brushSize = value;
-            // Trigger update event
+            OnStylesChanged();
         }
     }
 
@@ -109,7 +107,20 @@ public class BrushStyles : ScriptableObject
         set
         {
             material = value;
-            // Trigger update event
+            OnStylesChanged();
+        }
+    }
+
+    public BrushUpDownState BrushToggle
+    {
+        get
+        {
+            return brushToggle;
+        }
+        set
+        {
+            brushToggle = value;
+            OnStylesChanged();
         }
     }
 
@@ -133,6 +144,13 @@ public class BrushStyles : ScriptableObject
             {BrushColor.Green, green2}
         };
         BrushColor = color;
+        OnStylesChanged();
+    }
+
+    private void OnStylesChanged()
+    {
+        stylesChangedEvent.Trigger("Update");
+        if(networkBrushStyles) SerializeBrushStyles();
     }
 
     // Getting actual colors for BrushColor
@@ -218,6 +236,21 @@ public class BrushStyles : ScriptableObject
             val[0] = small; val[1] = medium; val[2] = large;
             return val[Array.IndexOf(indices, index)];
         }
+    }
+
+    // Networking
+
+    public string SerializeBrushStyles()
+    {
+        // Pack Brushstyles for network transfer
+        return "Brush styles serialized";
+    }
+
+    public void DeSerializeBrushStyles(string serializedBrushStyles)
+    {
+        // Unpack Brushstyles transfer
+        // Apply Brushstyles values to self
+        OnStylesChanged();
     }
 
 }

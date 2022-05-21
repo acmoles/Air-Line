@@ -24,12 +24,12 @@ public class MovingTargetEditor : Editor
 
 		if (GUILayout.Button(BrushUpDownState.Up.ToString()))
 		{
-			t.OnToggleBrushUpDown(BrushUpDownState.Up.ToString());
+			t.OnToggleBrushUpDown(BrushUpDownState.Up);
 		}
 
 		if (GUILayout.Button(BrushUpDownState.Down.ToString()))
 		{
-			t.OnToggleBrushUpDown(BrushUpDownState.Down.ToString());
+			t.OnToggleBrushUpDown(BrushUpDownState.Down);
 		}
 
 		GUILayout.Space(20);
