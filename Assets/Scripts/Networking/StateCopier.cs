@@ -15,7 +15,10 @@ public class StateCopier : MonoBehaviour
     [SerializeField]
     private BrushStyles brushStylesToCopy = null;
 
-    // TEMP for testing
+    [SerializeField]
+    private StateNetworkginIntermediary server = null;
+
+    // TEMP for testing, replace with intermediary
     public Vector3 Position
     {
         get

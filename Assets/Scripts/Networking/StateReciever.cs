@@ -11,12 +11,22 @@ public class StateReciever : MonoBehaviour
     [SerializeField]
     private Transform transformToControl = null;
 
-    // TODO get BrushStyles object
+    [SerializeField]
+    private BrushStyles myBrushStyles = null;
+
+    [SerializeField]
+    private StateNetworkginIntermediary server = null;
+
 
     void Update()
     {
         // TODO get network values
         transformToControl.position = incomingState.Position;
         transformToControl.rotation = incomingState.Rotation;
+    }
+
+    void GetMessage()
+    {
+
     }
 }

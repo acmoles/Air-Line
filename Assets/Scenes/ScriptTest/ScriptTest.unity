@@ -440,7 +440,7 @@ MonoBehaviour:
   contentParent: {fileID: 866659161}
   positionReporters:
   - {fileID: 1012923677}
-  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  brushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
 --- !u!1 &714870521
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +488,7 @@ MonoBehaviour:
   xOffset: 0.3
   transformToCopy: {fileID: 3168876679778140742}
   brushStylesToCopy: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  server: {fileID: 0}
 --- !u!1 &810497551
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,6 +631,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incomingState: {fileID: 714870524}
   transformToControl: {fileID: 1012923676}
+  myBrushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
+  server: {fileID: 0}
 --- !u!1 &866659160
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +734,7 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  brushStyles: {fileID: 11400000, guid: 95d7ba466ee5a41adb26473ee52036a8, type: 2}
 --- !u!114 &1012923678
 MonoBehaviour:
   m_ObjectHideFlags: 0
