@@ -109,9 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29a8a9c661ff4b4884a20a3e5df5923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onToggleBrushUpDown: {fileID: 11400000, guid: d03792a23f4074ad88381f989b318b32,
+  movementStateUpdated: {fileID: 11400000, guid: f9b161f13016a471c874fb0b30e9c7e0,
     type: 2}
-  onToggleFollowMe: {fileID: 11400000, guid: f9b161f13016a471c874fb0b30e9c7e0, type: 2}
   target: {fileID: 1386067308375673232}
   waypointManager: {fileID: 0}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}

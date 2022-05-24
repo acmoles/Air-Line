@@ -9,14 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c47fb4d0afb534de1b4ea9988d25b167, type: 3}
-  m_Name: MovementSettings
+  m_Script: {fileID: 11500000, guid: f99b8475a530d46b8a834edad4c214ee, type: 3}
+  m_Name: FakeStyleUpdated
   m_EditorClassIdentifier: 
-  offset: 0.1
-  offsetMovementThreshhold: 0.001
-  speed: 50
-  speedLimit: 100
-  force: 1.5
-  rotateSpeed: 0.5
-  hoverFrequency: 1
-  hoverAmount: 0.01
+  logging: 1

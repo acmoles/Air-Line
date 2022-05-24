@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,9 @@ using UnityEngine;
 public class Turtle : MonoBehaviour
 {
     public bool logging = false;
+
+    public TurtleMovementState movementState = TurtleMovementState.Play;
+    private TurtleMovementState lastMovementState = TurtleMovementState.Play;
 
     [SerializeField]
     private Transform contentParent;
@@ -35,6 +39,7 @@ public class Turtle : MonoBehaviour
     public void StartSequence(string commandString)
     {
         DisableFollowMe();
+        movementState = TurtleMovementState.Play;
         if (!isMovingWaypoints && !isMovingScripted)
         {
             StartCoroutine(DoSequence(commandString));
@@ -78,33 +83,61 @@ public class Turtle : MonoBehaviour
         }
     }
 
-    public void OnToggleFollowMovingTarget(string state)
+    public void OnMovementStateUpdated(string state)
     {
-        if (logging) Debug.Log("State: " + state);
-        if (state == FollowMeState.On.ToString())
+        if (logging) Debug.Log("TurtleMovementState: " + state);
+
+        TurtleMovementState tState;
+        if (Enum.TryParse<TurtleMovementState>(state, out tState))
         {
-            // Toggle on
-            if (!isMovingWaypoints && !isMovingScripted)
+            switch (tState)
             {
-                if (logging) Debug.Log("Enable follow me");
-                EnableFollowMe();
-            }
-            else
-            {
-                if (logging) Debug.Log("Set waiting for follow me control");
-                isWaitingToFreeDraw = true;
+                case TurtleMovementState.FollowMe:
+                    // TODO is waiting to free draw desirable?
+                    if ((!isMovingWaypoints && !isMovingScripted) || movementState == TurtleMovementState.Pause)
+                    {
+                        if (logging) Debug.Log("Enable follow me");
+                        EnableFollowMe();
+                    }
+                    else
+                    {
+                        if (logging) Debug.Log("Set waiting for follow me control");
+                        isWaitingToFreeDraw = true;
+                    }
+                    break;
+                case TurtleMovementState.ExitFollowMe:
+                    if (logging) Debug.Log("Exit FollowMe");
+                    movementState = lastMovementState;
+                    DisableFollowMe();
+                    break;
+                case TurtleMovementState.Play:
+                    if (logging) Debug.Log("Play");
+                    movementState = TurtleMovementState.Play;
+                    DisableFollowMe();
+                    break;
+                case TurtleMovementState.Pause:
+                    if (logging) Debug.Log("Pause");
+                    movementState = TurtleMovementState.Pause;
+                    DisableFollowMe();
+                    break;
             }
         }
-        else if (state == FollowMeState.Off.ToString())
+        else
         {
-            if (logging) Debug.Log("Disable follow me");
-            DisableFollowMe();
+            Debug.LogWarning("Cannot parse movement state");
         }
     }
 
     private void EnableFollowMe()
     {
+        lastMovementState = movementState;
+        movementState = TurtleMovementState.FollowMe;
+
         isWaitingToFreeDraw = false;
+        isMovingWaypoints = false;
+        isMovingScripted = false;
+        StopAllCoroutines();
+
         followMe.enabled = true;
     }
 
@@ -325,6 +358,10 @@ public class Turtle : MonoBehaviour
 
         while (objectToMove.transform.position != end)
         {
+            while (movementState == TurtleMovementState.Pause)
+            {
+                yield return new WaitForSeconds(0.2f);
+            }
             linearPosition = Vector3.MoveTowards(linearPosition, end, speed * Time.deltaTime);
             float p = 1 - (end - linearPosition).sqrMagnitude / dist;
             p = EasingFunction.EaseInOutQuart(0f, 1f, p);
@@ -360,6 +397,7 @@ public class Turtle : MonoBehaviour
         yield return null;
     }
 
+    // Unused!
     public IEnumerator MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
     {
         if (logging) Debug.Log("start move");

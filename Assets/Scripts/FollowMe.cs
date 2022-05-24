@@ -12,7 +12,7 @@ public class FollowMe : MonoBehaviour
     private MovingTarget movingTarget;
 
     [SerializeField]
-    private MovementSettings movementSettings;
+    private TurtleSettings movementSettings;
 
     private Rigidbody turtleRigidbody = null;
 

@@ -422,6 +422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
+  movementState: 2
   contentParent: {fileID: 0}
   waypoints: {fileID: 0}
   settings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
@@ -456,7 +457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movingTarget: {fileID: 0}
-  movementSettings: {fileID: 11400000, guid: 2c86571c64d9f44dd8bf8c4ba09bbdb0, type: 2}
+  movementSettings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
 --- !u!114 &3168876681408605485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,7 +476,7 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  logging: 0
 --- !u!114 &8863005918012922179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,7 +523,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3168876681408605474}
         m_TargetAssemblyTypeName: Turtle, Assembly-CSharp
-        m_MethodName: OnToggleFollowMovingTarget
+        m_MethodName: OnMovementStateUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

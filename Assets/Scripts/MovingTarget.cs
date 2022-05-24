@@ -8,11 +8,11 @@ using UnityEngine;
 - Place waypoint
 
 - Toggle brush up/down (end/start line)
-- Change radius
+- Change brush size
 - Change colour
 - Replay sequence (on new line?)
 - Follow moving target
-- Change material
+- Play pause
 - Debug field for max tube points
 */
 
@@ -20,7 +20,7 @@ using UnityEngine;
 public class MovingTarget : MonoBehaviour
 {
     [SerializeField]
-    StringEvent onToggleFollowMe;
+    StringEvent movementStateUpdated;
 
     [SerializeField]
     Transform target;
@@ -56,9 +56,9 @@ public class MovingTarget : MonoBehaviour
         brushStyles.BrushColor = color;
     }
 
-    public void OnToggleFollowMe(string toggle)
+    public void OnToggleMovementState(string toggle)
     {
-        onToggleFollowMe.Trigger(toggle);
+        movementStateUpdated.Trigger(toggle);
     }
 
     public void OnToggleBrushUpDown(BrushUpDownState toggle)
