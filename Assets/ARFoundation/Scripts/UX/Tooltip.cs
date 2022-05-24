@@ -25,10 +25,10 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void Update()
         {
-            if(m_EnteredButton)
-            {
-                m_Tooltip.transform.position = Input.mousePosition + m_ToolTipOffset;
-            }
+            // if(m_EnteredButton)
+            // {
+            //     m_Tooltip.transform.position = Input.mousePosition + m_ToolTipOffset;
+            // }
         }
 
 

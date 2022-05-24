@@ -45,6 +45,8 @@ public class FollowMe : MonoBehaviour
 
     private void UpdateTargetPosition()
     {
+        if (movingTarget == null) return;
+
         // prevent small changes at brush head
         if ((movingTarget.Target.position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
         {

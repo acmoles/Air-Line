@@ -33,7 +33,8 @@ public class Turtle : MonoBehaviour
     {
         Sequences.PopulateSequenceList();
         DisableFollowMe();
-        StartSequence("Initial");
+        //StartSequence("Initial");
+        StartSequence("DoSphere");
     }
 
     public void StartSequence(string commandString)
@@ -63,7 +64,7 @@ public class Turtle : MonoBehaviour
         }
 
         // Do any waiting waypoints
-        if (waypoints.WaypointsToPlay())
+        if (waypoints != null && waypoints.WaypointsToPlay())
         {
             yield return DoWaypoints();
         }
@@ -353,7 +354,7 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator Move(GameObject objectToMove, float distance, float speed)
     {
-        distance *= contentParent.localScale.x;
+        if(contentParent != null) distance *= contentParent.localScale.x;
         if (logging) Debug.Log("start move");
         Vector3 start = objectToMove.transform.position;
         Vector3 end = objectToMove.transform.position + objectToMove.transform.forward * distance;

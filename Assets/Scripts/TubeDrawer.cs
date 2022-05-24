@@ -143,7 +143,8 @@ public class TubeDrawer : MonoBehaviour
             mesh.MarkDynamic();
 
             GameObject lineObj = new GameObject("Line Object");
-            lineObj.transform.parent = parent.contentParent;
+            if(parent.contentParent != null) lineObj.transform.parent = parent.contentParent;
+            else lineObj.transform.parent = parent.transform;
             lineObj.transform.position = Vector3.zero;
             lineObj.transform.rotation = Quaternion.identity;
             lineObj.transform.localScale = Vector3.one;

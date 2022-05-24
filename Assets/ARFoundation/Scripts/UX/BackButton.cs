@@ -23,10 +23,10 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                BackButtonPressed();
-            }
+            // if (Input.GetKeyDown(KeyCode.Escape))
+            // {
+            //     BackButtonPressed();
+            // }
         }
 
         public void BackButtonPressed()
