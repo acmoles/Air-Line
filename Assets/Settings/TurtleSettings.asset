@@ -15,3 +15,11 @@ MonoBehaviour:
   moveSpeed: 1
   rotateSpeed: 480
   arcSegments: 8
+  offset: 0.1
+  offsetMovementThreshhold: 0.001
+  speed: 50
+  speedLimit: 100
+  force: 1.5
+  followMeRotateSpeed: 0.5
+  hoverFrequency: 1
+  hoverAmount: 0.01

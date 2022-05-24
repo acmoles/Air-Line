@@ -162,6 +162,10 @@ public class Turtle : MonoBehaviour
 
     private IEnumerator NextWaypoint()
     {
+        while (movementState == TurtleMovementState.Pause)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
         for (int i = 0; i < waypoints.points.Count; i++)
         {
             if (waypoints.points[i].played)
