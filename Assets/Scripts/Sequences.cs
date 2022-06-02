@@ -41,7 +41,7 @@ public static class Sequences
         yield return new WaitForSeconds(1);
         for (int i = 0; i < iterations; i++)
         {
-            Vector3 target = UnityEngine.Random.onUnitSphere;
+            Vector3 target = 0.3f * UnityEngine.Random.onUnitSphere;
             yield return turtle.PointAt(target);
             yield return turtle.MoveToTarget(target);
             yield return turtle.SetCustomColor(NextColorStep(ref i, iterations, Color.cyan, Color.magenta));

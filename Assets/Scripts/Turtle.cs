@@ -34,7 +34,7 @@ public class Turtle : MonoBehaviour
         Sequences.PopulateSequenceList();
         DisableFollowMe();
         //StartSequence("Initial");
-        StartSequence("DoSphere");
+        StartSequence("Initial");
     }
 
     public void StartSequence(string commandString)

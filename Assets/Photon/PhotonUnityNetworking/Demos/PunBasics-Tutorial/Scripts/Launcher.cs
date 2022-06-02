@@ -65,10 +65,10 @@ namespace Photon.Pun.Demo.PunBasics
 		/// </summary>
 		void Awake()
 		{
-			if (loaderAnime==null)
-			{
-				Debug.LogError("<Color=Red><b>Missing</b></Color> loaderAnime Reference.",this);
-			}
+			// if (loaderAnime==null)
+			// {
+			// 	Debug.LogError("<Color=Red><b>Missing</b></Color> loaderAnime Reference.",this);
+			// }
 
 			// #Critical
 			// this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
