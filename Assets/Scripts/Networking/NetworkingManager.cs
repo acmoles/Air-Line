@@ -60,7 +60,12 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (PhotonNetwork.IsMasterClient)
         {
+            BrushStylesSync.ShouldManageOwnBrushStyles = true;
             Debug.LogFormat("IsMasterClient {0}", PhotonNetwork.IsMasterClient);
+        }
+        else
+        {
+            BrushStylesSync.ShouldManageOwnBrushStyles = false;
         }
 
         if (networkedPlayerPrefab == null)
@@ -105,6 +110,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnBrushStylesChanged(string state)
     {
+        // TODO individual brushStyles for each client
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         if (logging) Debug.Log("Sending brush styles networked: " + state);
         // BrushStyles handles it's own serialization
         string brushStylesMessage = myBrushStyles.SerializeBrushStyles();
@@ -115,7 +125,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-
+        // TODO individual brushStyles for each client
+        if (PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         byte eventCode = photonEvent.Code;
         if (eventCode == brushStylesChangedEventCode)
         {

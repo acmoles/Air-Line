@@ -7,6 +7,9 @@ using Photon.Pun;
 
 public class PhotonPlayerManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField]
+    private bool logging = true;
+
     [Tooltip("The local photon player instance")]
     public static PhotonPlayerManager LocalPlayerInstance;
 
@@ -41,6 +44,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         else
         {
             remoteNetworkedPlayers.Add(this);
+            if(logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
         }
         DontDestroyOnLoad(gameObject);
     }
