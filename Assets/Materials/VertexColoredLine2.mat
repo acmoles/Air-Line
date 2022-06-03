@@ -58,7 +58,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DarknessAmount: 0.32
+    - _DarknessAmount: 0.36
     - _DetailNormalMapScale: 1
     - _Diffuse: 0.56
     - _DstBlend: 0
@@ -68,17 +68,17 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NoiseAmount: 0.2
-    - _NoiseScale: 256
+    - _NoiseScale: 512
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimOverdrive: 1.4
+    - _RimOverdrive: 1.2
     - _RimOverlayOverdrive: 0.6
     - _RimPower: 2.4
     - _RimThreshold: 0.4
     - _SmoothnessTextureChannel: 0
-    - _SpecularAmount: 200
+    - _SpecularAmount: 24
     - _SpecularHighlights: 1
-    - _SpecularOverdrive: 1.2
+    - _SpecularOverdrive: 0.5
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1

@@ -35,6 +35,14 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public string NickName
+    {
+        get
+        {
+            return photonView.Owner.NickName;
+        }
+    }
+
     public void Awake()
     {
         if (photonView.IsMine)
@@ -44,7 +52,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         else
         {
             remoteNetworkedPlayers.Add(this);
-            if(logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
+            if (logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
         }
         DontDestroyOnLoad(gameObject);
     }

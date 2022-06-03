@@ -149,4 +149,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627c2230110dd45d5936bc1184136300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logging: 1
   localTurtleTransform: {fileID: 0}

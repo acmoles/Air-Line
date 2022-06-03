@@ -161,6 +161,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Transform movingTurtle = fakeTurtle.GetComponent<ExposeChildTransform>().childTransform;
         movingTurtle.name = id;
         fakeTurtles.Add(movingTurtle);
+        if(logging) Debug.Log("Adding fake turtle at index: " + (fakeTurtles.Count - 1) + " with id: " + id);
     }
 
     private void RemoveFakeTurtle(string id)
@@ -168,10 +169,10 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         for (int i = 0; i < PhotonPlayerManager.remoteNetworkedPlayers.Count; i++)
         {
             PhotonPlayerManager playerManager = PhotonPlayerManager.remoteNetworkedPlayers[i];
-            if (playerManager.UserId == id)
+            if (playerManager.NickName == id)
             {
                 PhotonPlayerManager.remoteNetworkedPlayers.RemoveAt(i);
-                if (fakeTurtles[i].name != id) Debug.LogError("Fake turtle name does not match networked player UserId!");
+                if (fakeTurtles[i].name != id) Debug.LogError("Fake turtle name does not match networked player NickName!");
                 fakeTurtles.RemoveAt(i);
             }
         }
@@ -183,13 +184,13 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.Log("OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
-        if (enableFakeTurtles) AddFakeTurtle(other.UserId);
+        if (enableFakeTurtles) AddFakeTurtle(other.NickName);
     }
 
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.Log("OnPlayerLeftRoom() " + other.NickName); // seen when other disconnects
-        if (enableFakeTurtles) RemoveFakeTurtle(other.UserId);
+        if (enableFakeTurtles) RemoveFakeTurtle(other.NickName);
     }
 
     public override void OnLeftRoom()

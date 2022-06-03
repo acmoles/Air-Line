@@ -72,6 +72,15 @@ Shader "Custom/VertexColored2"
                 return base / (1.0 - blend);
             }
 
+            float2 intToSeedVec(uint seed) {
+                uint a = 1;
+                uint b = 256;
+                uint c = 255;
+
+                float2 iSeedVec = float2(  ((seed / a) & c), ((seed / b) & c) );
+                return trunc(iSeedVec * (1.0 / 9.0)) * 10.0 + frac(iSeedVec * (1.0 / 9.0)) * 9.0 + 1.0; // Skip multiples of 9
+            }
+
             struct appdata
             {
                 float4 vertexColor: COLOR; // Vertex color
@@ -155,6 +164,7 @@ Shader "Custom/VertexColored2"
                 // Noise
                 float2 screenUV = i.screenPosition.xy / i.screenPosition.w;
                 screenUV *= float2(_NoiseScale, _NoiseScale);
+                screenUV *= 0.75 + (frac(_Time.y)/2.0);
                 float n = _NoiseAmount * SimplexNoise( screenUV );
                 float3 noise = float3(n, n, n);
 
