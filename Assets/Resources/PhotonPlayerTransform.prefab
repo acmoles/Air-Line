@@ -151,3 +151,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logging: 1
   localTurtleTransform: {fileID: 0}
+  enableFakeTurtles: 1
+  fakeTurtlePrefab: {fileID: 5288738431906612135, guid: bb94f37d1089e43f39ff637c4a28cdb2,
+    type: 3}

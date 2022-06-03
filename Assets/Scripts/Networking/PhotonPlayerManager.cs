@@ -71,8 +71,6 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         }
         // Set by NetworkingManager in the scene
         transform.parent = contentParentCached;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     public override void OnDisable()
