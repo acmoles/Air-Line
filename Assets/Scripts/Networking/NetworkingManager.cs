@@ -13,6 +13,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     static public NetworkingManager Instance;
 
+    [SerializeField]
+    private bool logging = true;
+
     [Tooltip("The prefab for representing the photon player")]
     [SerializeField]
     private GameObject networkedPlayerPrefab = null;
@@ -23,6 +26,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private Transform localTurtle = null;
 
     [Header("Fake turtles")]
+    [SerializeField]
+    private bool enableFakeTurtles = false;
     [Tooltip("Prefab for fake turtles to match remote photon players")]
     [SerializeField]
     private Transform fakeTurtlePrefab = null;
@@ -70,6 +75,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                 // Spawn the prefab for the local player. it gets synced by using PhotonNetwork.Instantiate.
                 GameObject networkedPlayer = PhotonNetwork.Instantiate(this.networkedPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                networkedPlayer.transform.parent = contentParent;
                 networkedPlayer.GetComponent<PhotonPlayerManager>().localTurtleTransform = localTurtle;
             }
             else
@@ -99,6 +105,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnBrushStylesChanged(string state)
     {
+        if (logging) Debug.Log("Sending brush styles networked: " + state);
         // BrushStyles handles it's own serialization
         string brushStylesMessage = myBrushStyles.SerializeBrushStyles();
 
@@ -114,19 +121,22 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             string message = (string)photonEvent.CustomData;
             myBrushStyles.DeSerializeBrushStyles(message);
-            Debug.Log("Incoming brush styles: " + message);
+            if (logging) Debug.Log("Incoming brush styles networked: " + message);
         }
     }
 
     private void Update()
     {
         // Synchronize fake turtles transforms with photon remote players transforms
-        for (int i = 0; i < PhotonPlayerManager.remoteNetworkedPlayers.Count; i++)
+        if (PhotonPlayerManager.remoteNetworkedPlayers.Count > 0 && fakeTurtles.Count < 0)
         {
-            PhotonPlayerManager playerManager = PhotonPlayerManager.remoteNetworkedPlayers[i];
-            if (fakeTurtles[i].name != playerManager.UserId) Debug.LogError("Fake turtle name does not match networked player UserId!");
-            fakeTurtles[i].localPosition = playerManager.transform.localPosition;
-            fakeTurtles[i].localRotation = playerManager.transform.localRotation;
+            for (int i = 0; i < PhotonPlayerManager.remoteNetworkedPlayers.Count; i++)
+            {
+                PhotonPlayerManager playerManager = PhotonPlayerManager.remoteNetworkedPlayers[i];
+                if (fakeTurtles[i].name != playerManager.UserId) Debug.LogError("Fake turtle name does not match networked player UserId!");
+                fakeTurtles[i].localPosition = playerManager.transform.localPosition;
+                fakeTurtles[i].localRotation = playerManager.transform.localRotation;
+            }
         }
     }
 
@@ -159,13 +169,13 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.Log("OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
-        AddFakeTurtle(other.UserId);
+        if (enableFakeTurtles) AddFakeTurtle(other.UserId);
     }
 
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.Log("OnPlayerLeftRoom() " + other.NickName); // seen when other disconnects
-        RemoveFakeTurtle(other.UserId);
+        if (enableFakeTurtles) RemoveFakeTurtle(other.UserId);
     }
 
     public override void OnLeftRoom()
