@@ -25,14 +25,6 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private Transform localTurtle = null;
 
-    [Header("Fake turtles")]
-    [SerializeField]
-    private bool enableFakeTurtles = false;
-    [Tooltip("Prefab for fake turtles to match remote photon players")]
-    [SerializeField]
-    private Transform fakeTurtlePrefab = null;
-    [Tooltip("The list of fake turtles to update")]
-    public static List<Transform> fakeTurtles = new List<Transform>();
     [SerializeField]
     private Transform contentParent = null;
 
@@ -78,9 +70,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
             {
                 Debug.LogFormat("Instantiating LocalPlayer in {0}", SceneManagerHelper.ActiveSceneName);
 
+                // Set cached content parent first
+                PhotonPlayerManager.contentParentCached = contentParent;
+
                 // Spawn the prefab for the local player. it gets synced by using PhotonNetwork.Instantiate.
                 GameObject networkedPlayer = PhotonNetwork.Instantiate(this.networkedPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                networkedPlayer.transform.parent = contentParent;
                 networkedPlayer.GetComponent<PhotonPlayerManager>().localTurtleTransform = localTurtle;
             }
             else
@@ -139,58 +133,17 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
-    private void Update()
-    {
-        // Synchronize fake turtles transforms with photon remote players transforms
-        if (PhotonPlayerManager.remoteNetworkedPlayers.Count > 0 && fakeTurtles.Count < 0)
-        {
-            for (int i = 0; i < PhotonPlayerManager.remoteNetworkedPlayers.Count; i++)
-            {
-                PhotonPlayerManager playerManager = PhotonPlayerManager.remoteNetworkedPlayers[i];
-                if (fakeTurtles[i].name != playerManager.UserId) Debug.LogError("Fake turtle name does not match networked player UserId!");
-                fakeTurtles[i].localPosition = playerManager.transform.localPosition;
-                fakeTurtles[i].localRotation = playerManager.transform.localRotation;
-            }
-        }
-    }
-
-    private void AddFakeTurtle(string id)
-    {
-        Transform fakeTurtle = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        fakeTurtle.parent = contentParent;
-        Transform movingTurtle = fakeTurtle.GetComponent<ExposeChildTransform>().childTransform;
-        movingTurtle.name = id;
-        fakeTurtles.Add(movingTurtle);
-        if(logging) Debug.Log("Adding fake turtle at index: " + (fakeTurtles.Count - 1) + " with id: " + id);
-    }
-
-    private void RemoveFakeTurtle(string id)
-    {
-        for (int i = 0; i < PhotonPlayerManager.remoteNetworkedPlayers.Count; i++)
-        {
-            PhotonPlayerManager playerManager = PhotonPlayerManager.remoteNetworkedPlayers[i];
-            if (playerManager.NickName == id)
-            {
-                PhotonPlayerManager.remoteNetworkedPlayers.RemoveAt(i);
-                if (fakeTurtles[i].name != id) Debug.LogError("Fake turtle name does not match networked player NickName!");
-                fakeTurtles.RemoveAt(i);
-            }
-        }
-    }
-
 
     #region Photon Callbacks
 
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.Log("OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
-        if (enableFakeTurtles) AddFakeTurtle(other.NickName);
     }
 
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.Log("OnPlayerLeftRoom() " + other.NickName); // seen when other disconnects
-        if (enableFakeTurtles) RemoveFakeTurtle(other.NickName);
     }
 
     public override void OnLeftRoom()

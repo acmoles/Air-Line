@@ -13,11 +13,24 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
     [Tooltip("The local photon player instance")]
     public static PhotonPlayerManager LocalPlayerInstance;
 
+    [Tooltip("Cache the ContentParent")]
+    public static Transform contentParentCached;
+
     [Tooltip("The list of remote photon players")]
     public static List<PhotonPlayerManager> remoteNetworkedPlayers = new List<PhotonPlayerManager>();
 
+    [Header("Local turtle")]
     [HideInInspector]
     public Transform localTurtleTransform = null;
+
+    [Header("Fake turtles")]
+    [SerializeField]
+    private bool enableFakeTurtles = false;
+    [Tooltip("Prefab for fake turtles to match remote photon players")]
+    [SerializeField]
+    private Transform fakeTurtlePrefab = null;
+    [Tooltip("The list of fake turtles to update")]
+    public static List<Transform> fakeTurtles = new List<Transform>();
 
     public PhotonView PlayerPhotonView
     {
@@ -48,18 +61,24 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             LocalPlayerInstance = this;
+            gameObject.name += " Local";
         }
         else
         {
             remoteNetworkedPlayers.Add(this);
             if (logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
+            if (enableFakeTurtles) AddFakeTurtle(NickName);
         }
+        // Set by NetworkingManager in the scene
+        transform.parent = contentParentCached;
+
         DontDestroyOnLoad(gameObject);
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
+        if (enableFakeTurtles) RemoveFakeTurtle(NickName);
     }
 
     public void Update()
@@ -69,6 +88,42 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         {
             transform.localPosition = localTurtleTransform.localPosition;
             transform.localRotation = localTurtleTransform.localRotation;
+        }
+        else
+        {
+            // Synchronize fake turtles transforms with photon remote players transforms
+            if (remoteNetworkedPlayers.Count > 0 && fakeTurtles.Count > 0)
+            {
+                for (int i = 0; i < remoteNetworkedPlayers.Count; i++)
+                {
+                    if (fakeTurtles[i].name != remoteNetworkedPlayers[i].NickName) Debug.LogError("Fake turtle name does not match networked player NickName!");
+                    fakeTurtles[i].localPosition = remoteNetworkedPlayers[i].transform.localPosition;
+                    fakeTurtles[i].localRotation = remoteNetworkedPlayers[i].transform.localRotation;
+                }
+            }
+        }
+    }
+
+    private void AddFakeTurtle(string id)
+    {
+        Transform fakeTurtle = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        fakeTurtle.parent = contentParentCached;
+        Transform movingTurtle = fakeTurtle.GetComponent<ExposeChildTransform>().childTransform;
+        movingTurtle.name = id;
+        fakeTurtles.Add(movingTurtle);
+        if (logging) Debug.Log("Adding fake turtle at index: " + (fakeTurtles.Count - 1) + " with id: " + id);
+    }
+
+    private void RemoveFakeTurtle(string id)
+    {
+        for (int i = 0; i < remoteNetworkedPlayers.Count; i++)
+        {
+            if (remoteNetworkedPlayers[i].NickName == id)
+            {
+                remoteNetworkedPlayers.RemoveAt(i);
+                if (fakeTurtles[i].name != id) Debug.LogError("Fake turtle name does not match networked player NickName!");
+                fakeTurtles.RemoveAt(i);
+            }
         }
     }
 }
