@@ -13,6 +13,7 @@ Shader "Custom/VertexColored2"
         _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
         _RimThreshold("Rim Threshold", Range(0, 1)) = 0.1
         _NoiseAmount ("NoiseAmount", Range(0,1)) = 0.0
+        _NoiseScale ("NoiseScale", float) = 1000.0
         _DarknessAmount ("DarknessAmount", Range(0,1)) = 0.5
         _SpecularOverdrive ("SpecularOverdrive", Range(0,5)) = 1.5
         _RimOverdrive ("RimOverdrive", Range(0,5)) = 2.0
@@ -37,6 +38,7 @@ Shader "Custom/VertexColored2"
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
             #include "AutoLight.cginc"
+            #include "SimplexNoise2D.hlsl"
 
             float noise(float2 co)
             {
@@ -94,6 +96,7 @@ Shader "Custom/VertexColored2"
             uniform float _RimPower;
             uniform float _RimThreshold;
             uniform float _NoiseAmount;
+            uniform float _NoiseScale;
             uniform float _DarknessAmount;
             uniform float _SpecularOverdrive;
             uniform float _RimOverdrive;
@@ -149,8 +152,8 @@ Shader "Custom/VertexColored2"
 
                 // Noise
                 float2 screenUV = i.screenPosition.xy / i.screenPosition.w;
-                screenUV *= float2(8,6);
-                float n = _NoiseAmount * noise( screenUV );
+                screenUV *= float2(_NoiseScale, _NoiseScale);
+                float n = _NoiseAmount * SimplexNoise( screenUV );
                 float3 noise = float3(n, n, n);
 
                 // Blends

@@ -39,9 +39,10 @@ public static class Sequences
     {
         const int iterations = 80;
         yield return new WaitForSeconds(1);
+        Vector3 initialPosition = turtle.transform.position;
         for (int i = 0; i < iterations; i++)
         {
-            Vector3 target = 0.3f * UnityEngine.Random.onUnitSphere;
+            Vector3 target = initialPosition + 0.3f * UnityEngine.Random.onUnitSphere;
             yield return turtle.PointAt(target);
             yield return turtle.MoveToTarget(target);
             yield return turtle.SetCustomColor(NextColorStep(ref i, iterations, Color.cyan, Color.magenta));
@@ -99,7 +100,7 @@ public static class Sequences
     public static Color NextColorStep(ref int index, int totalSteps, Color start, Color end)
     {
         index++;
-        return Color.Lerp(start, end, (float)index / (float)totalSteps);
+        return Color.Lerp(start, end, Mathf.Clamp01((float)index / (float)totalSteps));
     }
 
     public static IEnumerator DoShape(Turtle turtle)

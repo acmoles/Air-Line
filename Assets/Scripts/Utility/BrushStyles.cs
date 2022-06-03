@@ -132,41 +132,45 @@ public class BrushStyles : ScriptableObject
 
     private void OnEnable()
     {
-        colorTranslatorPrimary = new Dictionary<BrushColor, Color>()
-        {
-            {BrushColor.Purple, purple1},
-            {BrushColor.Blue, blue1},
-            {BrushColor.Orange, orange1},
-            {BrushColor.Green, green1},
-            {BrushColor.Custom, customColor},
-        };
-        colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
-        {
-            {BrushColor.Purple, purple2},
-            {BrushColor.Blue, blue2},
-            {BrushColor.Orange, orange2},
-            {BrushColor.Green, green2},
-            {BrushColor.Custom, customColor},
-        };
-
         // Ensure color and secondaryColor are set correctly and trigger an update event
         BrushColor = color;
     }
 
     private void OnStylesChanged(string state)
     {
+        if (logging) Debug.Log("Onstyles changed event triggered: " + state);
         stylesChangedEvent.Trigger(state);
     }
 
     // Getting actual colors for BrushColor
     public Color GetPrimary(BrushColor color)
     {
-        if (colorTranslatorPrimary == null) return Color.black;
+        if (colorTranslatorPrimary == null)
+        {
+            colorTranslatorPrimary = new Dictionary<BrushColor, Color>()
+            {
+                {BrushColor.Purple, purple1},
+                {BrushColor.Blue, blue1},
+                {BrushColor.Orange, orange1},
+                {BrushColor.Green, green1},
+                {BrushColor.Custom, customColor},
+            };
+        }
         return colorTranslatorPrimary[color];
     }
     public Color GetSecondary(BrushColor color)
     {
-        if (colorTranslatorSecondary == null) return Color.black;
+        if (colorTranslatorSecondary == null)
+        {
+            colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
+            {
+                {BrushColor.Purple, purple2},
+                {BrushColor.Blue, blue2},
+                {BrushColor.Orange, orange2},
+                {BrushColor.Green, green2},
+                {BrushColor.Custom, customColor},
+            };
+        }
         return colorTranslatorSecondary[color];
     }
 

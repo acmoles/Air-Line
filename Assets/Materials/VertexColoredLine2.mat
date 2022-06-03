@@ -68,6 +68,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NoiseAmount: 0.2
+    - _NoiseScale: 256
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RimOverdrive: 1.8
