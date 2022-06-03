@@ -40,25 +40,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private BrushStyles myBrushStyles = null;
     public const byte brushStylesChangedEventCode = 1;
 
-    private const string settingMenuPath = "AirLine/Lobby On Start";
-    private static bool lobbyOnStart;
-
-    [MenuItem(settingMenuPath, priority = 1)]
-    private static void Setting()
-    {
-        lobbyOnStart = !lobbyOnStart;
-    }
-
-    [MenuItem(settingMenuPath, true)]
-    private static bool SettingValidate()
-    {
-        Menu.SetChecked(settingMenuPath, lobbyOnStart);
-        return true;
-    }
-
     private void Start()
     {
-        if (!lobbyOnStart) return;
+        if (!AutoStartLobby.IsEnabled) return;
 
         Instance = this;
 

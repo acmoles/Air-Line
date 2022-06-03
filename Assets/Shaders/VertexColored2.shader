@@ -17,6 +17,7 @@ Shader "Custom/VertexColored2"
         _DarknessAmount ("DarknessAmount", Range(0,1)) = 0.5
         _SpecularOverdrive ("SpecularOverdrive", Range(0,5)) = 1.5
         _RimOverdrive ("RimOverdrive", Range(0,5)) = 2.0
+        _RimOverlayOverdrive ("RimOverlayOverdrive", Range(0,5)) = 1.0
     }
     SubShader
     {
@@ -100,6 +101,7 @@ Shader "Custom/VertexColored2"
             uniform float _DarknessAmount;
             uniform float _SpecularOverdrive;
             uniform float _RimOverdrive;
+            uniform float _RimOverlayOverdrive;
 
 
             // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
@@ -148,7 +150,7 @@ Shader "Custom/VertexColored2"
                 float3 rim = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow(rimIntensity, _RimPower);
 
                 float rimInvert = rimDot * pow(1 - NdotL, 1 - _RimThreshold);
-                float3 rimOverlay = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow(rimInvert, _RimPower);
+                float3 rimOverlay = UNITY_ACCESS_INSTANCED_PROP(Props, _RimColor).rgb * pow(rimInvert, _RimPower * _RimOverlayOverdrive);
 
                 // Noise
                 float2 screenUV = i.screenPosition.xy / i.screenPosition.w;
