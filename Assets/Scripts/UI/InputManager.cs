@@ -12,6 +12,12 @@ public class InputManager : Singleton<InputManager>
 
     public delegate void EndTouchEvent(Vector3 position, float time);
     public event EndTouchEvent OnEndTouch;
+
+
+    public delegate void HoldEvent(bool toggle);
+    public event HoldEvent OnHold;
+
+
     private TouchInput touchInput = null;
 
     private Camera mainCamera = null;
@@ -42,6 +48,9 @@ public class InputManager : Singleton<InputManager>
     {
         touchInput.Touch.TouchPress.started += ctx => StartTouch(ctx);
         touchInput.Touch.TouchPress.canceled += ctx => EndTouch(ctx);
+
+        touchInput.Touch.TouchHold.performed += ctx => StartHold(ctx);
+        touchInput.Touch.TouchHold.canceled += ctx => EndHold(ctx);
     }
 
     private void StartTouch(InputAction.CallbackContext ctx)
@@ -55,11 +64,23 @@ public class InputManager : Singleton<InputManager>
         if (OnEndTouch != null) OnEndTouch(TouchUtils.ScreenToWorld(mainCamera, touchInput.Touch.TouchPosition.ReadValue<Vector2>()), (float)ctx.time);
     }
 
-    // Direct finger API
-    private void FingerDown(Finger finger)
+    private void StartHold(InputAction.CallbackContext ctx)
     {
-        if (OnStartTouch != null) OnStartTouch(TouchUtils.ScreenToWorld(mainCamera, finger.screenPosition), Time.time);
+        Debug.Log("Hold started");
+        if (OnHold != null) OnHold(true);
     }
+
+    private void EndHold(InputAction.CallbackContext ctx)
+    {
+        Debug.Log("Hold ended");
+        if (OnHold != null) OnHold(false);
+    }
+
+    // Direct finger API
+    // private void FingerDown(Finger finger)
+    // {
+    //     if (OnStartTouch != null) OnStartTouch(TouchUtils.ScreenToWorld(mainCamera, finger.screenPosition), Time.time);
+    // }
 
     public Vector3 PrimaryPosition()
     {
