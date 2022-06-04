@@ -8,7 +8,13 @@ public class PressDetector : MonoBehaviour
     private Transform spawnable = null;
 
     [SerializeField]
+    WaypointManager waypointManager = null;
+
+    [SerializeField]
     private float zOffset = 0.02f;
+
+    [SerializeField]
+    private int screenYDeadzone = 100;
 
     private InputManager inputManager = null;
 
@@ -35,14 +41,26 @@ public class PressDetector : MonoBehaviour
     {
         //TODO disallow touch on the bottom (UI) portion of the screen
         //Get current 2D touch position and ignore if within black-zone
-        Debug.Log("End " + position);
+        Vector2 screenPosition = inputManager.PrimaryPosition2D();
+        if (screenPosition.y < screenYDeadzone)
+        {
+            return;
+        }
+
+        position.z += zOffset;
+
         if (shouldSpawnWaypoint)
         {
-            position.z += zOffset;
-            //TODO properly create waypoints and ensure parented to contentParent
-            Transform instance = Instantiate(spawnable, position, Quaternion.identity);
-            instance.GetComponent<WaypointVisual>().AnimateIn();
-            instance.parent = transform;
+            if (waypointManager != null)
+            {
+                waypointManager.AddPoint(position);
+            }
+            else
+            {
+                Transform instance = Instantiate(spawnable, position, Quaternion.identity);
+                instance.GetComponent<WaypointVisual>().AnimateIn();
+                instance.parent = transform;
+            }
         }
     }
 

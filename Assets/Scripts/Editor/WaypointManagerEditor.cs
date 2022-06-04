@@ -63,7 +63,7 @@ public class WaypointManagerEditor : Editor
             var newPointGlobal = MouseUtility.GetMouseWorldPosition(PathSpace.xyz, 10f);
             var newPointLocal = t.transform.InverseTransformPoint(newPointGlobal);
             Undo.RecordObject(this, "Add segment");
-            t.AddPoint(newPointLocal, BrushColor.Orange);
+            t.AddPoint(newPointLocal);
         }
     }
 }

@@ -13,13 +13,13 @@ public class WaypointManager : MonoBehaviour
     private bool logging = false;
 
     [SerializeField]
-    StringEvent updatedEvent;
+    StringEvent updatedEvent = null;
 
     [SerializeField]
-    WaypointVisual waypointVisual;
+    WaypointVisual waypointVisual = null;
 
     [SerializeField]
-    AnimationSettings animationSettings;
+    BrushStyles brushStyles = null;
 
 
     [SerializeField, HideInInspector]
@@ -60,19 +60,19 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
-    public void AddPoint(Vector3 position, BrushColor color)
+    public void AddPoint(Vector3 position)
     {
         //TODO check if new waypoint is within close threshhold of previous waypoint
-        var point = new Waypoint(position, color);
+        var point = new Waypoint(position, brushStyles.BrushColor);
         points.Add(point);
         updatedEvent.Trigger("update");
 
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
         point.visual = visual;
-        visual.SetColor(color);
+        visual.SetColor(brushStyles.BrushColor);
         if (points[points.Count - 2].played)
         {
-            if(logging) Debug.Log("New point is active");
+            if (logging) Debug.Log("New point is active");
             point.visual.SetNext(points.Count - 1);
         }
         point.visual.AnimateIn();

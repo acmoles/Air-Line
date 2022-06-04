@@ -51,7 +51,7 @@ public partial class @TouchInput : IInputActionCollection2, IDisposable
                     ""id"": ""c98e58da-e8c0-409e-8e8f-c466c9fbee9f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=1,pressPoint=0.5)"",
+                    ""interactions"": ""Hold(duration=1)"",
                     ""initialStateCheck"": false
                 }
             ],

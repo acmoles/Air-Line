@@ -342,7 +342,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -369,13 +369,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502838943}
-  m_LocalRotation: {x: 0.28257096, y: 0.32619035, z: -0.102847405, w: 0.89620084}
-  m_LocalPosition: {x: -10, y: 10, z: -10}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 35, y: 40, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &685333035 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5449020191466763501, guid: 9d62f5c916e77492796f899e5ba60728,
@@ -725,6 +725,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &1714924876
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5820192587708491395, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_Name
+      value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820192587708491404, guid: dadbe072e631c4d56ba2fb76d764ae3c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dadbe072e631c4d56ba2fb76d764ae3c, type: 3}
 --- !u!114 &1769381087 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3168876681408605474, guid: cd0026b1d95734e4bab31ec3f715b4f7,
@@ -786,7 +855,7 @@ MonoBehaviour:
   updatedEvent: {fileID: 11400000, guid: 0ee101994391b490eb5deae0a4177dbb, type: 2}
   waypointVisual: {fileID: 3368408452690416465, guid: db3728167723a4a0888da10fe01b88b4,
     type: 3}
-  animationSettings: {fileID: 11400000, guid: 72e53927fcf59417fbeabb5b45942ef4, type: 2}
+  brushStyles: {fileID: 0}
   initialized: 0
   targets:
   - {fileID: 810497552}

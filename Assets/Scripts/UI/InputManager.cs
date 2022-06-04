@@ -7,6 +7,9 @@ using UnityEngine.InputSystem.EnhancedTouch;
 [DefaultExecutionOrder(-1)]
 public class InputManager : Singleton<InputManager>
 {
+    [SerializeField]
+    private bool logging = false;
+
     public delegate void StartTouchEvent(Vector3 position, float time);
     public event StartTouchEvent OnStartTouch;
 
@@ -60,19 +63,19 @@ public class InputManager : Singleton<InputManager>
 
     private void EndTouch(InputAction.CallbackContext ctx)
     {
-        //Debug.Log("Touch ended");
+        if(logging) Debug.Log("Touch ended");
         if (OnEndTouch != null) OnEndTouch(TouchUtils.ScreenToWorld(mainCamera, touchInput.Touch.TouchPosition.ReadValue<Vector2>()), (float)ctx.time);
     }
 
     private void StartHold(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Hold started");
+        if(logging) Debug.Log("Hold started");
         if (OnHold != null) OnHold(true);
     }
 
     private void EndHold(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Hold ended");
+        if(logging) Debug.Log("Hold ended");
         if (OnHold != null) OnHold(false);
     }
 
