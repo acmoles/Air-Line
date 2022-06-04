@@ -1,30 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HoldDetector : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject indicator = null;
 
     [SerializeField]
-    private float startDelay = 0.2f;
+    private Image holdRingFill;
+
+    [SerializeField]
+    private Image holdRingBackground;
+
+    [SerializeField]
+    StringEvent movementStateUpdated;
 
 
     [SerializeField, Range(0f, 10f)]
-    private float holdTime = 4f;
+    private float holdDuration = 3f;
+    [SerializeField]
+    private float holdCancelMultiplier = 3f;
 
+    private bool holdSustain = false;
+    private float holdAmount = 0f;
 
     [SerializeField]
-
-    private GameObject indicator = null;
+    private float finishedCooldownDuration = .8f;
+    private float finishedCooldownAmount = 0f;
+    private bool isCoolingDown = false;
 
 
     // [SerializeField]
     // private float zOffset = -0.5f;
 
-
-    private Coroutine chargeCoroutine = null;
-    //private Coroutine coolCoroutine = null;
-    private float startTime;
     private InputManager inputManager;
 
     private void Awake()
@@ -35,62 +45,87 @@ public class HoldDetector : MonoBehaviour
 
     private void OnEnable()
     {
-        inputManager.OnStartTouch += HoldStart;
+        inputManager.OnHold += HoldStart;
         inputManager.OnEndTouch += HoldEnd;
     }
 
     private void OnDisable()
     {
-        inputManager.OnStartTouch -= HoldStart;
+        inputManager.OnHold -= HoldStart;
         inputManager.OnEndTouch -= HoldEnd;
     }
 
-    private void HoldStart(Vector3 position, float time)
+    private void HoldStart(bool isHeld)
     {
-        startTime = time;
-        chargeCoroutine = StartCoroutine(indicatorChargeUp(startDelay));
-    }
-
-    private IEnumerator indicatorChargeUp(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        while (true)
+        if (isHeld)
         {
-            // TODO Fill up ring
-            Vector2 position = inputManager.PrimaryPosition2D();
-            indicator.transform.position = position;
-            if (!indicator.activeSelf) indicator.SetActive(true);
-            DetectHoldComplete(Time.time);
-            yield return null;
+            holdSustain = true;
+            indicator.SetActive(true);
         }
     }
 
-
-    private IEnumerator indicatorCooldown()
-    {
-        yield return new WaitForSeconds(2f);
-        indicator.transform.localScale = Vector3.one * 0.5f;
-        indicator.SetActive(false);
-    }
-
-
     private void HoldEnd(Vector3 position, float time)
     {
-        indicator.SetActive(false);
-        StopCoroutine(chargeCoroutine);
-        // TODO disable follow-me
+        holdSustain = false;
+
+        if (movementStateUpdated != null) movementStateUpdated.Trigger(TurtleMovementState.ExitFollowMe.ToString());
     }
 
-    private void DetectHoldComplete(float time)
+    private void LateUpdate()
     {
-        if (time - startTime > holdTime)
+        if (indicator.activeSelf)
         {
-            Debug.Log("Hold complete");
-            indicator.transform.localScale = Vector3.one * 0.75f;
-            // TODO enable follow-me
-            // TODO prevent placement of waypoint
-            StopCoroutine(chargeCoroutine);
-            StartCoroutine(indicatorCooldown());
-        } 
+            Vector2 position = inputManager.PrimaryPosition2D();
+            indicator.transform.position = position;
+        }
+
+        if (isCoolingDown)
+        {
+            finishedCooldownAmount -= Time.deltaTime / finishedCooldownDuration;
+
+            finishedCooldownAmount = Mathf.Clamp01(finishedCooldownAmount);
+
+            holdRingFill.fillAmount = 1f;
+
+            SetImageAlpha(holdRingFill, finishedCooldownAmount);
+            SetImageAlpha(holdRingBackground, finishedCooldownAmount);
+
+            if (finishedCooldownAmount == 0f)
+            {
+                isCoolingDown = false;
+                indicator.SetActive(false);
+            }
+        }
+        else
+        {
+            holdAmount += (Time.deltaTime * (holdSustain ? 1f : -1f * holdCancelMultiplier)) / holdDuration;
+
+            holdAmount = Mathf.Clamp01(holdAmount);
+
+            holdRingFill.fillAmount = holdAmount;
+
+            float alpha = Mathf.InverseLerp(0f, .2f, holdAmount);
+            SetImageAlpha(holdRingFill, alpha);
+            SetImageAlpha(holdRingBackground, alpha);
+
+            if (holdAmount == 1f)
+            {
+                finishedCooldownAmount = 1f;
+                holdAmount = 0f;
+                isCoolingDown = true;
+                if (movementStateUpdated != null) movementStateUpdated.Trigger(TurtleMovementState.FollowMe.ToString());
+            }
+            else if (holdAmount == 0f)
+            {
+                indicator.SetActive(false);
+            }
+        }
+    }
+
+    private void SetImageAlpha(Image image, float newAlpha)
+    {
+        Color newCol = image.color;
+        newCol.a = newAlpha;
+        image.color = newCol;
     }
 }
