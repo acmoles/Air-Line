@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,23 +32,60 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     protected BrushStyles brushStyles = null;
 
+
+    // Brush size
+    public int brushSizeIndex = 0;
     public void OnSize(BrushSize size)
     {
         brushStyles.BrushSize = size;
     }
+    public void OnSize(bool toggle)
+    {
+        brushSizeIndex++;
+        if (brushSizeIndex >= Enum.GetNames(typeof(BrushSize)).Length)
+        {
+            brushSizeIndex = 0;
+        }
+        OnSize((BrushSize)brushSizeIndex);
+    }
 
+    // Brush color
     public void OnColor(BrushColor color)
     {
         brushStyles.BrushColor = color;
     }
-
-    public void OnToggleMovementState(string toggle)
+    public void OnChangeColor(string message)
     {
-        movementStateUpdated.Trigger(toggle);
+        BrushColor converted;
+        if(Enum.TryParse<BrushColor>(message, out converted))
+        {
+            OnColor(converted);
+        }
+        else
+        {
+            Debug.LogWarning("Not a BrushColor: " + message);
+        }
     }
 
+    // Movement state (play/pause)
+    public void OnToggleMovementState(TurtleMovementState toggle)
+    {
+        movementStateUpdated.Trigger(toggle.ToString());
+    }
+    public void OnToggleMovementState(bool toggle)
+    {
+        if (toggle) OnToggleMovementState(TurtleMovementState.Play);
+        else OnToggleMovementState(TurtleMovementState.Pause);
+    }
+
+    // Brush up/down
     public void OnToggleBrushUpDown(BrushUpDownState toggle)
     {
         brushStyles.BrushToggle = toggle;
+    }
+    public void OnToggleBrushUpDown(bool toggle)
+    {
+        if (toggle) OnToggleBrushUpDown(BrushUpDownState.Down);
+        else OnToggleBrushUpDown(BrushUpDownState.Up);
     }
 }

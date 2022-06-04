@@ -68,6 +68,7 @@ public class HoldDetector : MonoBehaviour
     {
         holdSustain = false;
 
+        //TODO this results in always setting back to play
         if (movementStateUpdated != null) movementStateUpdated.Trigger(TurtleMovementState.ExitFollowMe.ToString());
     }
 

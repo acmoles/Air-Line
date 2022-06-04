@@ -1,21 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Interactable
-{
-    private bool m_isToggled = false;
-    public bool IsToggled
-    {
-        get => m_isToggled;
-        set => m_isToggled = value;
-    }
-}
-
-public class ToggleButtonVisual : MonoBehaviour
+public class ToggleButtonVisual : ToggleResponder
 {
     [SerializeField]
-    private Interactable toggle = null;
+    private Toggle toggle = null;
 
     [SerializeField]
     private GameObject OffVisual = null;
@@ -23,24 +14,15 @@ public class ToggleButtonVisual : MonoBehaviour
     [SerializeField]
     private GameObject OnVisual = null;
 
-    private void Start()
-    {
-        SetVisual(toggle.IsToggled);
-    }
+    [SerializeField]
+    private StringEvent toggleEvent = null;
 
-    private void Update()
-    {
-        UpdateVisual();
-    }
 
-    public void SetVisual(bool isOn)
+    //TODO animation
+    protected override void SetVisual()
     {
-        OnVisual.SetActive(isOn);
-        OffVisual.SetActive(!isOn);
-    }
-
-    public void UpdateVisual()
-    {
-        SetVisual(toggle.IsToggled);
+        if (OnVisual != null) OnVisual.SetActive(toggle.isOn);
+        if (OffVisual != null) OffVisual.SetActive(!toggle.isOn);
+        if (toggleEvent != null) toggleEvent.Trigger(toggle.isOn.ToString());
     }
 }

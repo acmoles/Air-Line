@@ -16,6 +16,10 @@ public class PressDetector : MonoBehaviour
     [SerializeField]
     private int screenYDeadzone = 100;
 
+    [SerializeField]
+    private int screenYDrawerToggledDeadzone = 200;
+    private bool useToggledDeadzone = false;
+
     private InputManager inputManager = null;
 
     private bool shouldSpawnWaypoint = true;
@@ -39,10 +43,9 @@ public class PressDetector : MonoBehaviour
 
     private void Spawn(Vector3 position, float time)
     {
-        //TODO disallow touch on the bottom (UI) portion of the screen
-        //Get current 2D touch position and ignore if within black-zone
         Vector2 screenPosition = inputManager.PrimaryPosition2D();
-        if (screenPosition.y < screenYDeadzone)
+        int deadzone = useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone;
+        if (screenPosition.y < deadzone)
         {
             return;
         }
@@ -67,5 +70,19 @@ public class PressDetector : MonoBehaviour
     private void SetWaypointSpawnable(bool isHeld)
     {
         shouldSpawnWaypoint = !isHeld;
+    }
+
+    public void SetToggledDeadzone(string message)
+    {
+        bool messageBool;
+
+        if (bool.TryParse(message, out messageBool))
+        {
+            useToggledDeadzone = messageBool;
+        }
+        else
+        {
+            Debug.LogWarning("Not a valid stringbool");
+        }
     }
 }

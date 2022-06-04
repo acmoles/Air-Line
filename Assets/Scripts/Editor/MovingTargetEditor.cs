@@ -84,22 +84,22 @@ public class MovingTargetEditor : Editor
 
         if (GUILayout.Button(TurtleMovementState.FollowMe.ToString()))
         {
-            t.OnToggleMovementState(TurtleMovementState.FollowMe.ToString());
+            t.OnToggleMovementState(TurtleMovementState.FollowMe);
         }
 
         if (GUILayout.Button(TurtleMovementState.ExitFollowMe.ToString()))
         {
-            t.OnToggleMovementState(TurtleMovementState.ExitFollowMe.ToString());
+            t.OnToggleMovementState(TurtleMovementState.ExitFollowMe);
         }
 
         if (GUILayout.Button(TurtleMovementState.Play.ToString()))
         {
-            t.OnToggleMovementState(TurtleMovementState.Play.ToString());
+            t.OnToggleMovementState(TurtleMovementState.Play);
         }
 
         if (GUILayout.Button(TurtleMovementState.Pause.ToString()))
         {
-            t.OnToggleMovementState(TurtleMovementState.Pause.ToString());
+            t.OnToggleMovementState(TurtleMovementState.Pause);
         }
     }
 }
