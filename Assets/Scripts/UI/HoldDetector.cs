@@ -66,10 +66,11 @@ public class HoldDetector : MonoBehaviour
 
     private void HoldEnd(Vector3 position, float time)
     {
+        if (holdSustain)
+        {
+            if (movementStateUpdated != null) movementStateUpdated.Trigger(TurtleMovementState.ExitFollowMe.ToString());
+        }
         holdSustain = false;
-
-        //TODO this results in always setting back to play
-        if (movementStateUpdated != null) movementStateUpdated.Trigger(TurtleMovementState.ExitFollowMe.ToString());
     }
 
     private void LateUpdate()

@@ -33,7 +33,13 @@ public class Turtle : MonoBehaviour
     {
         Sequences.PopulateSequenceList();
         DisableFollowMe();
-        //StartSequence("Initial");
+        StartSequence("Initial");
+    }
+
+    [ContextMenu("Force restart")]
+    public void ForceRestart()
+    {
+        DisableFollowMe();
         StartSequence("Initial");
     }
 
@@ -46,7 +52,8 @@ public class Turtle : MonoBehaviour
             StartCoroutine(DoSequence(commandString));
         }
     }
-
+    
+    //TODO bug waypoints dropped before first rest do not get played
     private IEnumerator DoSequence(string commandString)
     {
         yield return null;

@@ -3,22 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO If follow me enabled
-
 [RequireComponent(typeof(Rigidbody))]
 public class FollowMe : MonoBehaviour
 {
     [SerializeField]
-    private MovingTarget movingTarget;
+    private bool useTouch = false;
 
     [SerializeField]
-    private TurtleSettings movementSettings;
+    private BrushStyles brushStyles = null;
+
+    [SerializeField]
+    private MovingTarget movingTarget = null;
+
+    [SerializeField]
+    private TurtleSettings movementSettings = null;
 
     private Rigidbody turtleRigidbody = null;
 
     private Vector3 targetPosition = Vector3.zero;
 
     private Quaternion targetRotation;
+
+    private InputManager inputManager = null;
+
+    private void Awake()
+    {
+        inputManager = InputManager.Instance;
+    }
 
     private void Start()
     {
@@ -31,7 +42,8 @@ public class FollowMe : MonoBehaviour
         turtleRigidbody.isKinematic = false;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         turtleRigidbody.isKinematic = true;
     }
 
@@ -45,12 +57,25 @@ public class FollowMe : MonoBehaviour
 
     private void UpdateTargetPosition()
     {
-        if (movingTarget == null) return;
-
-        // prevent small changes at brush head
-        if ((movingTarget.Target.position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
+        if (useTouch)
         {
-            targetPosition = movingTarget.Target.position;
+            Vector3 position = inputManager.PrimaryPosition();
+            position.z += brushStyles.followMeScreenOffset;
+            // prevent small changes at brush head
+            if ((position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
+            {
+                targetPosition = position;
+            }
+        }
+        else
+        {
+            if (movingTarget == null) return;
+
+            // prevent small changes at brush head
+            if ((movingTarget.Target.position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
+            {
+                targetPosition = movingTarget.Target.position;
+            }
         }
     }
 

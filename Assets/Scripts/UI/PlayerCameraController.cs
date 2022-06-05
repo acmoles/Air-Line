@@ -57,6 +57,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (logging) Debug.Log("Move " + position);
         Vector3 move = new Vector3(position.x, 0, position.y);
+        move = transform.TransformVector(move);
         controller.Move(move * Time.deltaTime * movementSpeed);
     }
 

@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "1d9985ed-a57b-4253-a475-921dfb2ac9c8",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -24,9 +24,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ToggleLook",
+                    "name": "Toggle",
                     "type": "Button",
-                    "id": "1e594a87-1b1f-4379-bf26-c9416aadd095",
+                    "id": "c2cb25d0-24af-4e54-80ea-2093e178653d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -157,12 +157,12 @@
                 },
                 {
                     "name": "",
-                    "id": "9378f383-b86b-4441-975a-6d684bda80a3",
+                    "id": "d8a39aea-a578-49cb-aaf4-6ffcad213630",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleLook",
+                    "action": "Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

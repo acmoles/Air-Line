@@ -29,9 +29,9 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""1d9985ed-a57b-4253-a475-921dfb2ac9c8"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -46,9 +46,9 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ToggleLook"",
+                    ""name"": ""Toggle"",
                     ""type"": ""Button"",
-                    ""id"": ""1e594a87-1b1f-4379-bf26-c9416aadd095"",
+                    ""id"": ""c2cb25d0-24af-4e54-80ea-2093e178653d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -179,12 +179,12 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9378f383-b86b-4441-975a-6d684bda80a3"",
+                    ""id"": ""d8a39aea-a578-49cb-aaf4-6ffcad213630"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ToggleLook"",
+                    ""action"": ""Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -197,7 +197,7 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
         m_CameraControls = asset.FindActionMap("CameraControls", throwIfNotFound: true);
         m_CameraControls_Move = m_CameraControls.FindAction("Move", throwIfNotFound: true);
         m_CameraControls_Look = m_CameraControls.FindAction("Look", throwIfNotFound: true);
-        m_CameraControls_ToggleLook = m_CameraControls.FindAction("ToggleLook", throwIfNotFound: true);
+        m_CameraControls_Toggle = m_CameraControls.FindAction("Toggle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -259,14 +259,14 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
     private ICameraControlsActions m_CameraControlsActionsCallbackInterface;
     private readonly InputAction m_CameraControls_Move;
     private readonly InputAction m_CameraControls_Look;
-    private readonly InputAction m_CameraControls_ToggleLook;
+    private readonly InputAction m_CameraControls_Toggle;
     public struct CameraControlsActions
     {
         private @SimulatedPlayerInput m_Wrapper;
         public CameraControlsActions(@SimulatedPlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_CameraControls_Move;
         public InputAction @Look => m_Wrapper.m_CameraControls_Look;
-        public InputAction @ToggleLook => m_Wrapper.m_CameraControls_ToggleLook;
+        public InputAction @Toggle => m_Wrapper.m_CameraControls_Toggle;
         public InputActionMap Get() { return m_Wrapper.m_CameraControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,9 +282,9 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
                 @Look.started -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnLook;
-                @ToggleLook.started -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggleLook;
-                @ToggleLook.performed -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggleLook;
-                @ToggleLook.canceled -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggleLook;
+                @Toggle.started -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggle;
+                @Toggle.performed -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggle;
+                @Toggle.canceled -= m_Wrapper.m_CameraControlsActionsCallbackInterface.OnToggle;
             }
             m_Wrapper.m_CameraControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -295,9 +295,9 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @ToggleLook.started += instance.OnToggleLook;
-                @ToggleLook.performed += instance.OnToggleLook;
-                @ToggleLook.canceled += instance.OnToggleLook;
+                @Toggle.started += instance.OnToggle;
+                @Toggle.performed += instance.OnToggle;
+                @Toggle.canceled += instance.OnToggle;
             }
         }
     }
@@ -306,6 +306,6 @@ public partial class @SimulatedPlayerInput : IInputActionCollection2, IDisposabl
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnToggleLook(InputAction.CallbackContext context);
+        void OnToggle(InputAction.CallbackContext context);
     }
 }

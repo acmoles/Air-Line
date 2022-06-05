@@ -225,8 +225,8 @@ MonoBehaviour:
   spawnable: {fileID: 3081456280799933435, guid: db3728167723a4a0888da10fe01b88b4,
     type: 3}
   waypointManager: {fileID: 0}
-  zOffset: 0.024
   screenYDeadzone: 100
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
   screenYDrawerToggledDeadzone: 200
 --- !u!114 &5820192586246417308
 MonoBehaviour:
@@ -615,6 +615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d77560df3524ded93edd7039fd6279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logging: 0
 --- !u!1 &5820192587497639736
 GameObject:
   m_ObjectHideFlags: 0

@@ -174,11 +174,16 @@ public class BrushStyles : ScriptableObject
         return colorTranslatorSecondary[color];
     }
 
+    [Space(10)]
+    [Header("Placement Settings")]
+    public float followMeScreenOffset = 0.1f;
+    public float waypointScreenOffset = 0.1f;
+
 
     [Space(10)]
     [Header("Line Settings")]
-    public float small = 0.01f;
-    public float medium = 0.02f;
+    public float small = 0.005f;
+    public float medium = 0.01f;
     public float large = 0.04f;
 
     [SerializeField]

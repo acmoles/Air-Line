@@ -11,10 +11,10 @@ public class PressDetector : MonoBehaviour
     WaypointManager waypointManager = null;
 
     [SerializeField]
-    private float zOffset = 0.02f;
+    private int screenYDeadzone = 100;
 
     [SerializeField]
-    private int screenYDeadzone = 100;
+    private BrushStyles brushStyles = null;
 
     [SerializeField]
     private int screenYDrawerToggledDeadzone = 200;
@@ -50,7 +50,7 @@ public class PressDetector : MonoBehaviour
             return;
         }
 
-        position.z += zOffset;
+        position.z += brushStyles.waypointScreenOffset;
 
         if (shouldSpawnWaypoint)
         {

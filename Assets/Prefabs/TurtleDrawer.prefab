@@ -165,6 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6de5a66c14cc4cccaaee5b31dc866c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useTouch: 0
+  brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
   movingTarget: {fileID: 0}
   movementSettings: {fileID: 11400000, guid: 0b84869b280934277a1b58c66c9deb84, type: 2}
 --- !u!114 &3168876681408605485

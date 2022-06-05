@@ -68,6 +68,7 @@ public class WaypointManager : MonoBehaviour
         updatedEvent.Trigger("update");
 
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
+        visual.transform.parent = transform;
         point.visual = visual;
         visual.SetColor(brushStyles.BrushColor);
         if (points[points.Count - 2].played)
