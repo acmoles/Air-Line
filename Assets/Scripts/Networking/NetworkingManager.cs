@@ -39,7 +39,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void Start()
     {
+#if UNITY_EDITOR
         if (!AutoStartLobby.IsEnabled) return;
+#endif
 
         Instance = this;
 

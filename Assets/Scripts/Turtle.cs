@@ -25,6 +25,8 @@ public class Turtle : MonoBehaviour
     [SerializeField]
     private BrushStyles brushStyles;
 
+    private Quaternion lastRotation = Quaternion.identity;
+
     private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
     private bool isWaitingToFreeDraw = false;
@@ -39,6 +41,7 @@ public class Turtle : MonoBehaviour
     [ContextMenu("Force restart")]
     public void ForceRestart()
     {
+        StopAllCoroutines();
         DisableFollowMe();
         StartSequence("Initial");
     }
@@ -52,7 +55,7 @@ public class Turtle : MonoBehaviour
             StartCoroutine(DoSequence(commandString));
         }
     }
-    
+
     //TODO bug waypoints dropped before first rest do not get played
     private IEnumerator DoSequence(string commandString)
     {
@@ -272,7 +275,7 @@ public class Turtle : MonoBehaviour
     {
         if (logging) Debug.Log("start turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         // Quaternion start = objectToMove.transform.rotation;
-        Quaternion end;
+        Quaternion end = Quaternion.identity;
         switch (axis)
         {
             case "x":
@@ -292,7 +295,8 @@ public class Turtle : MonoBehaviour
                     break;
                 }
                 Vector3 direction = Vector3.Normalize(target.Value - objectToMove.transform.position);
-                end = Quaternion.LookRotation(direction, objectToMove.transform.up);
+                if (direction == Vector3.zero) end = objectToMove.transform.rotation;
+                else end = Quaternion.LookRotation(direction, objectToMove.transform.up);
                 break;
             default:
                 end = objectToMove.transform.rotation;
@@ -317,7 +321,9 @@ public class Turtle : MonoBehaviour
         // TODO use acceleration/deceleration 
         while (objectToMove.transform.rotation != end)
         {
+            lastRotation = objectToMove.transform.rotation;
             objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
+            if (objectToMove.transform.rotation == lastRotation) Debug.LogError("Rotation lock");
             yield return new WaitForEndOfFrame();
         }
     }
@@ -361,7 +367,7 @@ public class Turtle : MonoBehaviour
 
     public IEnumerator Move(GameObject objectToMove, float distance, float speed)
     {
-        if(contentParent != null) distance *= contentParent.localScale.x;
+        if (contentParent != null) distance *= contentParent.localScale.x;
         if (logging) Debug.Log("start move");
         Vector3 start = objectToMove.transform.position;
         Vector3 end = objectToMove.transform.position + objectToMove.transform.forward * distance;

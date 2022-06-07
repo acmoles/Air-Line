@@ -7,8 +7,7 @@ public class PressDetector : MonoBehaviour
     [SerializeField]
     private Transform spawnable = null;
 
-    [SerializeField]
-    WaypointManager waypointManager = null;
+    private WaypointManager waypointManager = null;
 
     [SerializeField]
     private int screenYDeadzone = 100;
@@ -27,6 +26,7 @@ public class PressDetector : MonoBehaviour
     private void Awake()
     {
         inputManager = InputManager.Instance;
+        waypointManager = WaypointManager.Instance;
     }
 
     private void OnEnable()

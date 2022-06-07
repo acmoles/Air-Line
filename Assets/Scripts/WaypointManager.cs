@@ -7,7 +7,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class WaypointManager : MonoBehaviour
+public class WaypointManager : Singleton<WaypointManager>
 {
     [SerializeField]
     private bool logging = false;

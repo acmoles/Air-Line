@@ -8,6 +8,7 @@ using UnityEditor;
 [SelectionBase]
 public class SequencePlayer : MonoBehaviour
 {
+    //TODO switch to event based system rather than direct reference
     public Turtle turtle = null;
 }
 
