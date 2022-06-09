@@ -64,7 +64,7 @@ public class HoldDetector : MonoBehaviour
         }
     }
 
-    private void HoldEnd(Vector3 position, float time)
+    private void HoldEnd(Vector2 position, float time)
     {
         if (holdSustain)
         {
@@ -77,8 +77,7 @@ public class HoldDetector : MonoBehaviour
     {
         if (indicator.activeSelf)
         {
-            Vector2 position = inputManager.PrimaryPosition2D();
-            indicator.transform.position = position;
+            indicator.transform.position = inputManager.PrimaryPosition2D();
         }
 
         if (isCoolingDown)

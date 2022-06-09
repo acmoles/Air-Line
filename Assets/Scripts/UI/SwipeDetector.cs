@@ -41,7 +41,7 @@ public class SwipeDetector : MonoBehaviour
         inputManager.OnEndTouch -= SwipeEnd;
     }
 
-    private void SwipeStart(Vector3 position, float time)
+    private void SwipeStart(Vector2 position, float time)
     {
         // TODO trail only if swipe starts in UI area (bottom of the screen)
         startPosition = position;
@@ -60,7 +60,7 @@ public class SwipeDetector : MonoBehaviour
         }
     }
 
-    private void SwipeEnd(Vector3 position, float time)
+    private void SwipeEnd(Vector2 position, float time)
     {
         endPosition = position;
         endTime = time;

@@ -23,16 +23,35 @@ public class PressDetector : MonoBehaviour
 
     private bool shouldSpawnWaypoint = true;
 
+
+    [Header("Debug")]
+    [SerializeField]
+    private RectTransform deadzoneVisual = null;
+
+    [SerializeField]
+    private GameObject tapVisual = null;
+
+    [SerializeField]
+    private GameObject noTapVisual = null;
+
+    [SerializeField]
+    private float tapDuration = 1.0f;
+    private float tapTimer = 0.0f;
+
     private void Awake()
     {
         inputManager = InputManager.Instance;
-        waypointManager = WaypointManager.Instance;
+        //waypointManager = WaypointManager.Instance;
     }
 
     private void OnEnable()
     {
         inputManager.OnEndTouch += Spawn;
         inputManager.OnHold += SetWaypointSpawnable;
+
+        //TODO debug
+        deadzoneVisual.anchoredPosition = new Vector2(deadzoneVisual.anchoredPosition.x, GetDeadzone());
+        tapVisual.SetActive(false);
     }
 
     private void OnDisable()
@@ -41,26 +60,29 @@ public class PressDetector : MonoBehaviour
         inputManager.OnHold -= SetWaypointSpawnable;
     }
 
-    private void Spawn(Vector3 position, float time)
+    private void Spawn(Vector2 position, float time)
     {
-        Vector2 screenPosition = inputManager.PrimaryPosition2D();
-        int deadzone = useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone;
-        if (screenPosition.y < deadzone)
+        tapTimer = 0.0f;
+
+        if (position.y < GetDeadzone())
         {
+            noTapVisual.SetActive(true);
             return;
         }
 
-        position.z += brushStyles.waypointScreenOffset;
+        tapVisual.SetActive(true);
+
+        Vector3 p = TouchUtils.ScreenToWorld(position, brushStyles.waypointScreenOffset);
 
         if (shouldSpawnWaypoint)
         {
             if (waypointManager != null)
             {
-                waypointManager.AddPoint(position);
+                waypointManager.AddPoint(p);
             }
             else
             {
-                Transform instance = Instantiate(spawnable, position, Quaternion.identity);
+                Transform instance = Instantiate(spawnable, p, Quaternion.identity);
                 instance.GetComponent<WaypointVisual>().AnimateIn();
                 instance.parent = transform;
             }
@@ -79,10 +101,32 @@ public class PressDetector : MonoBehaviour
         if (bool.TryParse(message, out messageBool))
         {
             useToggledDeadzone = messageBool;
+            deadzoneVisual.anchoredPosition = new Vector2(deadzoneVisual.anchoredPosition.x, GetDeadzone());
         }
         else
         {
             Debug.LogWarning("Not a valid stringbool");
+        }
+    }
+
+    private float GetDeadzone()
+    {
+        return useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone;
+    }
+
+    //TODO debug
+    private void Update()
+    {
+        if (tapTimer < 1.0f)
+        {
+            tapTimer += Time.deltaTime / tapDuration;
+            tapVisual.transform.position = inputManager.PrimaryPosition2D();
+            noTapVisual.transform.position = inputManager.PrimaryPosition2D();
+        }
+        else
+        {
+            tapVisual.SetActive(false);
+            noTapVisual.SetActive(false);
         }
     }
 }

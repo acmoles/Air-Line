@@ -59,8 +59,8 @@ public class FollowMe : MonoBehaviour
     {
         if (useTouch)
         {
-            Vector3 position = inputManager.PrimaryPosition();
-            position.z += brushStyles.followMeScreenOffset;
+            Vector3 position = TouchUtils.ScreenToWorld(inputManager.PrimaryPosition2D(), brushStyles.followMeScreenOffset);
+            
             // prevent small changes at brush head
             if ((position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
             {

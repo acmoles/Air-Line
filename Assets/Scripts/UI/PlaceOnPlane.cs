@@ -11,6 +11,10 @@ public class PlaceOnPlane : MonoBehaviour
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
     GameObject m_PlacedPrefab;
 
+    [SerializeField]
+    [Tooltip("Instantiates this prefab on a plane at the touch location.")]
+    GameObject m_IndicatorPrefab;
+
     private InputManager inputManager = null;
 
     /// <summary>
@@ -26,6 +30,10 @@ public class PlaceOnPlane : MonoBehaviour
     /// The object instantiated as a result of a successful raycast intersection with a plane.
     /// </summary>
     public GameObject spawnedObject { get; private set; }
+
+    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+
+    ARRaycastManager m_RaycastManager;
 
     void Awake()
     {
@@ -43,14 +51,14 @@ public class PlaceOnPlane : MonoBehaviour
         inputManager.OnEndTouch -= AddObject;
     }
 
-    public void AddObject(Vector3 position, float time)
+    public void AddObject(Vector2 position, float time)
     {
-        var touchPosition = inputManager.PrimaryPosition2D();
-        if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+        if (m_RaycastManager.Raycast(position, s_Hits, TrackableType.PlaneWithinPolygon))
         {
             // Raycast hits are sorted by distance, so the first one
             // will be the closest hit.
             var hitPose = s_Hits[0].pose;
+            if(m_IndicatorPrefab != null) Instantiate(m_IndicatorPrefab, hitPose.position, hitPose.rotation);
 
             if (spawnedObject == null)
             {
@@ -65,8 +73,4 @@ public class PlaceOnPlane : MonoBehaviour
             // }
         }
     }
-
-    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-
-    ARRaycastManager m_RaycastManager;
 }
