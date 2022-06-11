@@ -18,6 +18,9 @@ namespace UnityEngine.XR.ARFoundation.Samples
         [SerializeField]
         Transform m_Arrow;
 
+        Light m_Light;
+
+
         public Transform arrow
         {
             get => m_Arrow;
@@ -44,7 +47,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     m_CameraManager.frameReceived += FrameChanged;
             }
         }
-        
+
         /// <summary>
         /// The estimated brightness of the physical environment, if available.
         /// </summary>
@@ -59,7 +62,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         /// The estimated color correction value of the physical environment, if available.
         /// </summary>
         public Color? colorCorrection { get; private set; }
-        
+
         /// <summary>
         /// The estimated direction of the main light of the physical environment, if available.
         /// </summary>
@@ -80,7 +83,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         /// </summary>
         public SphericalHarmonicsL2? sphericalHarmonics { get; private set; }
 
-        void Awake ()
+        void Awake()
         {
             m_Light = GetComponent<Light>();
         }
@@ -146,7 +149,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             // {
             //     colorCorrection = null;
             // }
-            
+
             if (args.lightEstimation.mainLightDirection.HasValue)
             {
                 mainLightDirection = args.lightEstimation.mainLightDirection;
@@ -194,7 +197,5 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //     sphericalHarmonics = null;
             // }
         }
-
-        Light m_Light;
     }
 }

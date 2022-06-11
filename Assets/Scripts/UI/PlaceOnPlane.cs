@@ -60,6 +60,12 @@ public class PlaceOnPlane : MonoBehaviour
                 spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
                 //Prevent re-placement after first place
                 inputManager.OnEndTouch -= AddObject;
+
+                //Disable plane and point visualisation
+                ToggleARPlanes toggle = GetComponent<ToggleARPlanes>();
+                if(toggle != null) toggle.TogglePlaneDetection();
+                else Debug.LogWarning("Toggle AR Planes not found");
+
                 //TODO add anchor
             }
             // else

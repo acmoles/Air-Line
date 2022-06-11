@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.google.ar.core.arfoundation.extensions": "file:C:/Users/acmol/Documents/dev/UnityPackages/arcore-unity-extensions-1.31.0.tgz",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.formats.fbx": "4.0.1",
     "com.unity.ide.rider": "2.0.7",
