@@ -117,35 +117,35 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void FrameChanged(ARCameraFrameEventArgs args)
         {
-            if (args.lightEstimation.averageBrightness.HasValue)
-            {
-                brightness = args.lightEstimation.averageBrightness.Value;
-                m_Light.intensity = brightness.Value;
-            }
-            else
-            {
-                brightness = null;
-            }
+            // if (args.lightEstimation.averageBrightness.HasValue)
+            // {
+            //     brightness = args.lightEstimation.averageBrightness.Value;
+            //     m_Light.intensity = brightness.Value;
+            // }
+            // else
+            // {
+            //     brightness = null;
+            // }
 
-            if (args.lightEstimation.averageColorTemperature.HasValue)
-            {
-                colorTemperature = args.lightEstimation.averageColorTemperature.Value;
-                m_Light.colorTemperature = colorTemperature.Value;
-            }
-            else
-            {
-                colorTemperature = null;
-            }
+            // if (args.lightEstimation.averageColorTemperature.HasValue)
+            // {
+            //     colorTemperature = args.lightEstimation.averageColorTemperature.Value;
+            //     m_Light.colorTemperature = colorTemperature.Value;
+            // }
+            // else
+            // {
+            //     colorTemperature = null;
+            // }
 
-            if (args.lightEstimation.colorCorrection.HasValue)
-            {
-                colorCorrection = args.lightEstimation.colorCorrection.Value;
-                m_Light.color = colorCorrection.Value;
-            }
-            else
-            {
-                colorCorrection = null;
-            }
+            // if (args.lightEstimation.colorCorrection.HasValue)
+            // {
+            //     colorCorrection = args.lightEstimation.colorCorrection.Value;
+            //     m_Light.color = colorCorrection.Value;
+            // }
+            // else
+            // {
+            //     colorCorrection = null;
+            // }
             
             if (args.lightEstimation.mainLightDirection.HasValue)
             {
@@ -163,36 +163,36 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 mainLightDirection = null;
             }
 
-            if (args.lightEstimation.mainLightColor.HasValue)
-            {
-                mainLightColor = args.lightEstimation.mainLightColor;
-                m_Light.color = mainLightColor.Value;
-            }
-            else
-            {
-                mainLightColor = null;
-            }
+            // if (args.lightEstimation.mainLightColor.HasValue)
+            // {
+            //     mainLightColor = args.lightEstimation.mainLightColor;
+            //     m_Light.color = mainLightColor.Value;
+            // }
+            // else
+            // {
+            //     mainLightColor = null;
+            // }
 
-            if (args.lightEstimation.mainLightIntensityLumens.HasValue)
-            {
-                mainLightIntensityLumens = args.lightEstimation.mainLightIntensityLumens;
-                m_Light.intensity = args.lightEstimation.averageMainLightBrightness.Value;
-            }
-            else
-            {
-                mainLightIntensityLumens = null;
-            }
+            // if (args.lightEstimation.mainLightIntensityLumens.HasValue)
+            // {
+            //     mainLightIntensityLumens = args.lightEstimation.mainLightIntensityLumens;
+            //     m_Light.intensity = args.lightEstimation.averageMainLightBrightness.Value;
+            // }
+            // else
+            // {
+            //     mainLightIntensityLumens = null;
+            // }
 
-            if (args.lightEstimation.ambientSphericalHarmonics.HasValue)
-            {
-                sphericalHarmonics = args.lightEstimation.ambientSphericalHarmonics;
-                RenderSettings.ambientMode = AmbientMode.Skybox;
-                RenderSettings.ambientProbe = sphericalHarmonics.Value;
-            }
-            else
-            {
-                sphericalHarmonics = null;
-            }
+            // if (args.lightEstimation.ambientSphericalHarmonics.HasValue)
+            // {
+            //     sphericalHarmonics = args.lightEstimation.ambientSphericalHarmonics;
+            //     RenderSettings.ambientMode = AmbientMode.Skybox;
+            //     RenderSettings.ambientProbe = sphericalHarmonics.Value;
+            // }
+            // else
+            // {
+            //     sphericalHarmonics = null;
+            // }
         }
 
         Light m_Light;

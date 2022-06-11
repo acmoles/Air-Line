@@ -18,16 +18,22 @@ Shader "Custom/VertexColored2"
         _SpecularOverdrive ("SpecularOverdrive", Range(0,5)) = 1.5
         _RimOverdrive ("RimOverdrive", Range(0,5)) = 2.0
         _RimOverlayOverdrive ("RimOverlayOverdrive", Range(0,5)) = 1.0
+
+        _FadeBeginDistance("Fade Begin Distance", Range(0.0, 10.0)) = 0.85
+        _FadeCompleteDistance("Fade Complete Distance", Range(0.0, 10.0)) = 0.5
+        _FadeMinValue("Fade Min Value", Range(0.0, 1.0)) = 0.0
     }
     SubShader
     {
         Tags 
         { 
-            "RenderType" = "Opaque"
+            "RenderType" = "Transparent"
+            "Queue" = "Transparent"
             "LightMode" = "ForwardBase"
             "PassFlags" = "OnlyDirectional"
         }
         LOD 200
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -94,7 +100,7 @@ Shader "Custom/VertexColored2"
                 float4 vertex : SV_POSITION;
                 float3 worldNormal : NORMAL;
                 float4 screenPosition : TEXCOORD0;
-                float3 worldPosition : TEXCOORD1;
+                float4 worldPosition : TEXCOORD1;
                 SHADOW_COORDS(2)
             };
 
@@ -111,6 +117,10 @@ Shader "Custom/VertexColored2"
             uniform float _SpecularOverdrive;
             uniform float _RimOverdrive;
             uniform float _RimOverlayOverdrive;
+
+            uniform float _FadeBeginDistance;
+            uniform float _FadeCompleteDistance;
+            uniform fixed _FadeMinValue;
 
 
             // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
@@ -130,6 +140,11 @@ Shader "Custom/VertexColored2"
                 o.screenPosition = ComputeScreenPos(o.vertex);
                 o.vertexColor = v.vertexColor;
                 TRANSFER_SHADOW(o)
+
+                float rangeInverse = 1.0 / (_FadeBeginDistance - _FadeCompleteDistance);
+                float fadeDistance = -UnityObjectToViewPos(v.vertex).z;
+                o.worldPosition.w = max(saturate(mad(fadeDistance, rangeInverse, -_FadeCompleteDistance * rangeInverse)), _FadeMinValue);
+
                 return o;
             }
 
@@ -175,6 +190,8 @@ Shader "Custom/VertexColored2"
                 col.rgb = blendColorDodge(col.rgb, rimOverlay);
                 col.rgb = blendScreen(col.rgb, (_SpecularOverdrive*specular + _RimOverdrive*rim + light*_DarknessAmount*.5).rgb);
                 
+                col.a = i.worldPosition.w;
+
                 return col;
                 //return float4(rimOverlay, 1);
             }

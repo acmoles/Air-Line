@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /* 
 /////UI events to hook up/////
@@ -22,31 +23,48 @@ Top UI
 Debug UI
 - ----Replay sequence (on new line?)----
 - Debug field for max tube points
+- Screen z offset
 */
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    protected StringEvent movementStateUpdated = null;
+    private bool logging = false;
 
     [SerializeField]
-    protected BrushStyles brushStyles = null;
+    private StringEvent movementStateUpdated = null;
+
+    [SerializeField]
+    private BrushStyles brushStyles = null;
+
+    // Initial state:
+    // Brush is set to down on start in BrushStyles
+    // Play is set in Turtle on start
 
 
     // Brush size
-    public int brushSizeIndex = 0;
+    public int BrushSizeIndex
+    {
+        set
+        {
+            if (value >= Enum.GetNames(typeof(BrushSize)).Length)
+            {
+                value = 0;
+            }
+            OnSize((BrushSize)value);
+        }
+        get
+        {
+            return (int)brushStyles.BrushSize;
+        }
+    }
     public void OnSize(BrushSize size)
     {
         brushStyles.BrushSize = size;
     }
     public void OnSize(bool toggle)
     {
-        brushSizeIndex++;
-        if (brushSizeIndex >= Enum.GetNames(typeof(BrushSize)).Length)
-        {
-            brushSizeIndex = 0;
-        }
-        OnSize((BrushSize)brushSizeIndex);
+        BrushSizeIndex++;
     }
 
     // Brush color
@@ -57,8 +75,9 @@ public class UIManager : MonoBehaviour
     public void OnChangeColor(string message)
     {
         BrushColor converted;
-        if(Enum.TryParse<BrushColor>(message, out converted))
+        if (Enum.TryParse<BrushColor>(message, out converted))
         {
+            if (logging) Debug.Log("New brush color: " + converted);
             OnColor(converted);
         }
         else

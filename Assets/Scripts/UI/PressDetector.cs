@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.UI;
 
 public class PressDetector : MonoBehaviour
 {
-    [SerializeField]
-    private Transform spawnable = null;
-
-    private WaypointManager waypointManager = null;
-
-    [SerializeField]
-    private int screenYDeadzone = 100;
+    // [SerializeField]
+    // private Transform spawnable = null;
 
     [SerializeField]
     private BrushStyles brushStyles = null;
+
+    [SerializeField]
+    private int screenYDeadzone = 100;
 
     [SerializeField]
     private int screenYDrawerToggledDeadzone = 200;
@@ -25,8 +24,6 @@ public class PressDetector : MonoBehaviour
 
 
     [Header("Debug")]
-    [SerializeField]
-    private RectTransform deadzoneVisual = null;
 
     [SerializeField]
     private GameObject tapVisual = null;
@@ -35,13 +32,16 @@ public class PressDetector : MonoBehaviour
     private GameObject noTapVisual = null;
 
     [SerializeField]
+    private RectTransform deadzone = null;
+
+    [SerializeField]
     private float tapDuration = 1.0f;
     private float tapTimer = 0.0f;
+    private bool pointerOverUI = false;
 
     private void Awake()
     {
         inputManager = InputManager.Instance;
-        //waypointManager = WaypointManager.Instance;
     }
 
     private void OnEnable()
@@ -49,9 +49,10 @@ public class PressDetector : MonoBehaviour
         inputManager.OnEndTouch += Spawn;
         inputManager.OnHold += SetWaypointSpawnable;
 
-        //TODO debug
-        deadzoneVisual.anchoredPosition = new Vector2(deadzoneVisual.anchoredPosition.x, GetDeadzone());
+        //Debug
         tapVisual.SetActive(false);
+        noTapVisual.SetActive(false);
+        deadzone.sizeDelta = new Vector2(0f, useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone);
     }
 
     private void OnDisable()
@@ -64,9 +65,16 @@ public class PressDetector : MonoBehaviour
     {
         tapTimer = 0.0f;
 
-        if (position.y < GetDeadzone())
+        if (GetDeadzone().Contains(position))
         {
             noTapVisual.SetActive(true);
+            return;
+        }
+
+        if (pointerOverUI)
+        {
+            noTapVisual.SetActive(true);
+            Debug.Log("UI element blocked spawn");
             return;
         }
 
@@ -76,18 +84,23 @@ public class PressDetector : MonoBehaviour
 
         if (shouldSpawnWaypoint)
         {
-            if (waypointManager != null)
+            if (WaypointSingleton.Instance.LocalManager != null)
             {
-                waypointManager.AddPoint(p);
+                WaypointSingleton.Instance.LocalManager.AddPoint(p);
             }
-            else
-            {
-                Transform instance = Instantiate(spawnable, p, Quaternion.identity);
-                instance.GetComponent<WaypointVisual>().AnimateIn();
-                instance.parent = transform;
-            }
+            // else
+            // {
+            //     Transform instance = Instantiate(spawnable, p, Quaternion.identity);
+            //     instance.GetComponent<WaypointVisual>().AnimateIn();
+            //     instance.parent = transform;
+            // }
         }
     }
+
+    // private void OnGUI()
+    // {
+    //     GUI.Box(GetDeadzone(), "");
+    // }
 
     private void SetWaypointSpawnable(bool isHeld)
     {
@@ -101,7 +114,7 @@ public class PressDetector : MonoBehaviour
         if (bool.TryParse(message, out messageBool))
         {
             useToggledDeadzone = messageBool;
-            deadzoneVisual.anchoredPosition = new Vector2(deadzoneVisual.anchoredPosition.x, GetDeadzone());
+            deadzone.sizeDelta = new Vector2(0f, useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone);
         }
         else
         {
@@ -109,14 +122,16 @@ public class PressDetector : MonoBehaviour
         }
     }
 
-    private float GetDeadzone()
+    private Rect GetDeadzone()
     {
-        return useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone;
+        return new Rect(0, 0, Screen.width, useToggledDeadzone ? screenYDrawerToggledDeadzone : screenYDeadzone);
     }
 
-    //TODO debug
     private void Update()
     {
+        pointerOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+
+        //TODO debug
         if (tapTimer < 1.0f)
         {
             tapTimer += Time.deltaTime / tapDuration;

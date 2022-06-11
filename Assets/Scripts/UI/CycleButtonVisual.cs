@@ -14,7 +14,7 @@ public class CycleButtonVisual : ToggleResponder
     //TODO animation
     protected override void SetVisual()
     {
-        int index = manager.brushSizeIndex;
+        int index = manager.BrushSizeIndex;
         for (int i = 0; i < buttonVisuals.Count; i++)
         {
             buttonVisuals[i].SetActive(index == i);

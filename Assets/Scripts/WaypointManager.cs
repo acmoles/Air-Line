@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
@@ -7,7 +8,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class WaypointManager : Singleton<WaypointManager>
+public class WaypointManager : MonoBehaviour
 {
     [SerializeField]
     private bool logging = false;
@@ -20,6 +21,8 @@ public class WaypointManager : Singleton<WaypointManager>
 
     [SerializeField]
     BrushStyles brushStyles = null;
+
+    private WaypointSingleton waypointSingleton = null;
 
 
     [SerializeField, HideInInspector]
@@ -41,19 +44,22 @@ public class WaypointManager : Singleton<WaypointManager>
     [SerializeField, HideInInspector]
     List<Waypoint> _points;
 
-    public Transform[] targets;
+    public List<Transform> targets = new List<Transform>();
 
 
     void Start()
     {
-        if (targets.Length > 0)
+        waypointSingleton = WaypointSingleton.Instance;
+        waypointSingleton.AddWaypointManager(this);
+
+        if (targets.Count > 0)
         {
             System.Array values = System.Enum.GetValues(typeof(BrushColor));
 
-            for (int i = 0; i < targets.Length; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
                 // add to points list without triggering update event
-                BrushColor randomColor = (BrushColor)values.GetValue(Random.Range(0, values.Length - 1));
+                BrushColor randomColor = (BrushColor)values.GetValue(UnityEngine.Random.Range(0, values.Length - 1));
                 var point = new Waypoint(targets[i].position, randomColor);
                 points.Add(point);
             }
@@ -71,11 +77,15 @@ public class WaypointManager : Singleton<WaypointManager>
         visual.transform.parent = transform;
         point.visual = visual;
         visual.SetColor(brushStyles.BrushColor);
-        if (points[points.Count - 2].played)
+
+        // If the waypoint before the one we just added is played
+        if ((points[points.Count - 2] != null && points[points.Count - 2].played) || points.Count == 1)
         {
+            // The one we just added is next to play
             if (logging) Debug.Log("New point is active");
             point.visual.SetNext(points.Count - 1);
         }
+
         point.visual.AnimateIn();
     }
 
@@ -102,6 +112,7 @@ public class WaypointManager : Singleton<WaypointManager>
 
 }
 
+[Serializable]
 public class Waypoint
 {
     public bool played;

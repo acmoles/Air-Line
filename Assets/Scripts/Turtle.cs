@@ -323,9 +323,13 @@ public class Turtle : MonoBehaviour
         {
             lastRotation = objectToMove.transform.rotation;
             objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
-            if (objectToMove.transform.rotation == lastRotation) Debug.LogError("Rotation lock");
+            if (objectToMove.transform.rotation == lastRotation) {
+                Debug.LogError("Rotation lock");
+                break;
+            }
             yield return new WaitForEndOfFrame();
         }
+        yield return null;
     }
 
     public IEnumerator RotateInstant(GameObject objectToMove, Quaternion end)

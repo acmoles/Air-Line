@@ -47,3 +47,9 @@ sysinfo.txt
 .DS_Store
 
 Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
+
+Assets/SRDebugger
+Assets/SRDebugger.meta
+
+Assets/StreamingAssets/HiddenARCore.meta
+Assets/StreamingAssets/HiddenARCore/

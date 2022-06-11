@@ -134,6 +134,8 @@ public class BrushStyles : ScriptableObject
     {
         // Ensure color and secondaryColor are set correctly and trigger an update event
         BrushColor = color;
+        // Always start with BrushDown
+        brushToggle = BrushUpDownState.Down;
     }
 
     private void OnStylesChanged(string state)
