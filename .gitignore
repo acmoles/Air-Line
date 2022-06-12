@@ -53,3 +53,5 @@ Assets/SRDebugger.meta
 
 Assets/StreamingAssets/HiddenARCore.meta
 Assets/StreamingAssets/HiddenARCore/
+
+ProjectSettings/ARCoreExtensionsProjectSettings.json

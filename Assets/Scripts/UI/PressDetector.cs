@@ -5,6 +5,9 @@ using UnityEngine.InputSystem.UI;
 
 public class PressDetector : MonoBehaviour
 {
+    [SerializeField]
+    private bool logging = false;
+
     // [SerializeField]
     // private Transform spawnable = null;
 
@@ -74,7 +77,7 @@ public class PressDetector : MonoBehaviour
         if (pointerOverUI)
         {
             noTapVisual.SetActive(true);
-            Debug.Log("UI element blocked spawn");
+            if(logging) Debug.Log("UI element blocked spawn");
             return;
         }
 

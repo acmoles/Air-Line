@@ -9,7 +9,7 @@ public static class Sequences
     public static List<string> sequenceList = new List<string>();
     public static void PopulateSequenceList()
     {
-        MethodInfo[] methods =typeof(Sequences).GetMethods();
+        MethodInfo[] methods = typeof(Sequences).GetMethods();
         foreach (var method in methods)
         {
             sequenceList.Add(method.Name);
@@ -52,10 +52,18 @@ public static class Sequences
     public static IEnumerator DoBraid(Turtle turtle)
     {
         Color[] colors = new Color[4];
-        colors[0] = Color.cyan;
-        colors[1] = Color.green;
-        colors[2] = Color.blue;
-        colors[3] = Color.magenta;
+        // colors[0] = Color.cyan;
+        // colors[1] = Color.green;
+        // colors[2] = Color.blue;
+        // colors[3] = Color.magenta;
+        colors[0] = new Color();
+        ColorUtility.TryParseHtmlString("#F63131", out colors[0]);
+        colors[1] = new Color();
+        ColorUtility.TryParseHtmlString("#FA26FA", out colors[1]);
+        colors[2] = new Color();
+        ColorUtility.TryParseHtmlString("#04BF9D", out colors[2]);
+        colors[3] = new Color();
+        ColorUtility.TryParseHtmlString("#FA6426", out colors[3]);
         int c = 0;
 
         for (int i = 0; i < 3; i++)

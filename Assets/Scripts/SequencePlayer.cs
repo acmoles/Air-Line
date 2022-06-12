@@ -8,8 +8,7 @@ using UnityEditor;
 [SelectionBase]
 public class SequencePlayer : MonoBehaviour
 {
-    //TODO switch to event based system rather than direct reference
-    public Turtle turtle = null;
+    public StringEvent sequenceEvent = null;
 }
 
 #if UNITY_EDITOR
@@ -21,7 +20,8 @@ public class SequencePlayerEditor : Editor
     {
         if (Sequences.sequenceList.Contains(commandString))
         {
-            instance.turtle.StartSequence(commandString);
+            instance.sequenceEvent.Trigger(commandString);
+            // instance.turtle.StartSequence(commandString);
         }
         else
         {

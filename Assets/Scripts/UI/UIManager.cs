@@ -37,6 +37,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private BrushStyles brushStyles = null;
 
+    [SerializeField]
+    private StringEvent sequenceEvent = null;
+
     // Initial state:
     // Brush is set to down on start in BrushStyles
     // Play is set in Turtle on start
@@ -106,5 +109,24 @@ public class UIManager : MonoBehaviour
     {
         if (toggle) OnToggleBrushUpDown(BrushUpDownState.Down);
         else OnToggleBrushUpDown(BrushUpDownState.Up);
+    }
+
+    // Sequences
+    public void OnPlaySequence(string commandString)
+    {
+        TrySequence(commandString);
+    }
+
+    // TODO duplicate from SequencePlayer.cs
+    private void TrySequence(string commandString)
+    {
+        if (Sequences.sequenceList.Contains(commandString))
+        {
+            sequenceEvent.Trigger(commandString);
+        }
+        else
+        {
+            Debug.LogWarning("Sequence not found: " + commandString);
+        }
     }
 }
