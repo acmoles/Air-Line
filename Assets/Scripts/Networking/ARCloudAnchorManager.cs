@@ -21,6 +21,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
     private ARCloudAnchor cloudAnchor = null;
 
+    //TODO send this id via Photon
     private string anchorToResolve;
 
     private bool anchorUpdateInProgress = false;
@@ -46,6 +47,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     public void QueueAnchor(ARAnchor arAnchor)
     {
         pendingHostAnchor = arAnchor;
+        HostAnchor();
     }
 
     public void HostAnchor()
@@ -133,7 +135,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
         if(anchorResolveInProgress && safeToResolvePassed <= 0)
         {
-            // check evey (resolveAnchorPassedTimeout)
+            // check every (resolveAnchorPassedTimeout)
             safeToResolvePassed = resolveAnchorPassedTimeout;
 
             if(!string.IsNullOrEmpty(anchorToResolve))

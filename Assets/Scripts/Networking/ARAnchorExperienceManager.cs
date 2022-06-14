@@ -9,7 +9,13 @@ using UnityEngine.XR.ARFoundation;
 public class ARAnchorExperienceManager : MonoBehaviour
 {
     [SerializeField]
-    private UnityEvent OnInitialized = null;
+    private NetworkingSettings settings = null;
+
+    [SerializeField]
+    private UnityEvent OnMasterInitialized = null;
+
+    [SerializeField]
+    private UnityEvent OnViewerInitialized = null;
 
     private ARPlaneManager arPlaneManager = null;
     private ARPointCloudManager arPointCloudManager = null;
@@ -17,7 +23,7 @@ public class ARAnchorExperienceManager : MonoBehaviour
     private bool Initialized { get; set; }
 
     private bool AllowCloudAnchorDelay { get; set; }
-    
+
     private float timePassedAfterPlanesDetected = 0;
 
     [SerializeField]
@@ -30,23 +36,19 @@ public class ARAnchorExperienceManager : MonoBehaviour
 
         arPlaneManager.planesChanged += PlanesChanged;
 
-        #if UNITY_EDITOR
-            OnInitialized?.Invoke();
-            Initialized = true;
-            AllowCloudAnchorDelay = false;
-            // arPlaneManager.enabled = false;
-            // arPointCloudManager.enabled = false;
-        #endif
+#if UNITY_EDITOR
+        Activate();
+#endif
     }
 
-    void Update() 
+    void Update()
     {
-        if(AllowCloudAnchorDelay)
+        if (AllowCloudAnchorDelay)
         {
-            if(timePassedAfterPlanesDetected <= maxScanningAreaTime)
+            if (timePassedAfterPlanesDetected <= maxScanningAreaTime)
             {
                 timePassedAfterPlanesDetected += Time.deltaTime * 1.0f;
-                Debug.Log($"Experience starts in {maxScanningAreaTime-timePassedAfterPlanesDetected} sec(s)");
+                Debug.Log($"Experience starts in {maxScanningAreaTime - timePassedAfterPlanesDetected} sec(s)");
             }
             else
             {
@@ -58,7 +60,7 @@ public class ARAnchorExperienceManager : MonoBehaviour
 
     void PlanesChanged(ARPlanesChangedEventArgs args)
     {
-        if(!Initialized)
+        if (!Initialized)
         {
             AllowCloudAnchorDelay = true;
         }
@@ -66,11 +68,19 @@ public class ARAnchorExperienceManager : MonoBehaviour
 
     private void Activate()
     {
-        Debug.Log("Activate AR Cloud Anchor Experience");
-        OnInitialized?.Invoke();
-        Initialized = true;
-        AllowCloudAnchorDelay = false;
-        // arPlaneManager.enabled = false;
-        // arPointCloudManager.enabled = false;
+        if (settings.isMasterClient)
+        {
+            Debug.Log("Master places the anchor");
+            OnMasterInitialized?.Invoke();
+            Initialized = true;
+            AllowCloudAnchorDelay = false;
+        }
+        else
+        {
+            Debug.Log("Non-master resolves the anchor");
+            OnViewerInitialized?.Invoke();
+            Initialized = true;
+            AllowCloudAnchorDelay = false;
+        }
     }
 }

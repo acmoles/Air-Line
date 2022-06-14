@@ -4,12 +4,17 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.InputSystem;
 
+using Photon.Pun;
+
 [RequireComponent(typeof(ARRaycastManager))]
 [RequireComponent(typeof(ARAnchorManager))]
 public class PlaceOnPlane : Singleton<PlaceOnPlane>
 {
     [SerializeField]
     private bool logging = false;
+
+    [SerializeField]
+    private NetworkingSettings settings = null;
 
     private bool AllowPlacement { get; set; }
 
@@ -47,23 +52,29 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
 
     private void OnEnable()
     {
-        inputManager.OnEndTouch += AddObject;
+        if (settings.isMasterClient)
+        {
+            inputManager.OnEndTouch += AddObject;
+        }
     }
 
     private void OnDisable()
     {
-        inputManager.OnEndTouch -= AddObject;
+        if (settings.isMasterClient)
+        {
+            inputManager.OnEndTouch -= AddObject;
+        }
     }
 
     public void AddObject(Vector2 position, float time)
     {
-        if(!AllowPlacement) 
+        if (!AllowPlacement)
         {
             Debug.Log("Placement not allowed yet");
             return;
         }
 
-        if(m_RaycastManager.Raycast(position, s_Hits, TrackableType.PlaneWithinPolygon))
+        if (m_RaycastManager.Raycast(position, s_Hits, TrackableType.PlaneWithinPolygon))
         {
             // Raycast hits are sorted by distance, so the first one
             // will be the closest hit.
@@ -73,7 +84,7 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
 
             if (spawnedObject == null)
             {
-                if(logging) Debug.Log("Creating anchor.");
+                if (logging) Debug.Log("Creating anchor.");
 
                 spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
 

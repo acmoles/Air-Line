@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WaypointSingleton : Singleton<WaypointSingleton>
 {
+    [SerializeField]
+    private bool logging = false;
+
     private List<WaypointManager> managers = new List<WaypointManager>();
 
     public WaypointManager LocalManager
@@ -16,7 +19,7 @@ public class WaypointSingleton : Singleton<WaypointSingleton>
             }
             else
             {
-                Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
+                if(logging) Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
                 return null;
             }
         }

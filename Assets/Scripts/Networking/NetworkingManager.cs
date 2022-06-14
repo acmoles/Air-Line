@@ -16,6 +16,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private bool logging = true;
 
+    [SerializeField]
+    private NetworkingSettings settings = null;
+
     [Tooltip("The prefab for representing the photon player")]
     [SerializeField]
     private GameObject networkedPlayerPrefab = null;
@@ -54,12 +57,12 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (PhotonNetwork.IsMasterClient)
         {
-            BrushStylesSync.ShouldManageOwnBrushStyles = true;
+            settings.isMasterClient = true;
             Debug.LogFormat("IsMasterClient {0}", PhotonNetwork.IsMasterClient);
         }
         else
         {
-            BrushStylesSync.ShouldManageOwnBrushStyles = false;
+            settings.isMasterClient = false;
         }
 
         if (networkedPlayerPrefab == null)
