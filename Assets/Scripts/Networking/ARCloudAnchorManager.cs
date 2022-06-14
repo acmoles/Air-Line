@@ -15,7 +15,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     [SerializeField]
     private float resolveAnchorPassedTimeout = 10.0f;
 
-    private ARAnchorManager arAnchorManager = null;
+    private ARAnchorManager m_arAnchorManager = null;
 
     private ARAnchor pendingHostAnchor = null;
 
@@ -36,6 +36,8 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     {
         resolver = new UnityEventResolver();
         resolver.AddListener((t) => PlaceOnPlane.Instance.ReCreatePlacement(t));
+
+        m_arAnchorManager = GetComponent<ARAnchorManager>();
     }
 
     private Pose GetCameraPose()
@@ -52,10 +54,10 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
     public void HostAnchor()
     {
-        FeatureMapQuality quality = arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
+        FeatureMapQuality quality = m_arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
         Debug.Log("HostAnchor executing, quality: " + quality);
 
-        cloudAnchor = arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
+        cloudAnchor = m_arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
     
         if(cloudAnchor == null)
         {
@@ -71,7 +73,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     {
         Debug.Log("Resolve executing");
 
-        cloudAnchor = arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
+        cloudAnchor = m_arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
 
         if(cloudAnchor == null)
         {

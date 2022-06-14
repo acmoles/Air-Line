@@ -18,7 +18,6 @@ public class ARAnchorExperienceManager : MonoBehaviour
     private UnityEvent OnViewerInitialized = null;
 
     private ARPlaneManager arPlaneManager = null;
-    private ARPointCloudManager arPointCloudManager = null;
 
     private bool Initialized { get; set; }
 
@@ -32,8 +31,6 @@ public class ARAnchorExperienceManager : MonoBehaviour
     private void Awake()
     {
         arPlaneManager = GetComponent<ARPlaneManager>();
-        arPointCloudManager = GetComponent<ARPointCloudManager>();
-
         arPlaneManager.planesChanged += PlanesChanged;
 
 #if UNITY_EDITOR
