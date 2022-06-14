@@ -456,6 +456,8 @@ GameObject:
   - component: {fileID: 762671675}
   - component: {fileID: 762671676}
   - component: {fileID: 762671669}
+  - component: {fileID: 762671677}
+  - component: {fileID: 762671678}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -571,8 +573,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d91ec5b7feb4c8f8dd9a3f8c7fdc09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logging: 0
   m_PlacedPrefab: {fileID: 663502690423013924, guid: fb57fe38d35f6434789d74a9a9c258ed,
     type: 3}
+--- !u!114 &762671677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762671668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c622d7e8305ba4daec4ae74fc00bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arCamera: {fileID: 2074560897}
+  resolveAnchorPassedTimeout: 10
+--- !u!114 &762671678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762671668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2806ed436ad45caaaa1cba0349402c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnInitialized:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 762671676}
+        m_TargetAssemblyTypeName: PlaceOnPlane, Assembly-CSharp
+        m_MethodName: SetAllowPlacement
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  maxScanningAreaTime: 10
 --- !u!1 &862497818
 GameObject:
   m_ObjectHideFlags: 0
