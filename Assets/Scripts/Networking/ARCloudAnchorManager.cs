@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
 using Google.XR.ARCoreExtensions;
 
-public class UnityEventResolver : UnityEvent<Transform>{}
+public class UnityEventResolver : UnityEvent<Transform> { }
 
 public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 {
@@ -54,12 +54,20 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
     public void HostAnchor()
     {
-        FeatureMapQuality quality = m_arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
-        Debug.Log("HostAnchor executing, quality: " + quality);
+        if (m_arAnchorManager != null && arCamera != null)
+        {
+            FeatureMapQuality quality = m_arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
+            Debug.Log("HostAnchor executing, quality: " + quality);
+        }
+        else
+        {
+            Debug.Log("Anchor manager and/or arCamera are null");
+            return;
+        }
 
         cloudAnchor = m_arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
-    
-        if(cloudAnchor == null)
+
+        if (cloudAnchor == null)
         {
             Debug.LogError("Unable to host cloud anchor");
         }
@@ -75,7 +83,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
         cloudAnchor = m_arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
 
-        if(cloudAnchor == null)
+        if (cloudAnchor == null)
         {
             Debug.LogError($"Failed to resolve cloud achor id {cloudAnchor.cloudAnchorId}");
         }
@@ -88,16 +96,16 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     private void CheckHostingProgress()
     {
         CloudAnchorState cloudAnchorState = cloudAnchor.cloudAnchorState;
-        if(cloudAnchorState == CloudAnchorState.Success)
+        if (cloudAnchorState == CloudAnchorState.Success)
         {
             Debug.LogError("Anchor successfully hosted");
-            
+
             anchorUpdateInProgress = false;
 
             // keep track of cloud anchors added
             anchorToResolve = cloudAnchor.cloudAnchorId;
         }
-        else if(cloudAnchorState != CloudAnchorState.TaskInProgress)
+        else if (cloudAnchorState != CloudAnchorState.TaskInProgress)
         {
             Debug.LogError($"Fail to host anchor with state: {cloudAnchorState}");
             anchorUpdateInProgress = false;
@@ -107,7 +115,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     private void CheckResolveProgress()
     {
         CloudAnchorState cloudAnchorState = cloudAnchor.cloudAnchorState;
-        
+
         Debug.Log($"ResolveCloudAnchor state {cloudAnchorState}");
 
         if (cloudAnchorState == CloudAnchorState.Success)
@@ -129,18 +137,18 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     void Update()
     {
         // check progress of new anchors created
-        if(anchorUpdateInProgress)
+        if (anchorUpdateInProgress)
         {
             CheckHostingProgress();
             return;
         }
 
-        if(anchorResolveInProgress && safeToResolvePassed <= 0)
+        if (anchorResolveInProgress && safeToResolvePassed <= 0)
         {
             // check every (resolveAnchorPassedTimeout)
             safeToResolvePassed = resolveAnchorPassedTimeout;
 
-            if(!string.IsNullOrEmpty(anchorToResolve))
+            if (!string.IsNullOrEmpty(anchorToResolve))
             {
                 Debug.Log($"Resolving AnchorId: {anchorToResolve}");
                 CheckResolveProgress();
