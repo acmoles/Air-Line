@@ -102,7 +102,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
         CloudAnchorState cloudAnchorState = cloudAnchor.cloudAnchorState;
         if (cloudAnchorState == CloudAnchorState.Success)
         {
-            Debug.LogError("Anchor successfully hosted");
+            Debug.Log("Anchor successfully hosted");
 
             anchorUpdateInProgress = false;
 

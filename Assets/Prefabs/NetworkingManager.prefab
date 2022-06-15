@@ -44,12 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a261f07e36f449481b3aa77cdcffb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logging: 1
+  settings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
   networkedPlayerPrefab: {fileID: 9169906530637907602, guid: ccc51c0078479477f9acc9a10f7a4f51,
     type: 3}
   localTurtle: {fileID: 0}
-  enableFakeTurtles: 0
-  fakeTurtlePrefab: {fileID: 5288738431906612135, guid: bb94f37d1089e43f39ff637c4a28cdb2,
-    type: 3}
   contentParent: {fileID: 0}
   lobbyName: Lobby
   myBrushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
