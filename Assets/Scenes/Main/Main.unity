@@ -841,7 +841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logging: 0
   settings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
-  m_PlacedPrefab: {fileID: 1934569588295450, guid: b34b6c8f1206a6844b983e23b9da0441,
+  m_PlacedPrefab: {fileID: 663502690423013924, guid: fb57fe38d35f6434789d74a9a9c258ed,
     type: 3}
 --- !u!114 &762671677
 MonoBehaviour:
