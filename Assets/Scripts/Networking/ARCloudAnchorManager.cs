@@ -10,6 +10,9 @@ public class UnityEventResolver : UnityEvent<Transform> { }
 public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 {
     [SerializeField]
+    private StringEvent cloudAnchorToHostEvent = null;
+
+    [SerializeField]
     private Camera arCamera = null;
 
     [SerializeField]
@@ -22,7 +25,6 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
     private ARCloudAnchor cloudAnchor = null;
 
-    //TODO send this id via Photon
     private string anchorToResolve;
 
     private bool anchorUpdateInProgress = false;
@@ -51,10 +53,11 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
         HostAnchor();
     }
 
-    //TODO 136 and 355 in ARAnchorManagerExtensions, null reference error
+    public void SetAnchorToResolve(string cloudAnchorID)
+    {
+        anchorToResolve = cloudAnchorID;
+    }
 
-    //ARCoreExtensions._instance.currentARCoreSessionHandle
-    //SessionApi
     [ContextMenu("Host")]
     public void HostAnchor()
     {
@@ -108,6 +111,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
 
             // keep track of cloud anchors added
             anchorToResolve = cloudAnchor.cloudAnchorId;
+            cloudAnchorToHostEvent.Trigger(anchorToResolve);
         }
         else if (cloudAnchorState != CloudAnchorState.TaskInProgress)
         {

@@ -11,6 +11,9 @@ using Photon.Pun;
 
 public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
+    [SerializeField]
+    private StringEvent cloudAnchorToResolveEvent = null;
+
     static public NetworkingManager Instance;
 
     [SerializeField]
@@ -39,6 +42,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private BrushStyles myBrushStyles = null;
     public const byte brushStylesChangedEventCode = 1;
+    public const byte anchorIdEventCode = 2;
 
     private void Start()
     {
@@ -122,6 +126,18 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         PhotonNetwork.RaiseEvent(brushStylesChangedEventCode, brushStylesMessage, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    public void OnAnchorHosted(string state)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        if (logging) Debug.Log("Sending hosted anchor ID networked: " + state);
+
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent(anchorIdEventCode, state, raiseEventOptions, SendOptions.SendReliable);
+    }
+
     public void OnEvent(EventData photonEvent)
     {
         // TODO individual brushStyles for each client
@@ -129,12 +145,20 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             return;
         }
+
         byte eventCode = photonEvent.Code;
         if (eventCode == brushStylesChangedEventCode)
         {
             string message = (string)photonEvent.CustomData;
             myBrushStyles.DeSerializeBrushStyles(message);
             if (logging) Debug.Log("Incoming brush styles networked: " + message);
+        }
+
+        if (eventCode == anchorIdEventCode)
+        {
+            string message = (string)photonEvent.CustomData;
+            cloudAnchorToResolveEvent.Trigger(message);
+            if (logging) Debug.Log("Incoming cloud anchor ID: " + message);
         }
     }
 

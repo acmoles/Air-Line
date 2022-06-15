@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4495488294619393352}
   - component: {fileID: 4495488294619393359}
   - component: {fileID: 4495488294619393353}
+  - component: {fileID: 9029960742383111197}
   m_Layer: 0
   m_Name: NetworkingManager
   m_TagString: Untagged
@@ -44,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a261f07e36f449481b3aa77cdcffb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cloudAnchorToResolveEvent: {fileID: 11400000, guid: 273aab98d9c2b884584ea7aa7607ee39,
+    type: 2}
   logging: 1
   settings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
   networkedPlayerPrefab: {fileID: 9169906530637907602, guid: ccc51c0078479477f9acc9a10f7a4f51,
@@ -71,6 +74,34 @@ MonoBehaviour:
       - m_Target: {fileID: 4495488294619393359}
         m_TargetAssemblyTypeName: NetworkingManager, Assembly-CSharp
         m_MethodName: OnBrushStylesChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9029960742383111197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4495488294619393358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e6d29e09a32a9f642997165bbc59c48d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4495488294619393359}
+        m_TargetAssemblyTypeName: NetworkingManager, Assembly-CSharp
+        m_MethodName: OnAnchorHosted
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

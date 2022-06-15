@@ -5,6 +5,10 @@ using Photon.Pun;
 using Photon.Realtime;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+
+    [SerializeField]
+    private NetworkingSettings settings = null;
+
     [SerializeField]
     private GameObject controlPanel;
 
@@ -43,6 +47,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+        playerName = playerNameField.text;
+        roomName = roomNameField.text;
     }
 
     void Start()
@@ -87,7 +93,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
         Debug.LogFormat("PhotonNetwork : Player count : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
         Debug.LogFormat("PhotonNetwork : Loading Arena : {0}", arenaToLoad);
-        
+
         connectionStatus.text = "Loading arena...";
         connectionStatus.color = Color.white;
         if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayersPerRoom && PhotonNetwork.CurrentRoom.PlayerCount <= maxPlayersPerRoom)
@@ -124,10 +130,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             buttonLoadArena.SetActive(true);
             buttonJoinRoom.SetActive(false);
             playerStatus.text = "Your are Lobby Leader";
+            settings.isMasterClient = true;
         }
         else
         {
             playerStatus.text = "Connected to Lobby";
+            settings.isMasterClient = false;
         }
     }
 
