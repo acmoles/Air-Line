@@ -15,7 +15,8 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     [SerializeField]
     private float resolveAnchorPassedTimeout = 10.0f;
 
-    private ARAnchorManager m_arAnchorManager = null;
+    [SerializeField]
+    private ARAnchorManager arAnchorManager = null;
 
     private ARAnchor pendingHostAnchor = null;
 
@@ -36,8 +37,6 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     {
         resolver = new UnityEventResolver();
         resolver.AddListener((t) => PlaceOnPlane.Instance.ReCreatePlacement(t));
-
-        m_arAnchorManager = GetComponent<ARAnchorManager>();
     }
 
     private Pose GetCameraPose()
@@ -52,11 +51,16 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
         HostAnchor();
     }
 
+    //TODO 136 and 355 in ARAnchorManagerExtensions, null reference error
+
+    //ARCoreExtensions._instance.currentARCoreSessionHandle
+    //SessionApi
+    [ContextMenu("Host")]
     public void HostAnchor()
     {
-        if (m_arAnchorManager != null && arCamera != null)
+        if (arAnchorManager != null && arCamera != null)
         {
-            FeatureMapQuality quality = m_arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
+            FeatureMapQuality quality = arAnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
             Debug.Log("HostAnchor executing, quality: " + quality);
         }
         else
@@ -65,7 +69,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
             return;
         }
 
-        cloudAnchor = m_arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
+        cloudAnchor = arAnchorManager.HostCloudAnchor(pendingHostAnchor, 1);
 
         if (cloudAnchor == null)
         {
@@ -81,7 +85,7 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
     {
         Debug.Log("Resolve executing");
 
-        cloudAnchor = m_arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
+        cloudAnchor = arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
 
         if (cloudAnchor == null)
         {

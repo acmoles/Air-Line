@@ -857,6 +857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arCamera: {fileID: 2074560897}
   resolveAnchorPassedTimeout: 10
+  arAnchorManager: {fileID: 762671675}
 --- !u!114 &762671678
 MonoBehaviour:
   m_ObjectHideFlags: 0
