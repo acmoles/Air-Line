@@ -141,7 +141,6 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
     {
         TogglePlaneDetection();
         spawnedObject = Instantiate(placedPrefab, transform.position, transform.rotation);
-        //TODO is this what we want?
         spawnedObject.transform.parent = transform;
     }
 

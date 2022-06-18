@@ -1163,6 +1163,7 @@ MonoBehaviour:
   movementStateUpdated: {fileID: 11400000, guid: f9b161f13016a471c874fb0b30e9c7e0,
     type: 2}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  networkingSettings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
   sequenceEvent: {fileID: 11400000, guid: 530c15cdcbd6c4b78be5970e9811023e, type: 2}
 --- !u!1 &6089608148767055463
 GameObject:

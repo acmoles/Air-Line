@@ -38,12 +38,22 @@ public class UIManager : MonoBehaviour
     private BrushStyles brushStyles = null;
 
     [SerializeField]
+    private NetworkingSettings networkingSettings = null;
+
+    [SerializeField]
     private StringEvent sequenceEvent = null;
 
     // Initial state:
     // Brush is set to down on start in BrushStyles
     // Play is set in Turtle on start
 
+    private void Start()
+    {
+        if (!networkingSettings.isMasterClient)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     // Brush size
     public int BrushSizeIndex

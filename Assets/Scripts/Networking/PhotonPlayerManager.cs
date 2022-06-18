@@ -61,13 +61,14 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             LocalPlayerInstance = this;
-            gameObject.name += " Local";
+            gameObject.name += "_Local";
         }
         else
         {
             remoteNetworkedPlayers.Add(this);
             if (logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
             if (enableFakeTurtles) AddFakeTurtle(NickName);
+            gameObject.name += "_" + NickName;
         }
         transform.parent = contentParentCached;
         foreach (var turtle in fakeTurtles)
@@ -105,8 +106,8 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
         // only if we are the local player
         if (photonView.IsMine)
         {
-            transform.localPosition = localTurtleTransform.localPosition;
-            transform.localRotation = localTurtleTransform.localRotation;
+            transform.position = localTurtleTransform.position;
+            transform.rotation = localTurtleTransform.rotation;
         }
         else
         {
@@ -116,8 +117,8 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
                 for (int i = 0; i < remoteNetworkedPlayers.Count; i++)
                 {
                     if (fakeTurtles[i].name != remoteNetworkedPlayers[i].NickName) Debug.LogError("Fake turtle name does not match networked player NickName!");
-                    fakeTurtles[i].childTransform.localPosition = remoteNetworkedPlayers[i].transform.localPosition;
-                    fakeTurtles[i].childTransform.localRotation = remoteNetworkedPlayers[i].transform.localRotation;
+                    fakeTurtles[i].childTransform.position = remoteNetworkedPlayers[i].transform.position;
+                    fakeTurtles[i].childTransform.rotation = remoteNetworkedPlayers[i].transform.rotation;
                 }
             }
         }
@@ -126,7 +127,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
     private void AddFakeTurtle(string id)
     {
         Transform fakeTurtleDrawer = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        fakeTurtleDrawer.name += "_" + id;
+        fakeTurtleDrawer.name = id;
         ExposeChildTransform fakeTurtle = fakeTurtleDrawer.GetComponent<ExposeChildTransform>();
         fakeTurtle.transform.parent = contentParentCached;
         fakeTurtles.Add(fakeTurtle);

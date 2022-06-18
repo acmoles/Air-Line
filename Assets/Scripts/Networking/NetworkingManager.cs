@@ -44,7 +44,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public const byte brushStylesChangedEventCode = 1;
     public const byte anchorIdEventCode = 2;
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
 
