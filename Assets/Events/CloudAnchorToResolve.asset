@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99b8475a530d46b8a834edad4c214ee, type: 3}
   m_Name: CloudAnchorToResolve
   m_EditorClassIdentifier: 
-  logging: 0
+  logging: 1

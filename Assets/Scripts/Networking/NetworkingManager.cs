@@ -12,15 +12,17 @@ using Photon.Pun;
 public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     [SerializeField]
+    private bool logging = true;
+    [SerializeField]
+    private string lobbyName = "Lobby";
+
+    [SerializeField]
     private StringEvent cloudAnchorToResolveEvent = null;
 
     [SerializeField]
-    private StringEvent networkingManagerInitializedEvent = null;
+    private StringEvent networkingManagerInitEvent = null;
 
     static public NetworkingManager Instance;
-
-    [SerializeField]
-    private bool logging = true;
 
     [SerializeField]
     private NetworkingSettings settings = null;
@@ -31,15 +33,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     [Header("Local turtle")]
     [Tooltip("The local turtle transform to follow with the local photon player")]
-    [SerializeField]
-    private Transform localTurtle = null;
+    public Transform localTurtle = null;
+    public Transform contentParent = null;
 
-    [SerializeField]
-    private Transform contentParent = null;
-
-
-    [SerializeField]
-    private string lobbyName = "Lobby";
 
     [Header("Brush styles")]
     [SerializeField]
@@ -71,7 +67,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             settings.isMasterClient = false;
         }
+    }
 
+    public void Initialize()
+    {
+        //Invoked by network manager proxy in content prefab
         if (networkedPlayerPrefab == null)
         {
             Debug.LogError("<Color=Red><b>Missing</b></Color> playerPrefab Reference. Please set it up in GameObject 'Networking Manager'", this);
@@ -84,7 +84,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                 // Set cached content parent first
                 PhotonPlayerManager.contentParentCached = contentParent;
-                networkingManagerInitializedEvent.Trigger("Initialized");
+                networkingManagerInitEvent.Trigger("Initialized");
 
                 // Spawn the prefab for the local player. it gets synced by using PhotonNetwork.Instantiate.
                 GameObject networkedPlayer = PhotonNetwork.Instantiate(this.networkedPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
@@ -95,7 +95,6 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
             }
         }
-
     }
 
     public override void OnEnable()
