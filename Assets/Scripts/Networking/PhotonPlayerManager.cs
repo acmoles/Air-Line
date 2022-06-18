@@ -28,9 +28,9 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
     private bool enableFakeTurtles = false;
     [Tooltip("Prefab for fake turtles to match remote photon players")]
     [SerializeField]
-    private Transform fakeTurtlePrefab = null;
+    private ExposeChildTransform fakeTurtlePrefab = null;
     [Tooltip("The list of fake turtles to update")]
-    public static List<Transform> fakeTurtles = new List<Transform>();
+    public static List<ExposeChildTransform> fakeTurtles = new List<ExposeChildTransform>();
 
     public PhotonView PlayerPhotonView
     {
@@ -70,6 +70,10 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
             if (enableFakeTurtles) AddFakeTurtle(NickName);
         }
         transform.parent = contentParentCached;
+        foreach (var turtle in fakeTurtles)
+        {
+            turtle.transform.parent = contentParentCached;
+        }
     }
 
     public void OnNetworkManagerInitialized()
@@ -81,7 +85,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
             transform.parent = contentParentCached;
             foreach (var turtle in fakeTurtles)
             {
-                turtle.parent = contentParentCached;
+                turtle.transform.parent = contentParentCached;
             }
         }
         else
@@ -112,8 +116,8 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
                 for (int i = 0; i < remoteNetworkedPlayers.Count; i++)
                 {
                     if (fakeTurtles[i].name != remoteNetworkedPlayers[i].NickName) Debug.LogError("Fake turtle name does not match networked player NickName!");
-                    fakeTurtles[i].localPosition = remoteNetworkedPlayers[i].transform.localPosition;
-                    fakeTurtles[i].localRotation = remoteNetworkedPlayers[i].transform.localRotation;
+                    fakeTurtles[i].childTransform.localPosition = remoteNetworkedPlayers[i].transform.localPosition;
+                    fakeTurtles[i].childTransform.localRotation = remoteNetworkedPlayers[i].transform.localRotation;
                 }
             }
         }
@@ -121,11 +125,10 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
 
     private void AddFakeTurtle(string id)
     {
-        Transform fakeTurtle = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        fakeTurtle.parent = contentParentCached;
-        Transform movingTurtle = fakeTurtle.GetComponent<ExposeChildTransform>().childTransform;
-        movingTurtle.name = id;
-        fakeTurtles.Add(movingTurtle);
+        ExposeChildTransform fakeTurtle = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        fakeTurtle.transform.parent = contentParentCached;
+        fakeTurtle.name += "_" + id;
+        fakeTurtles.Add(fakeTurtle);
         if (logging) Debug.Log("Adding fake turtle at index: " + (fakeTurtles.Count - 1) + " with id: " + id);
     }
 
