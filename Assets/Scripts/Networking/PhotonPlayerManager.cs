@@ -28,7 +28,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
     private bool enableFakeTurtles = false;
     [Tooltip("Prefab for fake turtles to match remote photon players")]
     [SerializeField]
-    private ExposeChildTransform fakeTurtlePrefab = null;
+    private Transform fakeTurtlePrefab = null;
     [Tooltip("The list of fake turtles to update")]
     public static List<ExposeChildTransform> fakeTurtles = new List<ExposeChildTransform>();
 
@@ -78,7 +78,7 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
 
     public void OnNetworkManagerInitialized()
     {
-        // Set by NetworkingManager in the scene, but null until content is placed. This callback occurs after placement
+        // Set by NetworkingManager in the scene, but null until content is placed. This callback occurs after placement when contentParentCached should be available
         if (contentParentCached != null)
         {
             Debug.Log("Parenting network player to content callback");
@@ -125,9 +125,10 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
 
     private void AddFakeTurtle(string id)
     {
-        ExposeChildTransform fakeTurtle = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        Transform fakeTurtleDrawer = Instantiate(fakeTurtlePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        fakeTurtleDrawer.name += "_" + id;
+        ExposeChildTransform fakeTurtle = fakeTurtleDrawer.GetComponent<ExposeChildTransform>();
         fakeTurtle.transform.parent = contentParentCached;
-        fakeTurtle.name += "_" + id;
         fakeTurtles.Add(fakeTurtle);
         if (logging) Debug.Log("Adding fake turtle at index: " + (fakeTurtles.Count - 1) + " with id: " + id);
     }
