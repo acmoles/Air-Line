@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloudAnchorToResolveEvent: {fileID: 11400000, guid: 273aab98d9c2b884584ea7aa7607ee39,
     type: 2}
+  networkingManagerInitializedEvent: {fileID: 11400000, guid: eb8d1583b7916bc45ba452a42ae36ec1,
+    type: 2}
   logging: 1
   settings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
   networkedPlayerPrefab: {fileID: 9169906530637907602, guid: ccc51c0078479477f9acc9a10f7a4f51,
