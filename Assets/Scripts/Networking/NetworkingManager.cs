@@ -14,6 +14,9 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private StringEvent cloudAnchorToResolveEvent = null;
 
+    [SerializeField]
+    private StringEvent networkingManagerInitializedEvent = null;
+
     static public NetworkingManager Instance;
 
     [SerializeField]
@@ -81,6 +84,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                 // Set cached content parent first
                 PhotonPlayerManager.contentParentCached = contentParent;
+                networkingManagerInitializedEvent.Trigger("Initialized");
 
                 // Spawn the prefab for the local player. it gets synced by using PhotonNetwork.Instantiate.
                 GameObject networkedPlayer = PhotonNetwork.Instantiate(this.networkedPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);

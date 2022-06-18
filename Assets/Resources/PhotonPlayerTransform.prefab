@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3511825929968512572}
   - component: {fileID: 7311007418366471044}
   - component: {fileID: 7105471438366034725}
+  - component: {fileID: 2658329250292055624}
   m_Layer: 0
   m_Name: PhotonPlayerTransform
   m_TagString: Untagged
@@ -154,3 +155,31 @@ MonoBehaviour:
   enableFakeTurtles: 1
   fakeTurtlePrefab: {fileID: 5288738431906612135, guid: bb94f37d1089e43f39ff637c4a28cdb2,
     type: 3}
+--- !u!114 &2658329250292055624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9169906530637907602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: eb8d1583b7916bc45ba452a42ae36ec1, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7105471438366034725}
+        m_TargetAssemblyTypeName: PhotonPlayerManager, Assembly-CSharp
+        m_MethodName: OnNetworkManagerInitialized
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
