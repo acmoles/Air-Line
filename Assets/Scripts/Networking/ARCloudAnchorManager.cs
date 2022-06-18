@@ -84,9 +84,10 @@ public class ARCloudAnchorManager : Singleton<ARCloudAnchorManager>
         }
     }
 
+    [ContextMenu("Resolve")]
     public void Resolve()
     {
-        Debug.Log("Resolve executing");
+        Debug.Log("Resolve executing for anchor: " + anchorToResolve);
 
         cloudAnchor = arAnchorManager.ResolveCloudAnchorId(anchorToResolve);
 

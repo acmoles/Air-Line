@@ -51,7 +51,10 @@ public class WaypointManager : MonoBehaviour
     {
         waypointSingleton = WaypointSingleton.Instance;
         waypointSingleton.AddWaypointManager(this);
-
+        foreach (var item in points)
+        {
+            Debug.Log(item);
+        }
         if (targets.Count > 0)
         {
             System.Array values = System.Enum.GetValues(typeof(BrushColor));
@@ -112,7 +115,6 @@ public class WaypointManager : MonoBehaviour
 
 }
 
-[Serializable]
 public class Waypoint
 {
     public bool played;

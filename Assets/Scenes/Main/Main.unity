@@ -637,13 +637,14 @@ GameObject:
   m_Component:
   - component: {fileID: 656491853}
   - component: {fileID: 656491852}
+  - component: {fileID: 656491854}
   m_Layer: 0
   m_Name: ContentInstantiator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &656491852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,6 +672,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &656491854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656491851}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41254eee9e77f4e4a94a150939fb8af2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformsToMove:
+  - {fileID: 2074560903}
+  targetPosition1: {x: 0.05, y: 0.02, z: 0.02}
+  targetAngle1: 8
+  targetPosition2: {x: -0.05, y: -0.02, z: -0.02}
+  targetAngle2: -8
+  speed: 1
 --- !u!1 &659350078
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,7 +785,6 @@ GameObject:
   - component: {fileID: 762671670}
   - component: {fileID: 762671675}
   - component: {fileID: 762671676}
-  - component: {fileID: 762671669}
   - component: {fileID: 762671677}
   - component: {fileID: 762671678}
   - component: {fileID: 762671679}
@@ -776,19 +795,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &762671669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762671668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7da7d8d2c4d44cd49b9b0c32fe65a226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logging: 1
 --- !u!114 &762671670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,7 +909,7 @@ MonoBehaviour:
   cloudAnchorToHostEvent: {fileID: 11400000, guid: e6d29e09a32a9f642997165bbc59c48d,
     type: 2}
   arCamera: {fileID: 2074560897}
-  resolveAnchorPassedTimeout: 10
+  resolveAnchorPassedTimeout: 5
   arAnchorManager: {fileID: 762671675}
 --- !u!114 &762671678
 MonoBehaviour:
@@ -2798,7 +2804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1900540850
 MonoBehaviour:
   m_ObjectHideFlags: 0

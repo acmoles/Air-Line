@@ -146,37 +146,6 @@ MonoBehaviour:
     type: 3}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
   initialized: 0
-  _points:
-  - played: 0
-    next: 0
-    position: {x: 0, y: 0, z: 1}
-    color: 2
-    visual: {fileID: 0}
-  - played: 0
-    next: 0
-    position: {x: 0.906, y: 0, z: 1}
-    color: 0
-    visual: {fileID: 0}
-  - played: 0
-    next: 0
-    position: {x: 0, y: 0, z: 1}
-    color: 0
-    visual: {fileID: 0}
-  - played: 0
-    next: 0
-    position: {x: 0.906, y: 0, z: 1}
-    color: 3
-    visual: {fileID: 0}
-  - played: 0
-    next: 0
-    position: {x: 0, y: 0, z: 1}
-    color: 0
-    visual: {fileID: 0}
-  - played: 0
-    next: 0
-    position: {x: 0.906, y: 0, z: 1}
-    color: 2
-    visual: {fileID: 0}
   targets:
   - {fileID: 663502690416402284}
   - {fileID: 663502688526401033}
@@ -471,11 +440,6 @@ PrefabInstance:
       propertyPath: contentParent
       value: 
       objectReference: {fileID: 663502690423013925}
-    - target: {fileID: 3168876681408605474, guid: cd0026b1d95734e4bab31ec3f715b4f7,
-        type: 3}
-      propertyPath: logging
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3168876681408605474, guid: cd0026b1d95734e4bab31ec3f715b4f7,
         type: 3}
       propertyPath: waypoints

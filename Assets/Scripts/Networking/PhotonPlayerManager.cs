@@ -69,29 +69,24 @@ public class PhotonPlayerManager : MonoBehaviourPunCallbacks
             if (logging) Debug.Log("Adding networked player: " + remoteNetworkedPlayers.Count);
             if (enableFakeTurtles) AddFakeTurtle(NickName);
         }
-
-        if (contentParentCached != null)
-        {
-            Debug.Log("Parenting network player to content");
-            transform.parent = contentParentCached;
-        }
-        else
-        {
-            Debug.Log("Cached parent is null on awake");
-        }
+        transform.parent = contentParentCached;
     }
 
     public void OnNetworkManagerInitialized()
     {
-        // Set by NetworkingManager in the scene
+        // Set by NetworkingManager in the scene, but null until content is placed. This callback occurs after placement
         if (contentParentCached != null)
         {
             Debug.Log("Parenting network player to content callback");
             transform.parent = contentParentCached;
+            foreach (var turtle in fakeTurtles)
+            {
+                turtle.parent = contentParentCached;
+            }
         }
         else
         {
-            Debug.LogError("Cached parent is still null");
+            Debug.LogError("Cached parent is still null!");
         }
     }
 

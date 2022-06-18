@@ -103,7 +103,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4495488294619393359}
         m_TargetAssemblyTypeName: NetworkingManager, Assembly-CSharp
-        m_MethodName: OnAnchorHosted
+        m_MethodName: OnAnchorToHost
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -34,7 +34,6 @@ public class Turtle : MonoBehaviour
     void Start()
     {
         Sequences.PopulateSequenceList();
-        DisableFollowMe();
         StartSequence("Initial");
     }
 

@@ -18,6 +18,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     [SerializeField]
     private StringEvent cloudAnchorToResolveEvent = null;
+    private string cachedAnchorToResolve = null;
 
     [SerializeField]
     private StringEvent networkingManagerInitEvent = null;
@@ -45,11 +46,11 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void Start()
     {
+        Instance = this;
+
 #if UNITY_EDITOR
         if (!AutoStartLobby.IsEnabled) return;
 #endif
-
-        Instance = this;
 
         // in case we started with the wrong scene active, load the lobby scene
         if (!PhotonNetwork.IsConnected)
@@ -129,13 +130,15 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         PhotonNetwork.RaiseEvent(brushStylesChangedEventCode, brushStylesMessage, raiseEventOptions, SendOptions.SendReliable);
     }
 
-    public void OnAnchorHosted(string state)
+    public void OnAnchorToHost(string state)
     {
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
         }
-        if (logging) Debug.Log("Sending hosted anchor ID networked: " + state);
+        if (logging) Debug.Log("Sending and caching hosted anchor ID networked: " + state);
+
+        cachedAnchorToResolve = state;
 
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(anchorIdEventCode, state, raiseEventOptions, SendOptions.SendReliable);
@@ -171,6 +174,12 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.Log("OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
+
+        // Send them the anchor to resolve
+        if (PhotonNetwork.IsMasterClient)
+        {
+            OnAnchorToHost(cachedAnchorToResolve);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player other)
@@ -181,6 +190,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(lobbyName);
+        cachedAnchorToResolve = null;
     }
 
     #endregion
