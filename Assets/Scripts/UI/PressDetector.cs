@@ -132,7 +132,10 @@ public class PressDetector : MonoBehaviour
 
     private void Update()
     {
-        pointerOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if (UnityEngine.EventSystems.EventSystem.current != null)
+        {
+            pointerOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        }
 
         //TODO debug
         if (tapTimer < 1.0f)
