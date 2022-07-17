@@ -41,6 +41,7 @@ public class BrushStyles : ScriptableObject
     private BrushColor color = BrushColor.Blue;
     private Color customColor = Color.white;
     private Color secondaryColor = Color.white;
+    private Color borderColor = Color.white;
 
     [SerializeField]
     private BrushSize brushSize = BrushSize.Medium;
@@ -62,6 +63,7 @@ public class BrushStyles : ScriptableObject
             color = value;
             customColor = GetPrimary(value);
             secondaryColor = GetSecondary(value);
+            borderColor = GetBorder(value);
             OnStylesChanged(value.ToString());
         }
     }
@@ -77,6 +79,7 @@ public class BrushStyles : ScriptableObject
             color = BrushColor.Custom;
             customColor = value;
             secondaryColor = value;
+            borderColor = defaultBorder;
             OnStylesChanged("CustomColor");
         }
     }
@@ -85,6 +88,13 @@ public class BrushStyles : ScriptableObject
         get
         {
             return secondaryColor;
+        }
+    }
+    public Color BorderColor
+    {
+        get
+        {
+            return borderColor;
         }
     }
 
@@ -129,6 +139,7 @@ public class BrushStyles : ScriptableObject
 
     private Dictionary<BrushColor, Color> colorTranslatorPrimary;
     private Dictionary<BrushColor, Color> colorTranslatorSecondary;
+    private Dictionary<BrushColor, Color> colorTranslatorBorder;
 
     private void OnEnable()
     {
@@ -162,15 +173,30 @@ public class BrushStyles : ScriptableObject
     }
     public Color GetSecondary(BrushColor color)
     {
-        if (colorTranslatorSecondary == null)
+        if (colorTranslatorBorder == null)
         {
-            colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
+            colorTranslatorBorder = new Dictionary<BrushColor, Color>()
             {
                 {BrushColor.Purple, purple2},
                 {BrushColor.Blue, blue2},
                 {BrushColor.Orange, orange2},
                 {BrushColor.Green, green2},
                 {BrushColor.Custom, customColor},
+            };
+        }
+        return colorTranslatorBorder[color];
+    }
+    public Color GetBorder(BrushColor color)
+    {
+        if (colorTranslatorSecondary == null)
+        {
+            colorTranslatorSecondary = new Dictionary<BrushColor, Color>()
+            {
+                {BrushColor.Purple, purpleBorder},
+                {BrushColor.Blue, blueBorder},
+                {BrushColor.Orange, orangeBorder},
+                {BrushColor.Green, greenBorder},
+                {BrushColor.Custom, defaultBorder},
             };
         }
         return colorTranslatorSecondary[color];
@@ -214,15 +240,21 @@ public class BrushStyles : ScriptableObject
     [Header("Color Settings")]
     public Color purple1 = Color.blue;
     public Color purple2 = Color.blue;
+    public Color purpleBorder = Color.blue;
     [Space(10)]
     public Color blue1 = Color.blue;
     public Color blue2 = Color.blue;
+    public Color blueBorder = Color.blue;
     [Space(10)]
     public Color orange1 = Color.blue;
     public Color orange2 = Color.blue;
+    public Color orangeBorder = Color.blue;
     [Space(10)]
     public Color green1 = Color.blue;
     public Color green2 = Color.blue;
+    public Color greenBorder = Color.blue;
+
+    public Color defaultBorder = Color.white;
 
     void OnValidate()
     {

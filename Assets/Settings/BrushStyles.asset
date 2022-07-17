@@ -15,7 +15,7 @@ MonoBehaviour:
   logging: 0
   stylesChangedEvent: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
   color: 2
-  brushSize: 1
+  brushSize: 0
   material: {fileID: 2100000, guid: d7ab0041ac24d44c3a98e3544979ce9a, type: 2}
   brushToggle: 1
   followMeScreenOffset: 0.3
@@ -33,9 +33,14 @@ MonoBehaviour:
   amountToAverageColor: 3
   purple1: {r: 0.63529414, g: 0.34901962, b: 1, a: 1}
   purple2: {r: 0.976716, g: 0.2688679, b: 1, a: 1}
+  purpleBorder: {r: 0.49791312, g: 0.08962262, b: 1, a: 1}
   blue1: {r: 0, g: 0.41960785, b: 1, a: 1}
   blue2: {r: 0.16862746, g: 1, b: 0.015686275, a: 1}
+  blueBorder: {r: 0.03137255, g: 0.57254905, b: 1, a: 1}
   orange1: {r: 1, g: 0.49019608, b: 0, a: 1}
   orange2: {r: 0.8745098, g: 1, b: 0.015686275, a: 1}
+  orangeBorder: {r: 1, g: 0.4633488, b: 0.1273585, a: 1}
   green1: {r: 0, g: 0.9150943, b: 0.4593615, a: 1}
   green2: {r: 0, g: 1, b: 0.2262168, a: 1}
+  greenBorder: {r: 0.2851863, g: 0.8018868, b: 0.27612138, a: 1}
+  defaultBorder: {r: 1, g: 1, b: 1, a: 1}

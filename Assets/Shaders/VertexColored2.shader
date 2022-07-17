@@ -46,6 +46,7 @@ Shader "Custom/VertexColored2"
             #include "Lighting.cginc"
             #include "AutoLight.cginc"
             #include "SimplexNoise2D.hlsl"
+            #include "BlendModes.hlsl"
 
             float noise(float2 co)
             {
@@ -55,27 +56,6 @@ Shader "Custom/VertexColored2"
                 float dt= dot(co.xy ,float2(a,b));
                 float sn= fmod(dt,3.14);
                 return frac(sin(sn) * c);
-            }
-
-            float3 blendOverlay(float3 base, float3 blend)
-            {
-                return lerp(
-                    sqrt(base) * (2.0 * blend - 1.0) + 2.0 * base * (1.0 - blend),
-                    2.0 * base * blend + base * base * (1.0 - 2.0 * blend),
-                    step(base, float3(0.5, 0.5, 0.5))
-                );
-            }
-
-            float3 blendScreen(float3 base, float3 blend){
-                return 1.0 - (1.0 - base) * (1.0 - blend);
-            }
-
-            float3 blendColorBurn(float3 base, float3 blend){
-                return 1.0 - (1.0 - base) / blend;
-            }
-
-            float3 blendColorDodge(float3 base, float3 blend){
-                return base / (1.0 - blend);
             }
 
             float2 intToSeedVec(uint seed) {
