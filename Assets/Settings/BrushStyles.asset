@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logging: 0
   stylesChangedEvent: {fileID: 11400000, guid: 527e7a8e1c1c048f8a8ed83bb910a231, type: 2}
-  color: 2
-  brushSize: 0
+  color: 0
+  brushSize: 1
   material: {fileID: 2100000, guid: d7ab0041ac24d44c3a98e3544979ce9a, type: 2}
   brushToggle: 1
   followMeScreenOffset: 0.3
@@ -43,4 +43,4 @@ MonoBehaviour:
   green1: {r: 0, g: 0.9150943, b: 0.4593615, a: 1}
   green2: {r: 0, g: 1, b: 0.2262168, a: 1}
   greenBorder: {r: 0.2851863, g: 0.8018868, b: 0.27612138, a: 1}
-  defaultBorder: {r: 1, g: 1, b: 1, a: 1}
+  defaultBorder: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}

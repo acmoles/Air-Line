@@ -27,6 +27,12 @@ public class ColorIndicator : MonoBehaviour
     private Color currentSecondaryColor = Color.white;
     private Color currentBorderColor = Color.white;
 
+    private void Start()
+    {
+        currentColor = brushStyles.CustomColor;
+        currentSecondaryColor = brushStyles.SecondaryColor;
+        currentBorderColor = brushStyles.BorderColor;
+    }
 
     public void OnBrushStylesChanged(string message)
     {
