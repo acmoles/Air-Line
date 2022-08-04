@@ -34,6 +34,28 @@ public class ColorIndicator : MonoBehaviour
         currentBorderColor = brushStyles.BorderColor;
     }
 
+    public void OnColorDrawerOpened(string message)
+    {
+        Color targetColor;
+        Color targetSecondaryColor;
+        Color targetBorderColor;
+
+        if(bool.Parse(message))
+        {
+            targetColor = Color.white;
+            targetSecondaryColor = Color.white;
+            targetBorderColor = brushStyles.GetBorder(overrideColor);
+        }
+        else
+        {
+            targetColor = brushStyles.CustomColor;
+            targetSecondaryColor = brushStyles.SecondaryColor;
+            targetBorderColor = brushStyles.BorderColor;
+        }
+
+        TweenToTargets(targetColor, targetSecondaryColor, targetBorderColor);
+    }
+
     public void OnBrushStylesChanged(string message)
     {
         // Set target color
@@ -72,7 +94,11 @@ public class ColorIndicator : MonoBehaviour
                 targetBorderColor = brushStyles.BorderColor;
             }
         }
+        TweenToTargets(targetColor, targetSecondaryColor, targetBorderColor);
+    }
 
+    private void TweenToTargets(Color targetColor, Color targetSecondaryColor, Color targetBorderColor)
+    {
         // Tween to target
         DOTween.To(()=> currentColor, x=> currentColor = x, targetColor, duration).SetEase(Ease.InOutQuint);
         DOTween.To(()=> currentSecondaryColor, x=> currentSecondaryColor = x, targetSecondaryColor, duration).SetEase(Ease.InOutQuint);
