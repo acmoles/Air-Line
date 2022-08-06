@@ -29,7 +29,7 @@ public class Turtle : MonoBehaviour
 
     private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
-    private bool isWaitingToFreeDraw = false;
+    private bool userInputWaiting = false;
 
     void Start()
     {
@@ -47,6 +47,7 @@ public class Turtle : MonoBehaviour
 
     public void StartSequence(string commandString)
     {
+        userInputWaiting = true;
         DisableFollowMe();
         movementState = TurtleMovementState.Play;
         if (!isMovingWaypoints && !isMovingScripted)
@@ -55,7 +56,7 @@ public class Turtle : MonoBehaviour
         }
     }
 
-    //TODO bug waypoints dropped before first rest do not get played
+    //TODO bug waypoints placed before first rest do not get played
     private IEnumerator DoSequence(string commandString)
     {
         yield return null;
@@ -77,16 +78,13 @@ public class Turtle : MonoBehaviour
         {
             yield return DoWaypoints();
         }
-        else if (isWaitingToFreeDraw)
-        {
-            EnableFollowMe();
-        }
 
         yield return null;
     }
 
     public void OnTriggerWaypoints()
     {
+        userInputWaiting = true;
         if (!isMovingWaypoints && !isMovingScripted)
         {
             StartCoroutine(DoWaypoints());
@@ -103,22 +101,16 @@ public class Turtle : MonoBehaviour
             switch (tState)
             {
                 case TurtleMovementState.FollowMe:
-                    // TODO is waiting to free draw desirable?
-                    if ((!isMovingWaypoints && !isMovingScripted) || movementState == TurtleMovementState.Pause)
-                    {
-                        if (logging) Debug.Log("Enable follow me");
-                        EnableFollowMe();
-                    }
-                    else
-                    {
-                        if (logging) Debug.Log("Set waiting for follow me control");
-                        isWaitingToFreeDraw = true;
-                    }
+                    if (logging) Debug.Log("Enable follow me");
+                    lastMovementState = movementState;
+                    movementState = TurtleMovementState.FollowMe;
+                    EnableFollowMe();
                     break;
                 case TurtleMovementState.ExitFollowMe:
                     if (logging) Debug.Log("Exit FollowMe");
                     movementState = lastMovementState;
                     DisableFollowMe();
+                    StartCoroutine(RotateToRest());
                     break;
                 case TurtleMovementState.Play:
                     if (logging) Debug.Log("Play");
@@ -140,10 +132,6 @@ public class Turtle : MonoBehaviour
 
     private void EnableFollowMe()
     {
-        lastMovementState = movementState;
-        movementState = TurtleMovementState.FollowMe;
-
-        isWaitingToFreeDraw = false;
         isMovingWaypoints = false;
         isMovingScripted = false;
         StopAllCoroutines();
@@ -163,11 +151,9 @@ public class Turtle : MonoBehaviour
         yield return null;
         yield return NextWaypoint();
         yield return null;
+        // Nothing to do, rotate to rest
+        yield return RotateToRest();
         if (logging) Debug.Log("Waypoints Done!");
-        if (isWaitingToFreeDraw)
-        {
-            EnableFollowMe();
-        }
     }
 
     private IEnumerator NextWaypoint()
@@ -270,11 +256,17 @@ public class Turtle : MonoBehaviour
         yield return Turn(gameObject, "target", 0, settings.rotateSpeed, target);
     }
 
+    public IEnumerator RotateToRest()
+    {
+        yield return Turn(gameObject, "rest", 0, settings.restRotateSpeed);
+    }
+
     public IEnumerator Turn(GameObject objectToMove, string axis, float angle, float speed, Vector3? target = null)
     {
         if (logging) Debug.Log("start turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         // Quaternion start = objectToMove.transform.rotation;
         Quaternion end = Quaternion.identity;
+        string method = "constant";
         switch (axis)
         {
             case "x":
@@ -293,9 +285,26 @@ public class Turtle : MonoBehaviour
                     end = objectToMove.transform.rotation;
                     break;
                 }
-                Vector3 direction = Vector3.Normalize(target.Value - objectToMove.transform.position);
-                if (direction == Vector3.zero) end = objectToMove.transform.rotation;
-                else end = Quaternion.LookRotation(direction, objectToMove.transform.up);
+                Vector3 direction = target.Value - objectToMove.transform.position;
+                if (direction.sqrMagnitude < 0.00001f) end = objectToMove.transform.rotation;
+                else
+                {
+                    direction.Normalize();
+                    end = Quaternion.LookRotation(direction, objectToMove.transform.up);
+                }
+                break;
+            case "rest":
+                Vector3 cameraDirection = Camera.main.transform.position - objectToMove.transform.position;
+                //cameraDirection.y = 0f;
+                float d = Vector3.Dot(cameraDirection, Vector3.up);
+                cameraDirection -= d * Vector3.up;
+                if (cameraDirection.sqrMagnitude < 0.00001f) end = objectToMove.transform.rotation;
+                else
+                {
+                    cameraDirection.Normalize();
+                    end = Quaternion.LookRotation(cameraDirection, Vector3.up);
+                }
+                method = "ease";
                 break;
             default:
                 end = objectToMove.transform.rotation;
@@ -308,24 +317,33 @@ public class Turtle : MonoBehaviour
         }
         else
         {
-            yield return RotateWithSpeed(objectToMove, end, speed);
+            yield return RotateWithSpeed(objectToMove, end, speed, method);
         }
 
         if (logging) Debug.Log("end turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         yield return null;
     }
 
-    public IEnumerator RotateWithSpeed(GameObject objectToMove, Quaternion end, float speed)
+    public IEnumerator RotateWithSpeed(GameObject objectToMove, Quaternion end, float speed, string method = "constant")
     {
-        // TODO use acceleration/deceleration 
         while (objectToMove.transform.rotation != end)
         {
+            // if (userInputWaiting)
+            // {
+            //     userInputWaiting = false;
+            //     break;
+            // }
+
             lastRotation = objectToMove.transform.rotation;
-            objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
-            if (objectToMove.transform.rotation == lastRotation) {
-                Debug.LogError("Rotation lock");
+            if (method == "ease") objectToMove.transform.rotation = Quaternion.Slerp(objectToMove.transform.rotation, end, speed * Time.deltaTime);
+            else objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
+            
+            if (objectToMove.transform.rotation == lastRotation)
+            {
+                if (logging) Debug.LogError("Rotation lock");
                 break;
             }
+            
             yield return new WaitForEndOfFrame();
         }
         yield return null;

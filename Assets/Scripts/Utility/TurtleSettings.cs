@@ -18,14 +18,15 @@ public class TurtleSettings : ScriptableObject
 
     //public float moveTime = 5f;
     public float moveSpeed = 5f;
-    public float rotateSpeed = 200f;
+    public float rotateSpeed = 480f;
+    public float restRotateSpeed = 800f;
     public const float instantRotateSpeed = -1;
     public int arcSegments = 8;
 
 
     [Header("FollowMe Target Offset")]
-    public float offset = 0.1f;
     public float offsetMovementThreshhold = 0.001f;
+    public float offsetRotationThreshhold = 0.001f;
 
 
     [Header("FollowMe Speed")]
@@ -36,6 +37,12 @@ public class TurtleSettings : ScriptableObject
 
     [Header("FollowMe Rotation")]
     public float followMeRotateSpeed = 0.5f;
+    public float followMeRotationForce = 1f;
+    public float followMeRotationDamp = .2f;
+    public float followMeRestingSpeed = 0.5f;
+    public float followMeMovingSpeed = 1f;
+    public float followMeRotationSpeedThreshold = 0.001f;
+
 
 
     [Header("FollowMe Hover")]

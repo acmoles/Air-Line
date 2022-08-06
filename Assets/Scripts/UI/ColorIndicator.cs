@@ -68,8 +68,8 @@ public class ColorIndicator : MonoBehaviour
         {
             if (overrideColor == BrushColor.Custom)
             {
-                targetColor = Color.white;
-                targetSecondaryColor = Color.white;
+                targetColor = brushStyles.defaultPrimary;
+                targetSecondaryColor = brushStyles.defaultPrimary;
                 targetBorderColor = brushStyles.GetBorder(overrideColor);
             }
             else
@@ -83,8 +83,8 @@ public class ColorIndicator : MonoBehaviour
         {
             if (brushStyles.BrushColor == BrushColor.Custom)
             {
-                targetColor = Color.white;
-                targetSecondaryColor = Color.white;
+                targetColor = brushStyles.defaultPrimary;
+                targetSecondaryColor = brushStyles.defaultPrimary;
                 targetBorderColor = brushStyles.BorderColor;
             }
             else
@@ -131,35 +131,3 @@ public class ColorIndicatorEditor : Editor
     }
 }
 #endif
-
-
-// if (useOverrideColor)
-// {
-//     if (overrideColor == BrushColor.Custom)
-//     {
-//         material.SetColor("_Color", Color.white);
-//         material.SetColor("_ColorSecondary", Color.white);
-//         material.SetColor("_ColorBackground", brushStyles.GetBorder(overrideColor));
-//     }
-//     else
-//     {
-//         material.SetColor("_Color", brushStyles.GetPrimary(overrideColor));
-//         material.SetColor("_ColorSecondary", brushStyles.GetSecondary(overrideColor));
-//         material.SetColor("_ColorBackground", brushStyles.GetBorder(overrideColor));
-//     }
-// }
-// else
-// {
-//     if (brushStyles.BrushColor == BrushColor.Custom)
-//     {
-//         material.SetColor("_Color", Color.white);
-//         material.SetColor("_ColorSecondary", Color.white);
-//         material.SetColor("_ColorBackground", brushStyles.BorderColor);
-//     }
-//     else
-//     {
-//         material.SetColor("_Color", brushStyles.CustomColor);
-//         material.SetColor("_ColorSecondary", brushStyles.SecondaryColor);
-//         material.SetColor("_ColorBackground", brushStyles.BorderColor);
-//     }
-// }

@@ -253,7 +253,9 @@ public class BrushStyles : ScriptableObject
     public Color green1 = Color.blue;
     public Color green2 = Color.blue;
     public Color greenBorder = Color.blue;
-
+    [Space(10)]
+    public Color defaultPrimary = Color.white;
+    public Color defaultSecondary = Color.white;
     public Color defaultBorder = Color.white;
 
     void OnValidate()

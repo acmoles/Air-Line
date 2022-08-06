@@ -20,7 +20,8 @@ public class FollowMe : MonoBehaviour
 
     private Rigidbody turtleRigidbody = null;
 
-    private Vector3 targetPosition = Vector3.zero;
+    [SerializeField]
+    private Transform targetRotationTransform = null;
 
     private Quaternion targetRotation;
 
@@ -29,11 +30,6 @@ public class FollowMe : MonoBehaviour
     private void Awake()
     {
         inputManager = InputManager.Instance;
-    }
-
-    private void Start()
-    {
-        targetPosition = this.transform.position;
     }
 
     private void OnEnable()
@@ -55,38 +51,34 @@ public class FollowMe : MonoBehaviour
         }
     }
 
-    private void UpdateTargetPosition()
+    private Vector3 GetTargetPosition()
     {
+        Vector3 position = transform.position;
+        Vector3 testPosition = transform.position;
         if (useTouch)
         {
-            Vector3 position = TouchUtils.ScreenToWorld(inputManager.PrimaryPosition2D(), brushStyles.followMeScreenOffset);
-            
-            // prevent small changes at brush head
-            if ((position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
-            {
-                targetPosition = position;
-            }
+            testPosition = TouchUtils.ScreenToWorld(inputManager.PrimaryPosition2D(), brushStyles.followMeScreenOffset);
         }
-        else
+        else if (movingTarget != null)
         {
-            if (movingTarget == null) return;
-
-            // prevent small changes at brush head
-            if ((movingTarget.Target.position - targetPosition).sqrMagnitude > movementSettings.offsetMovementThreshhold)
-            {
-                targetPosition = movingTarget.Target.position;
-            }
+            testPosition = movingTarget.Target.position;
         }
+
+        // prevent small changes at brush head
+        if ((testPosition - transform.position).sqrMagnitude > movementSettings.offsetMovementThreshhold)
+        {
+            position = testPosition;
+        }
+        return position;
     }
 
     private void FixedUpdate()
     {
-        UpdateTargetPosition();
-
-        // hover not really working nicely
+        // hover not really working nicely in follow me
         //targetPosition.y += Mathf.Sin((Time.time * movementSettings.hoverFrequency) / Mathf.PI) * movementSettings.hoverAmount;
 
-        Vector3 displacement = targetPosition - this.transform.position;
+        // movement
+        Vector3 displacement = GetTargetPosition() - this.transform.position;
         Vector3 targetVelocity = displacement * movementSettings.speed;
         if (targetVelocity.magnitude > movementSettings.speedLimit)
         {
@@ -96,17 +88,79 @@ public class FollowMe : MonoBehaviour
         // movement force
         Vector3 velocityDifference = targetVelocity - turtleRigidbody.velocity;
         turtleRigidbody.AddForce(velocityDifference * movementSettings.force);
+
+        // rotation force
+        targetRotationTransform.rotation = targetRotation;
+        targetRotationTransform.position = this.transform.position;
+        AddRotationForce(turtleRigidbody, targetRotationTransform, movementSettings.followMeRotationForce, movementSettings.followMeRotationDamp);
     }
 
     void LateUpdate()
     {
         // target rotation
-        Vector3 lookDisplacement = targetPosition - this.transform.position;
-        if (lookDisplacement.sqrMagnitude > movementSettings.offsetMovementThreshhold)
+        float movingAmount = Mathf.InverseLerp(movementSettings.followMeRestingSpeed, movementSettings.followMeMovingSpeed, turtleRigidbody.velocity.magnitude);
+
+        Vector3 lookDisplacement = GetTargetPosition() - this.transform.position;
+        Quaternion restRotation = Quaternion.identity;
+        if (lookDisplacement.sqrMagnitude > movementSettings.offsetRotationThreshhold)
         {
-            targetRotation = Quaternion.LookRotation(lookDisplacement);
+            restRotation = Quaternion.LookRotation(lookDisplacement);
+        }
+        else
+        {
+            Vector3 cameraDisplacement = Camera.main.transform.position - this.transform.position;
+            restRotation = Quaternion.LookRotation(cameraDisplacement);
         }
 
-        transform.rotation = Quaternion.Slerp(targetRotation, transform.rotation, Time.deltaTime * movementSettings.rotateSpeed);
+        Quaternion movingRotation = this.transform.rotation;
+        if (turtleRigidbody.velocity.magnitude > movementSettings.followMeRotationSpeedThreshold)
+        {
+            movingRotation = Quaternion.LookRotation(turtleRigidbody.velocity);
+        }
+        targetRotation = Quaternion.Slerp(restRotation, movingRotation, movingAmount);
+
+        // Vector3 lookDisplacement = GetTargetPosition() - this.transform.position;
+        // if (lookDisplacement.sqrMagnitude > movementSettings.offsetRotationThreshhold)
+        // {
+        //     targetRotation = Quaternion.LookRotation(lookDisplacement);
+        // }
+
+        // transform.rotation = Quaternion.Slerp(targetRotation, transform.rotation, Time.deltaTime * movementSettings.rotateSpeed);
+        
+    }
+
+    public static void AddRotationForce(Rigidbody current, Transform targetTransform, float force, float damp)
+    {
+        Vector3 targetAngularVelocity = CalculateTorque3D(current, targetTransform) * force;
+        Vector3 forceRequired = targetAngularVelocity - (current.angularVelocity * force * damp);
+        current.AddTorque(forceRequired);
+    }
+
+    public static Vector3 CalculateTorque3D(Rigidbody current, Transform targetTransform)
+    {
+        Vector3 torque = Vector3.zero;
+        torque += CalculateTorqueAxis(current, targetTransform, Vector3.right);
+        torque += CalculateTorqueAxis(current, targetTransform, Vector3.up);
+        torque += CalculateTorqueAxis(current, targetTransform, Vector3.forward);
+        return torque;
+    }
+
+    public static Vector3 CalculateTorqueAxis(Rigidbody current, Transform targetTransform, Vector3 localAxis)
+    {
+        Vector3 x = Vector3.Cross(current.transform.TransformDirection(localAxis).normalized, targetTransform.TransformDirection(localAxis).normalized);
+
+        // to avoid NaN in some cases when x.magnitude = 1
+        float theta = Mathf.Asin((Single)x.magnitude);
+        if (float.IsNaN(theta))
+        {
+            theta = Mathf.Asin(1);
+        }
+
+        Vector3 w = x.normalized * theta / 0.02f;
+        // Vector3 w = x.normalized * theta / Time.fixedDeltaTime;
+        Quaternion q = current.transform.rotation * current.inertiaTensorRotation;
+        Vector3 torque = q * Vector3.Scale(current.inertiaTensor, Quaternion.Inverse(q) * w);
+
+        return torque;
     }
 }

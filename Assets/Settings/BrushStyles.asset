@@ -43,4 +43,6 @@ MonoBehaviour:
   green1: {r: 0, g: 0.9150943, b: 0.4593615, a: 1}
   green2: {r: 0, g: 1, b: 0.2262168, a: 1}
   greenBorder: {r: 0.2851863, g: 0.8018868, b: 0.27612138, a: 1}
-  defaultBorder: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
+  defaultPrimary: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+  defaultSecondary: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
+  defaultBorder: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}

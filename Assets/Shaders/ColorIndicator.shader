@@ -29,6 +29,7 @@ Shader "Unlit/ColorIndicator"
         Tags { "Queue"="Transparent" "IgnoreProjector"="true" "RenderType"="Transparent" }
         LOD 100
         ZWrite Off
+        ZTest Always
         Blend One OneMinusSrcAlpha
 
         Pass

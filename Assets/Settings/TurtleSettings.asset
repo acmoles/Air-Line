@@ -20,6 +20,6 @@ MonoBehaviour:
   speed: 50
   speedLimit: 100
   force: 1.5
-  followMeRotateSpeed: 0.5
+  followMeRotateSpeed: 160
   hoverFrequency: 1
   hoverAmount: 0.01
