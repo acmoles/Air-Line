@@ -29,7 +29,7 @@ public class Turtle : MonoBehaviour
 
     private bool isMovingScripted = false;
     private bool isMovingWaypoints = false;
-    private bool userInputWaiting = false;
+    private bool isRotatingToRest = false;
 
     void Start()
     {
@@ -47,7 +47,6 @@ public class Turtle : MonoBehaviour
 
     public void StartSequence(string commandString)
     {
-        userInputWaiting = true;
         DisableFollowMe();
         movementState = TurtleMovementState.Play;
         if (!isMovingWaypoints && !isMovingScripted)
@@ -84,8 +83,7 @@ public class Turtle : MonoBehaviour
 
     public void OnTriggerWaypoints()
     {
-        userInputWaiting = true;
-        if (!isMovingWaypoints && !isMovingScripted)
+        if (!isMovingWaypoints && !isMovingScripted && !isRotatingToRest)
         {
             StartCoroutine(DoWaypoints());
         }
@@ -110,7 +108,7 @@ public class Turtle : MonoBehaviour
                     if (logging) Debug.Log("Exit FollowMe");
                     movementState = lastMovementState;
                     DisableFollowMe();
-                    StartCoroutine(RotateToRest());
+                    StartCoroutine(DoRotateToRest());
                     break;
                 case TurtleMovementState.Play:
                     if (logging) Debug.Log("Play");
@@ -134,6 +132,7 @@ public class Turtle : MonoBehaviour
     {
         isMovingWaypoints = false;
         isMovingScripted = false;
+        isRotatingToRest = false;
         StopAllCoroutines();
 
         followMe.enabled = true;
@@ -144,6 +143,23 @@ public class Turtle : MonoBehaviour
         followMe.enabled = false;
     }
 
+    private IEnumerator DoRotateToRest()
+    {
+        if (logging) Debug.Log("Rotating to rest started!");
+        isRotatingToRest = true;
+        yield return null;
+        yield return RotateToRest();
+        yield return null;
+        isRotatingToRest = false;
+
+        // Do any waiting waypoints
+        if (waypoints != null && waypoints.WaypointsToPlay())
+        {
+            yield return DoWaypoints();
+        }
+        if (logging) Debug.Log("Rotating to rest Done!");
+    }
+
     private IEnumerator DoWaypoints()
     {
         if (logging) Debug.Log("Waypoints Started!");
@@ -151,8 +167,8 @@ public class Turtle : MonoBehaviour
         yield return null;
         yield return NextWaypoint();
         yield return null;
-        // Nothing to do, rotate to rest
-        yield return RotateToRest();
+        // Rotate to rest after finishing waypoints
+        yield return DoRotateToRest();
         if (logging) Debug.Log("Waypoints Done!");
     }
 
@@ -294,15 +310,16 @@ public class Turtle : MonoBehaviour
                 }
                 break;
             case "rest":
-                Vector3 cameraDirection = Camera.main.transform.position - objectToMove.transform.position;
+                //Vector3 restDirection = Camera.main.transform.position - objectToMove.transform.position;
+                Vector3 restDirection = objectToMove.transform.forward;
                 //cameraDirection.y = 0f;
-                float d = Vector3.Dot(cameraDirection, Vector3.up);
-                cameraDirection -= d * Vector3.up;
-                if (cameraDirection.sqrMagnitude < 0.00001f) end = objectToMove.transform.rotation;
+                float d = Vector3.Dot(restDirection, Vector3.up);
+                restDirection -= d * Vector3.up;
+                if (restDirection.sqrMagnitude < 0.00001f) end = objectToMove.transform.rotation;
                 else
                 {
-                    cameraDirection.Normalize();
-                    end = Quaternion.LookRotation(cameraDirection, Vector3.up);
+                    restDirection.Normalize();
+                    end = Quaternion.LookRotation(restDirection, Vector3.up);
                 }
                 method = "ease";
                 break;
@@ -328,22 +345,16 @@ public class Turtle : MonoBehaviour
     {
         while (objectToMove.transform.rotation != end)
         {
-            // if (userInputWaiting)
-            // {
-            //     userInputWaiting = false;
-            //     break;
-            // }
-
             lastRotation = objectToMove.transform.rotation;
             if (method == "ease") objectToMove.transform.rotation = Quaternion.Slerp(objectToMove.transform.rotation, end, speed * Time.deltaTime);
             else objectToMove.transform.rotation = Quaternion.RotateTowards(objectToMove.transform.rotation, end, speed * Time.deltaTime);
-            
+
             if (objectToMove.transform.rotation == lastRotation)
             {
                 if (logging) Debug.LogError("Rotation lock");
                 break;
             }
-            
+
             yield return new WaitForEndOfFrame();
         }
         yield return null;
