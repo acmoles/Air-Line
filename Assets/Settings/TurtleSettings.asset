@@ -14,12 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   rotateSpeed: 480
+  restRotateSpeed: 6
   arcSegments: 8
-  offset: 0.1
   offsetMovementThreshhold: 0.001
+  offsetRotationThreshhold: 0.001
   speed: 50
   speedLimit: 100
   force: 1.5
   followMeRotateSpeed: 160
+  followMeRotationForce: 1
+  followMeRotationDamp: 0.5
+  followMeRestingSpeed: 0.5
+  followMeMovingSpeed: 1
+  followMeRotationSpeedThreshold: 0.001
   hoverFrequency: 1
   hoverAmount: 0.01

@@ -28,6 +28,8 @@ Shader "Unlit/ColorIndicator"
     {
         Tags { "Queue"="Transparent" "IgnoreProjector"="true" "RenderType"="Transparent" }
         LOD 100
+        Cull Off
+        Lighting Off
         ZWrite Off
         ZTest Always
         Blend One OneMinusSrcAlpha
@@ -39,6 +41,7 @@ Shader "Unlit/ColorIndicator"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
+            #include "UnityUI.cginc"
             #include "SimplexNoise2D.hlsl"
             #include "BlendModes.hlsl"
 
@@ -55,12 +58,14 @@ Shader "Unlit/ColorIndicator"
 
             struct appdata
             {
+                float4 vertexColor: COLOR; // Vertex color
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
+                float4 vertexColor: COLOR; // Vertex color
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float4 screenPosition : TEXCOORD1;
@@ -92,6 +97,7 @@ Shader "Unlit/ColorIndicator"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertexColor = v.vertexColor;
                 o.screenPosition = ComputeScreenPos(o.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
@@ -142,9 +148,8 @@ Shader "Unlit/ColorIndicator"
                 col = lerp(col, comp, circle(i.uv, 1.0 - _Border / 2.0));
                 float ring = smoothstep(1.0 - _Border - 0.03, 1.0 - _Border, d) * smoothstep(0.99, 0.96, d);
                 col = lerp(col, _ColorBackground, ring);
+                col = lerp(col, fixed4(0.0, 0.0, 0.0, 0.0), 1.0 - i.vertexColor.a);
 
-                //return fixed4(center, 0.0, 1.0);
-                //return fixed4(d, d, d, 1.0);
                 return col; 
             }
             ENDCG

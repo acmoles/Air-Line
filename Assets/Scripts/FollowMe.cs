@@ -98,6 +98,7 @@ public class FollowMe : MonoBehaviour
     void LateUpdate()
     {
         // target rotation
+        // TODO desirable rotation behaviour?
         float movingAmount = Mathf.InverseLerp(movementSettings.followMeRestingSpeed, movementSettings.followMeMovingSpeed, turtleRigidbody.velocity.magnitude);
 
         Vector3 lookDisplacement = GetTargetPosition() - this.transform.position;
@@ -108,8 +109,18 @@ public class FollowMe : MonoBehaviour
         }
         else
         {
-            Vector3 cameraDisplacement = Camera.main.transform.position - this.transform.position;
-            restRotation = Quaternion.LookRotation(cameraDisplacement);
+            // Vector3 cameraDisplacement = Camera.main.transform.position - this.transform.position;
+            // restRotation = Quaternion.LookRotation(cameraDisplacement);
+            //Vector3 restDirection = this.transform.forward;
+            // float d = Vector3.Dot(restDirection, Vector3.up);
+            // restDirection -= d * Vector3.up;
+            // if (restDirection.sqrMagnitude < 0.00001f) restRotation = this.transform.rotation;
+            // else
+            // {
+            //     restDirection.Normalize();
+            //     restRotation = Quaternion.LookRotation(restDirection, Vector3.up);
+            // }
+            restRotation = this.transform.rotation;
         }
 
         Quaternion movingRotation = this.transform.rotation;

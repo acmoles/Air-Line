@@ -185,6 +185,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
         type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.5849056
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.8301887
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.8301887
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.8301887
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392275784709200305, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4048224044970699308}

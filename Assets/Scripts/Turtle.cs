@@ -77,6 +77,10 @@ public class Turtle : MonoBehaviour
         {
             yield return DoWaypoints();
         }
+        // else
+        // {
+        //     yield return DoRotateToRest();
+        // }
 
         yield return null;
     }
@@ -108,7 +112,7 @@ public class Turtle : MonoBehaviour
                     if (logging) Debug.Log("Exit FollowMe");
                     movementState = lastMovementState;
                     DisableFollowMe();
-                    StartCoroutine(DoRotateToRest());
+                    //StartCoroutine(DoRotateToRest());
                     break;
                 case TurtleMovementState.Play:
                     if (logging) Debug.Log("Play");
@@ -168,7 +172,7 @@ public class Turtle : MonoBehaviour
         yield return NextWaypoint();
         yield return null;
         // Rotate to rest after finishing waypoints
-        yield return DoRotateToRest();
+        //yield return DoRotateToRest();
         if (logging) Debug.Log("Waypoints Done!");
     }
 
@@ -312,7 +316,6 @@ public class Turtle : MonoBehaviour
             case "rest":
                 //Vector3 restDirection = Camera.main.transform.position - objectToMove.transform.position;
                 Vector3 restDirection = objectToMove.transform.forward;
-                //cameraDirection.y = 0f;
                 float d = Vector3.Dot(restDirection, Vector3.up);
                 restDirection -= d * Vector3.up;
                 if (restDirection.sqrMagnitude < 0.00001f) end = objectToMove.transform.rotation;
