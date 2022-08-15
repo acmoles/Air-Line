@@ -48,4 +48,8 @@ public class TurtleSettings : ScriptableObject
     [Header("FollowMe Hover")]
     public float hoverFrequency = 1f;
     public float hoverAmount = 0.01f;
+
+    public float rotateFrequency = 1f;
+    public Vector3 rotateStart = new Vector3(-10f, 0f, 0f);
+    public Vector3 rotateEnd = new Vector3(10f, 0f, 0f);
 }

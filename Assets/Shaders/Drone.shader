@@ -2,22 +2,26 @@ Shader "Custom/Drone"
 {
     Properties
     {
-       _InnerColor ("Inner Color", Color) = (1.0, 1.0, 1.0, 1.0)
-       _InnerAlpha("Inner Alpha", Range(0.0,1.0)) = 1.0
-       _RimColor ("Rim Color", Color) = (0.26,0.19,0.16,0.0)
-       _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
-       _MainTex("Alpha Map", 2D) = "white" {}
+        _InnerColor ("Inner Color", Color) = (1.0, 1.0, 1.0, 1.0)
+        _InnerAlpha("Inner Alpha", Range(0.0,1.0)) = 1.0
+        _RimColor ("Rim Color", Color) = (0.26,0.19,0.16,0.0)
+        _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
+        _MainTex("Alpha Map", 2D) = "white" {}
+
+        _FadeBeginDistance("Fade Begin Distance", Range(0.0, 10.0)) = 0.85
+        _FadeCompleteDistance("Fade Complete Distance", Range(0.0, 10.0)) = 0.5
+        _FadeMinValue("Fade Min Value", Range(0.0, 1.0)) = 0.0
     }
     SubShader
     {
-         Tags {"Queue" = "Transparent" "Render" = "Transparent" "IgnoreProjector" = "True"}
+        Tags {"Queue" = "Transparent" "Render" = "Transparent" "IgnoreProjector" = "True"}
        
-       Cull Back
-       //Blend One One
-       Blend SrcAlpha OneMinusSrcAlpha
+        Cull Back
+        Blend One One
+        //Blend SrcAlpha OneMinusSrcAlpha
 
-       // Write depth values so that you see topmost layer.
-       Pass
+        // Write depth values so that you see topmost layer.
+        Pass
         {
             ZWrite On
             ColorMask 0
@@ -47,6 +51,7 @@ Shader "Custom/Drone"
        {
            float3 viewDir;
            float2 uv_MainTex;
+           float4 worldPosition : TEXCOORD1;
            INTERNAL_DATA
        };
        
@@ -56,6 +61,10 @@ Shader "Custom/Drone"
        float4 _RimColor;
        float _RimPower;
 
+        uniform float _FadeBeginDistance;
+        uniform float _FadeCompleteDistance;
+        uniform fixed _FadeMinValue;
+
        float3 SafeNormalize(float3 normal) {
            float magSq = dot(normal, normal);
            if (magSq == 0) {
@@ -64,8 +73,14 @@ Shader "Custom/Drone"
            return normalize(normal);
        }
 
-        //TODO near fade
-       void vert(inout appdata_full v) {
+    
+       void vert(inout appdata_full v, out Input o)
+       {
+            UNITY_INITIALIZE_OUTPUT(Input,o);
+
+            float rangeInverse = 1.0 / (_FadeBeginDistance - _FadeCompleteDistance);
+            float fadeDistance = -UnityObjectToViewPos(v.vertex).z;
+            o.worldPosition.w = max(saturate(mad(fadeDistance, rangeInverse, -_FadeCompleteDistance * rangeInverse)), _FadeMinValue);
        }
        
        void surf (Input IN, inout SurfaceOutput o) 
@@ -82,7 +97,7 @@ Shader "Custom/Drone"
            half rim_2 = 1.5 - saturate(dot(viewDir, o.Normal));
 
            o.Emission = _RimColor.rgb * pow (rim, _RimPower) * blackness;
-           o.Alpha = blackness * _InnerAlpha * pow(rim_2, _RimPower);
+           o.Alpha = blackness * _InnerAlpha * pow(rim_2, _RimPower) * IN.worldPosition.w;;
        }
        ENDCG
     }

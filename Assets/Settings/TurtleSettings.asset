@@ -24,8 +24,8 @@ MonoBehaviour:
   followMeRotateSpeed: 160
   followMeRotationForce: 1
   followMeRotationDamp: 0.5
-  followMeRestingSpeed: 0.5
+  followMeRestingSpeed: 0.1
   followMeMovingSpeed: 1
   followMeRotationSpeedThreshold: 0.001
-  hoverFrequency: 1
-  hoverAmount: 0.01
+  hoverFrequency: 8
+  hoverAmount: 0.0001

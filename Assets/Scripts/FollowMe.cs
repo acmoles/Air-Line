@@ -98,7 +98,6 @@ public class FollowMe : MonoBehaviour
     void LateUpdate()
     {
         // target rotation
-        // TODO desirable rotation behaviour?
         float movingAmount = Mathf.InverseLerp(movementSettings.followMeRestingSpeed, movementSettings.followMeMovingSpeed, turtleRigidbody.velocity.magnitude);
 
         Vector3 lookDisplacement = GetTargetPosition() - this.transform.position;

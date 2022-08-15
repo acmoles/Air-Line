@@ -286,6 +286,7 @@ public class Turtle : MonoBehaviour
         if (logging) Debug.Log("start turn, " + axis + ": " + objectToMove.transform.rotation.eulerAngles);
         // Quaternion start = objectToMove.transform.rotation;
         Quaternion end = Quaternion.identity;
+        // TODO enable user code to use constant/ease
         string method = "constant";
         switch (axis)
         {
