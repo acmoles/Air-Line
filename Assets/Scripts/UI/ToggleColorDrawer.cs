@@ -21,29 +21,51 @@ public class ToggleColorDrawer : MonoBehaviour
     [SerializeField]
     private float fadeOutDuration = 0.4f;
 
+    private float onAlpha = 1.0f;
 
-    //TODO separate script for sequence drawer
+    private float offAlpha = 0.0f;
+
+    [SerializeField]
+    private bool applyAlpha = true;
+
+    [SerializeField]
+    private Vector2 startVectorDisplacement = Vector2.zero;
+    [SerializeField]
+    private Vector2 originalOpenPosition = Vector2.zero;
+
+    private Tween t = null;
+    private float progress = 0f;
+
     public void ToggleDrawer(string message)
     {
-        bool messageBool;
+        bool toOpen;
 
-        if (bool.TryParse(message, out messageBool))
+        if (bool.TryParse(message, out toOpen))
         {
-            float startOpacity = messageBool ? 0f : 1f;
-            float targetOpacity = messageBool ? 1f : 0f;
-            float duration = messageBool ? fadeInDuration : fadeOutDuration;
-            if (messageBool) colorDrawer.gameObject.SetActive(messageBool);
-            Tween t = DOVirtual.Float(startOpacity, targetOpacity, duration, v => colorDrawerGroup.alpha = v);
+            if (t != null) t.Kill();
+            float startOpacity = progress;
+            float targetOpacity = toOpen ? onAlpha : offAlpha;
+            float duration = toOpen ? fadeInDuration : fadeOutDuration;
+
+            Vector2 startPosition = colorDrawer.anchoredPosition;
+            Vector2 targetPosition = toOpen ? originalOpenPosition : startVectorDisplacement;
+
+            if (toOpen) colorDrawer.gameObject.SetActive(toOpen);
+
+            t = DOVirtual.Float(startOpacity, targetOpacity, duration, v =>
+            {
+                progress = v;
+                if(applyAlpha) colorDrawerGroup.alpha = v;
+                Vector2 vec = Vector2.Lerp(startPosition, targetPosition, Mathf.InverseLerp(startOpacity, targetOpacity, v));
+                colorDrawer.anchoredPosition = vec;
+            });
             t.OnComplete(() =>
             {
-                colorDrawer.gameObject.SetActive(messageBool);
+                colorDrawer.gameObject.SetActive(toOpen);
+                t = null;
             });
+            if (toOpen) t.SetEase(Ease.OutQuart);
 
-            //transform.DOMove(new Vector3(2,3,4), 1);
-
-            //colorDrawer.SetActive(messageBool);
-
-            // Fade up in box
             // Scale in bounce buttons
         }
         else

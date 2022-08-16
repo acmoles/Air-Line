@@ -27,5 +27,8 @@ MonoBehaviour:
   followMeRestingSpeed: 0.1
   followMeMovingSpeed: 1
   followMeRotationSpeedThreshold: 0.001
-  hoverFrequency: 8
+  hoverFrequency: 4
   hoverAmount: 0.0001
+  rotateFrequency: 0.4
+  rotateStart: {x: -1, y: 0, z: -2}
+  rotateEnd: {x: 1, y: 0, z: 2}
