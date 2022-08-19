@@ -62,8 +62,8 @@ Material:
     - _DetailNormalMapScale: 1
     - _Diffuse: 0.56
     - _DstBlend: 0
-    - _FadeBeginDistance: 0.35
-    - _FadeCompleteDistance: 0.31
+    - _FadeBeginDistance: 0.15
+    - _FadeCompleteDistance: 0.05
     - _FadeMinValue: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.16

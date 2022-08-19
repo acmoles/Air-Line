@@ -26,7 +26,7 @@ public static class Sequences
         yield return methodInfo.Invoke(null, parametersArray);
     }
 
-    public static IEnumerator DoArc(Turtle turtle)
+    public static IEnumerator Arc(Turtle turtle)
     {
         yield return new WaitForSeconds(1);
         Vector3 controlPoint = new Vector3(1.5f, 1.75f, 1f);
@@ -35,7 +35,7 @@ public static class Sequences
     }
 
 
-    public static IEnumerator DoSphere(Turtle turtle)
+    public static IEnumerator Sphere(Turtle turtle)
     {
         const int iterations = 80;
         yield return new WaitForSeconds(1);
@@ -49,7 +49,7 @@ public static class Sequences
         }
     }
 
-    public static IEnumerator DoBraid(Turtle turtle)
+    public static IEnumerator Braid(Turtle turtle)
     {
         Color[] colors = new Color[4];
         // colors[0] = Color.cyan;
@@ -111,7 +111,7 @@ public static class Sequences
         return Color.Lerp(start, end, Mathf.Clamp01((float)index / (float)totalSteps));
     }
 
-    public static IEnumerator DoShape(Turtle turtle)
+    public static IEnumerator Staircase(Turtle turtle)
     {
         int c = 0;
         for (int i = 0; i < 3; i++)
@@ -144,14 +144,16 @@ public static class Sequences
         }
     }
 
-    public static IEnumerator DoTriangle(Turtle turtle)
+    public static IEnumerator Triangle(Turtle turtle)
     {
+        yield return new WaitForSeconds(1);
         yield return turtle.Segment(1f, 0f, 120f);
         yield return turtle.Segment(1f, 0f, 120f);
         yield return turtle.Segment(1f, 0f, 120f);
+        yield return new WaitForSeconds(1);
     }
 
-    public static IEnumerator DoTest(Turtle turtle)
+    public static IEnumerator Test(Turtle turtle)
     {
         yield return new WaitForSeconds(1);
         yield return turtle.Move(0.5f);
@@ -173,7 +175,7 @@ public static class Sequences
         // yield return DoSpiral(turtle);
     }
 
-    public static IEnumerator DoSpiral(Turtle turtle)
+    public static IEnumerator Spiral(Turtle turtle)
     {
         Debug.Log("Spiral Started!");
         yield return null;

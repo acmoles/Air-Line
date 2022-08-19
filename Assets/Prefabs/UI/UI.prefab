@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 6644371769497537428}
   - component: {fileID: 2479397540311719472}
   - component: {fileID: 6873440706727635444}
+  - component: {fileID: 5113954330469519460}
   m_Layer: 5
   m_Name: CurrentSequence
   m_TagString: Untagged
@@ -244,7 +245,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sequence
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -313,6 +314,34 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5113954330469519460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900408179719125096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b70b2d0dfa045e68e468fe37987e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 530c15cdcbd6c4b78be5970e9811023e, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6873440706727635444}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1979618452471196792
 GameObject:
   m_ObjectHideFlags: 0
@@ -3086,7 +3115,7 @@ PrefabInstance:
     - target: {fileID: 595538874098408132, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: DoTriangle
+      value: Triangle
       objectReference: {fileID: 0}
     - target: {fileID: 769219713529006837, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
@@ -3262,6 +3291,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511280525549918563, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d0da34173e3545e7b380ad022d590c4,
+        type: 3}
+    - target: {fileID: 8794755918413474857, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_text
+      value: AirLine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbaf11d788a347ce9e82ce959451d52, type: 3}
@@ -4130,7 +4170,7 @@ PrefabInstance:
     - target: {fileID: 595538874098408132, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: DoBraid
+      value: Braid
       objectReference: {fileID: 0}
     - target: {fileID: 769219713529006837, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
@@ -4306,6 +4346,19 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511280525549918563, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 56ae7dc6145c146d28c8d6939fc5fd1c,
+        type: 3}
+    - target: {fileID: 8794755918413474857, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_text
+      value: 'AirLine
+
+'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbaf11d788a347ce9e82ce959451d52, type: 3}
@@ -4720,7 +4773,7 @@ PrefabInstance:
     - target: {fileID: 595538874098408132, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: DoSpiral
+      value: Spiral
       objectReference: {fileID: 0}
     - target: {fileID: 769219713529006837, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
@@ -4896,6 +4949,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511280525549918563, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9a17c1812e8b64c67b90d92c75523063,
+        type: 3}
+    - target: {fileID: 8794755918413474857, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_text
+      value: AirLine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbaf11d788a347ce9e82ce959451d52, type: 3}
@@ -5732,6 +5796,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 4462477993097413674}
+    - target: {fileID: 595538874098408132, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Sphere
+      objectReference: {fileID: 0}
     - target: {fileID: 769219713529006837, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_text
@@ -5906,6 +5975,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511280525549918563, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bd0e82a4fe636421c9891ced36629d6c,
+        type: 3}
+    - target: {fileID: 8794755918413474857, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_text
+      value: AirLine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbaf11d788a347ce9e82ce959451d52, type: 3}
@@ -6195,12 +6275,12 @@ PrefabInstance:
     - target: {fileID: 595538874098408132, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: DoShape
+      value: Staircase
       objectReference: {fileID: 0}
     - target: {fileID: 769219713529006837, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
       propertyPath: m_text
-      value: Shape
+      value: Staircase
       objectReference: {fileID: 0}
     - target: {fileID: 3405385376930706441, guid: bcbaf11d788a347ce9e82ce959451d52,
         type: 3}
@@ -6371,6 +6451,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511280525549918563, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d010b63c43dd04068bb96800878daf3e,
+        type: 3}
+    - target: {fileID: 8794755918413474857, guid: bcbaf11d788a347ce9e82ce959451d52,
+        type: 3}
+      propertyPath: m_text
+      value: AirLine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbaf11d788a347ce9e82ce959451d52, type: 3}

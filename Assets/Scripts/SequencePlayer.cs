@@ -38,34 +38,34 @@ public class SequencePlayerEditor : Editor
 
         GUILayout.Label("Sequences");
 
-        if (GUILayout.Button("DoSphere"))
+        if (GUILayout.Button("Sphere"))
         {
-            TrySequence("DoSphere", t);
+            TrySequence("Sphere", t);
         }
 
-        if (GUILayout.Button("DoBraid"))
+        if (GUILayout.Button("Braid"))
         {
-            TrySequence("DoBraid", t);
+            TrySequence("Braid", t);
         }
 
-        if (GUILayout.Button("DoShape"))
+        if (GUILayout.Button("Shape"))
         {
-            TrySequence("DoShape", t);
+            TrySequence("Shape", t);
         }
 
-        if (GUILayout.Button("DoTriangle"))
+        if (GUILayout.Button("Triangle"))
         {
-            TrySequence("DoTriangle", t);
+            TrySequence("Triangle", t);
         }
 
-        if (GUILayout.Button("DoTest"))
+        if (GUILayout.Button("Test"))
         {
-            TrySequence("DoTest", t);
+            TrySequence("Test", t);
         }
 
-        if (GUILayout.Button("DoSpiral"))
+        if (GUILayout.Button("Spiral"))
         {
-            TrySequence("DoSpiral", t);
+            TrySequence("Spiral", t);
         }
 
 

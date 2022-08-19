@@ -82,7 +82,7 @@ SubShader {
         UNITY_SETUP_INSTANCE_ID(v);
         UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
         o.position = UnityObjectToClipPos (v.vertex);
-        o.color = lerp(_Color,_Color2, v.texcoord.y );
+        o.color = lerp(_Color2,_Color, v.texcoord.y );
         o.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
         return o;
     }
