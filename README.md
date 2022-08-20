@@ -1,6 +1,6 @@
 # AirLine
 
-This project is WIP. Video here: [Leap Motion](https://www.acmoles.com/projects/play/#airline)
+This project is WIP. Video [here](https://www.acmoles.com/projects/play/#airline)
 
 ![AirLine WIP 1](/Log/Screenshot1.png "Screenshot 1")
 ![AirLine WIP 2](/Log/Screenshot2.png "Screenshot 2")
