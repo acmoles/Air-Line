@@ -48,6 +48,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         Instance = this;
 
+        if (settings.isOfflineMode) return;
+
 #if UNITY_EDITOR
         if (!AutoStartLobby.IsEnabled) return;
 #endif
@@ -72,6 +74,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void Initialize()
     {
+        if (settings.isOfflineMode) return;
         //Invoked by network manager proxy in content prefab
         if (networkedPlayerPrefab == null)
         {

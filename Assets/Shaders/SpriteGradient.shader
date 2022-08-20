@@ -90,10 +90,6 @@ SubShader {
     float4 frag (v2f i) : COLOR {
         half4 color = (tex2D(_MainTex, i.texcoord) + _TextureSampleAdd) * i.color;
 
-        #ifdef UNITY_UI_CLIP_RECT
-        color.a *= UnityGet2DClipping(i.worldPosition.xy, _ClipRect);
-        #endif
-
         #ifdef UNITY_UI_ALPHACLIP
         clip (color.a - 0.001);
         #endif

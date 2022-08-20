@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 using Photon.Pun;
 using Photon.Realtime;
+
+using UnityEngine.SceneManagement;
+
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
 
@@ -49,6 +52,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         playerName = playerNameField.text;
         roomName = roomNameField.text;
+        settings.isOfflineMode = false;
     }
 
     void Start()
@@ -71,6 +75,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         connectionStatus.text = "Connecting...";
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    public void StartOffline()
+    {
+        settings.isMasterClient = true;
+        settings.isOfflineMode = true;
+        SceneManager.LoadScene("Main");
     }
 
     public void JoinRoom()

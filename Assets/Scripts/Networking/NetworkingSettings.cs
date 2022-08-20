@@ -7,4 +7,5 @@ using System;
 public class NetworkingSettings : ScriptableObject
 {
     public bool isMasterClient = true;
+    public bool isOfflineMode = false;
 }
