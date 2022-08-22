@@ -14,6 +14,17 @@ public class WaypointManager : MonoBehaviour
     private bool logging = false;
 
     [SerializeField]
+    private bool fakeManager = false;
+
+    public bool FakeManager
+    {
+        get
+        {
+            return fakeManager;
+        }
+    }
+
+    [SerializeField]
     StringEvent updatedEvent = null;
 
     [SerializeField]
@@ -74,7 +85,7 @@ public class WaypointManager : MonoBehaviour
         //TODO check if new waypoint is within close threshhold of previous waypoint
         var point = new Waypoint(position, brushStyles.BrushColor);
         points.Add(point);
-        updatedEvent.Trigger("update");
+        if(!fakeManager && updatedEvent != null) updatedEvent.Trigger("update");
 
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
         visual.transform.parent = transform;

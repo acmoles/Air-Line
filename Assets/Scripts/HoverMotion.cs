@@ -9,7 +9,7 @@ public class HoverMotion : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(0f, Mathf.Sin((Time.time * movementSettings.hoverFrequency) / Mathf.PI) * movementSettings.hoverAmount, 0f);
+        // transform.Translate(0f, Mathf.Sin((Time.time * movementSettings.hoverFrequency) / Mathf.PI) * movementSettings.hoverAmount, 0f);
 
         Quaternion from = Quaternion.Euler(movementSettings.rotateStart);
         Quaternion to = Quaternion.Euler(movementSettings.rotateEnd);
