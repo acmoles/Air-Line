@@ -22,7 +22,7 @@ public class GradientSkyboxInspector : MaterialEditor
 
             if (dp.hasMixedValue || dy.hasMixedValue)
             {
-                EditorGUILayout.HelpBox ("Editing angles is disabled because they have mixed values.", MessageType.Warning);
+                EditorGUILayout.HelpBox ("Editing angles is disabled because they have mixed values.", UnityEditor.MessageType.Warning);
             }
             else
             {
