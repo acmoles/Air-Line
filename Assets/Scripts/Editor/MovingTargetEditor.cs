@@ -18,6 +18,16 @@ public class MovingTargetEditor : Editor
             t.OnPlace();
         }
 
+        if (GUILayout.Button("Place Fake"))
+        {
+            t.OnPlaceFake();
+        }
+
+        if (GUILayout.Button("Play Fake"))
+        {
+            t.OnPlayFake();
+        }
+
         GUILayout.Space(20);
 
         GUILayout.Label("Toggle brush up/down");

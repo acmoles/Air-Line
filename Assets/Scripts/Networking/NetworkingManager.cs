@@ -43,10 +43,16 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private BrushStyles myBrushStyles = null;
     public const byte brushStylesChangedEventCode = 1;
     public const byte anchorIdEventCode = 2;
+    public const byte placeFakeWaypointEventCode = 3;
+    public const byte playFakeWaypointEventCode = 4;
+
+    private WaypointSingleton waypointSingleton = null;
 
     private void Awake()
     {
         Instance = this;
+
+        waypointSingleton = WaypointSingleton.Instance;
 
         if (settings.isOfflineMode) return;
 
@@ -147,6 +153,28 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         PhotonNetwork.RaiseEvent(anchorIdEventCode, state, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    public void OnPlaceFakeWaypoint(Vector3 position)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        if (logging) Debug.Log("Sharing position of new local waypoint for viewer: " + position);
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, position, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void OnPlayFakeWaypoint()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        if (logging) Debug.Log("Play next fake waypoint");
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, 0f, raiseEventOptions, SendOptions.SendReliable);
+    }
+
     public void OnEvent(EventData photonEvent)
     {
         // TODO individual brushStyles for each client
@@ -168,6 +196,19 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
             string message = (string)photonEvent.CustomData;
             cloudAnchorToResolveEvent.Trigger(message);
             if (logging) Debug.Log("Incoming cloud anchor ID: " + message);
+        }
+
+        if (eventCode == placeFakeWaypointEventCode)
+        {
+            Vector3 position = (Vector3)photonEvent.CustomData;
+            waypointSingleton.FakeManager.AddPoint(position);
+            if (logging) Debug.Log("Incoming new fake waypoint: " + position);
+        }
+
+        if (eventCode == playFakeWaypointEventCode)
+        {
+            waypointSingleton.FakeManager.NextWaypointSingle();
+            if (logging) Debug.Log("Incoming play last fake waypoint");
         }
     }
 

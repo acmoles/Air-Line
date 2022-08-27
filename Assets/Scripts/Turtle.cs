@@ -185,7 +185,7 @@ public class Turtle : MonoBehaviour
         yield return waypoints.NextWaypoint((finished) => {
             if (logging) Debug.Log("No more waypoints to play: " + finished);
             isMovingWaypoints = false;
-        }, this);
+        }, this); // we pass the turtle in this case
     }
 
     public IEnumerator GotoTarget(Vector3 target)

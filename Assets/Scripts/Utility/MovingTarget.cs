@@ -19,11 +19,25 @@ public class MovingTarget : UIManager
         { }
     }
 
-    [SerializeField]
-    WaypointManager waypointManager;
+    private WaypointSingleton waypointSingleton = null;
+
+    private void Start()
+    {
+        waypointSingleton = WaypointSingleton.Instance;
+    }
 
     public void OnPlace()
     {
-        waypointManager.AddPoint(target.transform.position);
+        waypointSingleton.LocalManager.AddPoint(target.transform.position);
+    }
+
+    public void OnPlaceFake()
+    {
+        waypointSingleton.FakeManager.AddPoint(target.transform.position);
+    }
+
+    public void OnPlayFake()
+    {
+        waypointSingleton.FakeManager.NextWaypointSingle();
     }
 }

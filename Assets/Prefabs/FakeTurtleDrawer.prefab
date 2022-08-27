@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logging: 0
+  fakeManager: 1
   updatedEvent: {fileID: 0}
   waypointVisual: {fileID: 3368408452690416465, guid: db3728167723a4a0888da10fe01b88b4,
     type: 3}

@@ -35,6 +35,8 @@ public class WaypointManager : MonoBehaviour
 
     private WaypointSingleton waypointSingleton = null;
 
+    private NetworkingManager networkingSingleton = null;
+
 
     [SerializeField, HideInInspector]
     bool initialized;
@@ -62,6 +64,9 @@ public class WaypointManager : MonoBehaviour
     {
         waypointSingleton = WaypointSingleton.Instance;
         waypointSingleton.AddWaypointManager(this);
+
+        networkingSingleton = NetworkingManager.Instance;
+
         foreach (var item in points)
         {
             Debug.Log(item);
@@ -101,6 +106,12 @@ public class WaypointManager : MonoBehaviour
         }
 
         point.visual.AnimateIn();
+
+        // For networked fake waypoint manager
+        if (networkingSingleton != null)
+        {
+            networkingSingleton.OnPlaceFakeWaypoint(position);
+        }
     }
 
     public void NextWaypointSingle()
@@ -119,6 +130,12 @@ public class WaypointManager : MonoBehaviour
             }
 
             yield return PlayPoint(turtle, i);
+
+            // For networked fake waypoint manager
+            if (networkingSingleton != null)
+            {
+                networkingSingleton.OnPlayFakeWaypoint();
+            }
 
             if (turtle == null) break;
 
