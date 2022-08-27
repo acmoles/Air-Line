@@ -182,37 +182,10 @@ public class Turtle : MonoBehaviour
         {
             yield return new WaitForSeconds(0.2f);
         }
-        for (int i = 0; i < waypoints.points.Count; i++)
-        {
-            if (waypoints.points[i].played)
-            {
-                continue;
-            }
-            waypoints.points[i].played = true;
-            waypoints.points[i].next = false;
-            if (waypoints.points[i].visual != null) waypoints.points[i].visual.AnimateOut();
-
-            if (i != waypoints.points.Count - 1)
-            {
-                Waypoint nextWaypoint = waypoints.points[i + 1];
-                nextWaypoint.next = true;
-                if (nextWaypoint.visual != null) nextWaypoint.visual.SetNext(i + 1);
-            }
-
-            yield return SetColor(waypoints.points[i].color);
-            yield return GotoTarget(waypoints.points[i].position);
-            if (i == waypoints.points.Count - 1)
-            {
-                if (logging) Debug.Log("No more waypoints to play");
-                isMovingWaypoints = false;
-            }
-            else
-            {
-                if (logging) Debug.Log("Played a waypoint");
-                yield return NextWaypoint();
-                break;
-            }
-        }
+        yield return waypoints.NextWaypoint((finished) => {
+            if (logging) Debug.Log("No more waypoints to play: " + finished);
+            isMovingWaypoints = false;
+        }, this);
     }
 
     public IEnumerator GotoTarget(Vector3 target)

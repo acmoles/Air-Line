@@ -85,7 +85,7 @@ public class WaypointManager : MonoBehaviour
         //TODO check if new waypoint is within close threshhold of previous waypoint
         var point = new Waypoint(position, brushStyles.BrushColor);
         points.Add(point);
-        if(!fakeManager && updatedEvent != null) updatedEvent.Trigger("update");
+        if (!fakeManager && updatedEvent != null) updatedEvent.Trigger("update");
 
         WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
         visual.transform.parent = transform;
@@ -101,6 +101,63 @@ public class WaypointManager : MonoBehaviour
         }
 
         point.visual.AnimateIn();
+    }
+
+    public void NextWaypointSingle()
+    {
+        // Plays a waypoint without affecting the turtle
+        StartCoroutine(NextWaypoint((finished) => { }));
+    }
+
+    public IEnumerator NextWaypoint(Action<bool> finishedCallback, Turtle turtle = null)
+    {
+        for (int i = 0; i < points.Count; i++)
+        {
+            if (points[i].played)
+            {
+                continue;
+            }
+
+            yield return PlayPoint(turtle, i);
+
+            if (turtle == null) break;
+
+            if (i == points.Count - 1) // Last point
+            {
+                finishedCallback(true);
+            }
+            else
+            {
+                if (logging) Debug.Log("Played a waypoint");
+                yield return NextWaypoint(finishedCallback, turtle);
+                break;
+            }
+        }
+        yield return null;
+    }
+
+    private IEnumerator PlayPoint(Turtle turtle, int i)
+    {
+        if (i != points.Count - 1) // Not last point
+        {
+            Waypoint nextWaypoint = points[i + 1];
+            nextWaypoint.next = true;
+            if (nextWaypoint.visual != null) nextWaypoint.visual.SetNext(i + 1);
+        }
+
+        if (turtle != null)
+        {
+            yield return turtle.SetColor(points[i].color);
+            yield return turtle.GotoTarget(points[i].position);
+        }
+        else
+        {
+            yield return null;
+        }
+
+        points[i].played = true;
+        points[i].next = false;
+        if (points[i].visual != null) points[i].visual.AnimateOut();
     }
 
     public bool WaypointsToPlay()

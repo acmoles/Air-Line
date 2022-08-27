@@ -4,34 +4,39 @@ using UnityEngine;
 using UnityEditor;
 
 
-[CustomEditor( typeof( WaypointManager ) )]
+[CustomEditor(typeof(WaypointManager))]
 public class WaypointManagerEditor : Editor
 {
     public override void OnInspectorGUI()
-	{
+    {
         base.OnInspectorGUI();
 
         // get the chosen game object
         WaypointManager t = target as WaypointManager;
 
-		if (GUILayout.Button("Clear"))
-		{
-			t.points.Clear();
-		}
+        if (GUILayout.Button("Clear"))
+        {
+            t.points.Clear();
+        }
 
         if (GUILayout.Button("Save"))
-		{
+        {
             // Make gameobjects and save to points list
             // Save between restarts? See object management
-			Debug.Log("noop");
-		}
-	}
+            Debug.Log("noop");
+        }
+
+        if (GUILayout.Button("Play single waypoint"))
+        {
+            t.NextWaypointSingle();
+        }
+    }
     void OnSceneGUI()
     {
         // get the chosen game object
         WaypointManager t = target as WaypointManager;
 
-        if( t == null )
+        if (t == null)
             return;
 
         EventType eventType = Event.current.type;
