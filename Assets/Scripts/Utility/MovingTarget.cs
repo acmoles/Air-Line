@@ -33,11 +33,11 @@ public class MovingTarget : UIManager
 
     public void OnPlaceFake()
     {
-        waypointSingleton.FakeManager.AddPoint(target.transform.position);
+        if( waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.AddPoint(target.transform.position);
     }
 
     public void OnPlayFake()
     {
-        waypointSingleton.FakeManager.NextWaypointSingle();
+        if( waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.NextWaypointSingle();
     }
 }

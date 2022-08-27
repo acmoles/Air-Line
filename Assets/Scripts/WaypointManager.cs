@@ -97,13 +97,17 @@ public class WaypointManager : MonoBehaviour
         point.visual = visual;
         visual.SetColor(brushStyles.BrushColor);
 
-        // If the waypoint before the one we just added is played
-        // if ((points[points.Count - 2] != null && points[points.Count - 2].played) || points.Count == 1)
-        // {
-        //     // The one we just added is next to play
-        //     if (logging) Debug.Log("New point is active");
-        //     point.visual.SetNext(points.Count - 1);
-        // }
+        // TODO add next indicator to fake waypoints
+        if (!fakeManager)
+        {
+            // If the waypoint before the one we just added is played
+            if ((points[points.Count - 2] != null && points[points.Count - 2].played) || points.Count == 1)
+            {
+                // The one we just added is next to play
+                if (logging) Debug.Log("New point is active");
+                point.visual.SetNext(points.Count - 1);
+            }
+        }
 
         point.visual.AnimateIn();
 

@@ -153,14 +153,17 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         PhotonNetwork.RaiseEvent(anchorIdEventCode, state, raiseEventOptions, SendOptions.SendReliable);
     }
 
+
+    private WaypointPosition cachedOutgoingMessage = new WaypointPosition();
     public void OnPlaceFakeWaypoint(Vector3 position)
     {
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
         }
-        string body = JsonUtility.ToJson(position);
-        if (logging) Debug.Log("Sharing position of new local waypoint for viewer: " + body);
+        cachedOutgoingMessage.position = position;
+        string body = JsonUtility.ToJson(cachedOutgoingMessage);
+        if (logging) Debug.Log("Sending position of new local waypoint for viewer: " + body);
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, body, raiseEventOptions, SendOptions.SendReliable);
     }
@@ -171,12 +174,12 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             return;
         }
-        if (logging) Debug.Log("Play next fake waypoint");
+        if (logging) Debug.Log("Sending play next fake waypoint");
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent(playFakeWaypointEventCode, 0f, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(playFakeWaypointEventCode, "", raiseEventOptions, SendOptions.SendReliable);
     }
 
-    private Vector3 cachedIncomingMessage = Vector3.zero;
+    private WaypointPosition cachedIncomingMessage = new WaypointPosition();
     public void OnEvent(EventData photonEvent)
     {
         // TODO individual brushStyles for each client
@@ -203,15 +206,21 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         if (eventCode == placeFakeWaypointEventCode)
         {
             JsonUtility.FromJsonOverwrite(message, cachedIncomingMessage);
-            waypointSingleton.FakeManager.AddPoint(cachedIncomingMessage);
-            if (logging) Debug.Log("Incoming new fake waypoint: " + cachedIncomingMessage);
+            if (waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.AddPoint(cachedIncomingMessage.position);
+            if (logging) Debug.Log("Incoming new fake waypoint: " + cachedIncomingMessage.position.x);
         }
 
         if (eventCode == playFakeWaypointEventCode)
         {
-            waypointSingleton.FakeManager.NextWaypointSingle();
+            if (waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.NextWaypointSingle();
             if (logging) Debug.Log("Incoming play last fake waypoint");
         }
+    }
+
+    [System.Serializable]
+    public class WaypointPosition
+    {
+        public Vector3 position;
     }
 
 

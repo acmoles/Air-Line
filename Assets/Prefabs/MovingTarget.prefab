@@ -109,11 +109,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29a8a9c661ff4b4884a20a3e5df5923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logging: 0
   movementStateUpdated: {fileID: 11400000, guid: f9b161f13016a471c874fb0b30e9c7e0,
     type: 2}
-  target: {fileID: 1386067308375673232}
-  waypointManager: {fileID: 0}
   brushStyles: {fileID: 11400000, guid: 5f3e4815f1b09425aba1ffdd3a4099da, type: 2}
+  networkingSettings: {fileID: 11400000, guid: d3d7f34bf72f263489d3c9e80dd84e88, type: 2}
+  sequenceEvent: {fileID: 11400000, guid: 530c15cdcbd6c4b78be5970e9811023e, type: 2}
+  target: {fileID: 1386067308375673232}
 --- !u!1 &5879092771082111790
 GameObject:
   m_ObjectHideFlags: 0
