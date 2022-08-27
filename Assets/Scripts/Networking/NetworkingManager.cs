@@ -173,9 +173,10 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
         if (logging) Debug.Log("Play next fake waypoint");
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, 0f, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(playFakeWaypointEventCode, 0f, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    private Vector3 cachedIncomingMessage = Vector3.zero;
     public void OnEvent(EventData photonEvent)
     {
         // TODO individual brushStyles for each client
@@ -183,28 +184,27 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             return;
         }
+        string message = (string)photonEvent.CustomData;
+        if (logging) Debug.Log("Event message: " + message);
 
         byte eventCode = photonEvent.Code;
         if (eventCode == brushStylesChangedEventCode)
         {
-            string message = (string)photonEvent.CustomData;
             myBrushStyles.DeSerializeBrushStyles(message);
             if (logging) Debug.Log("Incoming brush styles networked: " + message);
         }
 
         if (eventCode == anchorIdEventCode)
         {
-            string message = (string)photonEvent.CustomData;
             cloudAnchorToResolveEvent.Trigger(message);
             if (logging) Debug.Log("Incoming cloud anchor ID: " + message);
         }
 
         if (eventCode == placeFakeWaypointEventCode)
         {
-            string message = (string)photonEvent.CustomData;
-            Vector3 position = StringToVector3(message);
-            waypointSingleton.FakeManager.AddPoint(position);
-            if (logging) Debug.Log("Incoming new fake waypoint: " + position);
+            JsonUtility.FromJsonOverwrite(message, cachedIncomingMessage);
+            waypointSingleton.FakeManager.AddPoint(cachedIncomingMessage);
+            if (logging) Debug.Log("Incoming new fake waypoint: " + cachedIncomingMessage);
         }
 
         if (eventCode == playFakeWaypointEventCode)
@@ -240,24 +240,4 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
 
     #endregion
-
-    public static Vector3 StringToVector3(string sVector)
-    {
-        // Remove the parentheses
-        if (sVector.StartsWith("(") && sVector.EndsWith(")"))
-        {
-            sVector = sVector.Substring(1, sVector.Length - 2);
-        }
-
-        // split the items
-        string[] sArray = sVector.Split(',');
-
-        // store as a Vector3
-        Vector3 result = new Vector3(
-            float.Parse(sArray[0]),
-            float.Parse(sArray[1]),
-            float.Parse(sArray[2]));
-
-        return result;
-    }
 }
