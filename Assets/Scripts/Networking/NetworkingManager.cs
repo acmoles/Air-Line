@@ -159,9 +159,10 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             return;
         }
-        if (logging) Debug.Log("Sharing position of new local waypoint for viewer: " + position);
+        string body = JsonUtility.ToJson(position);
+        if (logging) Debug.Log("Sharing position of new local waypoint for viewer: " + body);
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, position, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(placeFakeWaypointEventCode, body, raiseEventOptions, SendOptions.SendReliable);
     }
 
     public void OnPlayFakeWaypoint()
@@ -200,7 +201,8 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (eventCode == placeFakeWaypointEventCode)
         {
-            Vector3 position = (Vector3)photonEvent.CustomData;
+            string message = (string)photonEvent.CustomData;
+            Vector3 position = StringToVector3(message);
             waypointSingleton.FakeManager.AddPoint(position);
             if (logging) Debug.Log("Incoming new fake waypoint: " + position);
         }
@@ -238,4 +240,24 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
 
     #endregion
+
+    public static Vector3 StringToVector3(string sVector)
+    {
+        // Remove the parentheses
+        if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+        {
+            sVector = sVector.Substring(1, sVector.Length - 2);
+        }
+
+        // split the items
+        string[] sArray = sVector.Split(',');
+
+        // store as a Vector3
+        Vector3 result = new Vector3(
+            float.Parse(sArray[0]),
+            float.Parse(sArray[1]),
+            float.Parse(sArray[2]));
+
+        return result;
+    }
 }

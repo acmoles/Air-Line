@@ -98,17 +98,17 @@ public class WaypointManager : MonoBehaviour
         visual.SetColor(brushStyles.BrushColor);
 
         // If the waypoint before the one we just added is played
-        if ((points[points.Count - 2] != null && points[points.Count - 2].played) || points.Count == 1)
-        {
-            // The one we just added is next to play
-            if (logging) Debug.Log("New point is active");
-            point.visual.SetNext(points.Count - 1);
-        }
+        // if ((points[points.Count - 2] != null && points[points.Count - 2].played) || points.Count == 1)
+        // {
+        //     // The one we just added is next to play
+        //     if (logging) Debug.Log("New point is active");
+        //     point.visual.SetNext(points.Count - 1);
+        // }
 
         point.visual.AnimateIn();
 
         // For networked fake waypoint manager
-        if (networkingSingleton != null)
+        if (!fakeManager && networkingSingleton != null)
         {
             networkingSingleton.OnPlaceFakeWaypoint(position);
         }
@@ -132,7 +132,7 @@ public class WaypointManager : MonoBehaviour
             yield return PlayPoint(turtle, i);
 
             // For networked fake waypoint manager
-            if (networkingSingleton != null)
+            if (!fakeManager && networkingSingleton != null)
             {
                 networkingSingleton.OnPlayFakeWaypoint();
             }
