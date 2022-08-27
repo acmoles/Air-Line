@@ -176,7 +176,7 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
         if (logging) Debug.Log("Sending play next fake waypoint");
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent(playFakeWaypointEventCode, "", raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(playFakeWaypointEventCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
 
     private WaypointPosition cachedIncomingMessage = new WaypointPosition();
