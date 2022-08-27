@@ -187,31 +187,41 @@ public class NetworkingManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             return;
         }
-        string message = (string)photonEvent.CustomData;
-        if (logging) Debug.Log("Event message: " + message);
 
         byte eventCode = photonEvent.Code;
         if (eventCode == brushStylesChangedEventCode)
         {
+            Debug.Log(photonEvent.CustomData);
+            string message = (string)photonEvent.CustomData;
+            if (logging) Debug.Log("Event message: " + message);
             myBrushStyles.DeSerializeBrushStyles(message);
             if (logging) Debug.Log("Incoming brush styles networked: " + message);
         }
 
         if (eventCode == anchorIdEventCode)
         {
+            Debug.Log(photonEvent.CustomData);
+            string message = (string)photonEvent.CustomData;
+            if (logging) Debug.Log("Event message: " + message);
             cloudAnchorToResolveEvent.Trigger(message);
             if (logging) Debug.Log("Incoming cloud anchor ID: " + message);
         }
 
         if (eventCode == placeFakeWaypointEventCode)
         {
+            Debug.Log(photonEvent.CustomData);
+            string message = (string)photonEvent.CustomData;
+            if (logging) Debug.Log("Event message: " + message);
             JsonUtility.FromJsonOverwrite(message, cachedIncomingMessage);
             if (waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.AddPoint(cachedIncomingMessage.position);
-            if (logging) Debug.Log("Incoming new fake waypoint: " + cachedIncomingMessage.position.x);
+            if (logging) Debug.Log("Incoming new fake waypoint: " + cachedIncomingMessage.position);
         }
 
         if (eventCode == playFakeWaypointEventCode)
         {
+            Debug.Log(photonEvent.CustomData);
+            string message = (string)photonEvent.CustomData;
+            if (logging) Debug.Log("Event message: " + message);
             if (waypointSingleton.FakeManager != null) waypointSingleton.FakeManager.NextWaypointSingle();
             if (logging) Debug.Log("Incoming play last fake waypoint");
         }
