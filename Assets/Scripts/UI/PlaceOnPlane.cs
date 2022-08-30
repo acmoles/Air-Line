@@ -94,7 +94,7 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
             {
                 if (logging) Debug.Log("Creating anchor.");
 
-                spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                spawnedObject = Instantiate(placedPrefab, hitPose.position, hitPose.rotation);
 
                 // Make sure the new GameObject has an ARAnchor component
                 anchor = spawnedObject.GetComponent<ARAnchor>();
@@ -110,8 +110,6 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
 
                 // Queues anchor for hosting
                 ARCloudAnchorManager.Instance.QueueAnchor(anchor);
-
-
 
                 //Prevent re-placement after first place
                 inputManager.OnEndTouch -= AddObject;
