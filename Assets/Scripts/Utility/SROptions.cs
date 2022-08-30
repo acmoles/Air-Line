@@ -3,6 +3,9 @@ using UnityEngine;
 
 public partial class SROptions
 {
+    private UIManager cachedManager = null;
+    private PlaceOnPlane cachedPlacement = null;
+
     [Category("Utilities")]
     public void ClearPlayerPrefs()
     {
@@ -14,26 +17,26 @@ public partial class SROptions
     public void ToggleUI()
     {
         Debug.Log("Toggling UI");
-        UIManager ui = GameObject.FindObjectOfType<UIManager>();
-        if (ui == null) { Debug.LogError("UI manager not found!"); return; }
-        ui.gameObject.SetActive(!ui.gameObject.activeSelf);
+        if (cachedManager == null) cachedManager = GameObject.FindObjectOfType<UIManager>();
+        if (cachedManager == null) { Debug.LogError("UI manager not found!"); return; }
+        cachedManager.gameObject.SetActive(!cachedManager.gameObject.activeSelf);
     }
 
     [Category("Utilities")]
     public void ForceAnchorPlacement()
     {
         Debug.Log("Placing anchor");
-        PlaceOnPlane placement = GameObject.FindObjectOfType<PlaceOnPlane>();
-        if (placement == null) { Debug.LogError("PlaceOnPlane not found!"); return; }
-        placement.SetAllowPlacement(true);
-        placement.AddObject(new Vector2(Screen.width / 2, Screen.height / 2), Time.time);
+        if (cachedPlacement == null) cachedPlacement = GameObject.FindObjectOfType<PlaceOnPlane>();
+        if (cachedPlacement == null) { Debug.LogError("PlaceOnPlane not found!"); return; }
+        cachedPlacement.SetAllowPlacement(true);
+        cachedPlacement.AddObject(new Vector2(Screen.width / 2, Screen.height / 2), Time.time);
     }
 
     [Category("Utilities")]
     public void RemovePlacements()
     {
-        PlaceOnPlane placement = GameObject.FindObjectOfType<PlaceOnPlane>();
-        if (placement == null) { Debug.LogError("PlaceOnPlane not found!"); return; }
-        placement.RemovePlacements();
+        if (cachedPlacement == null) cachedPlacement = GameObject.FindObjectOfType<PlaceOnPlane>();
+        if (cachedPlacement == null) { Debug.LogError("PlaceOnPlane not found!"); return; }
+        cachedPlacement.RemovePlacements();
     }
 }

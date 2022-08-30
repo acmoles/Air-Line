@@ -121,6 +121,13 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
             //     spawnedObject.transform.position = hitPose.position;
             // }
         }
+        else
+        {
+            Debug.Log("Not planes hit");
+#if UNITY_EDITOR
+            spawnedObject = Instantiate(placedPrefab, Vector3.zero, Quaternion.identity);
+#endif
+        }
     }
 
     public void SetAllowPlacement(bool isAllowed)
