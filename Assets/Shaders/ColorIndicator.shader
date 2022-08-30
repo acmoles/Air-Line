@@ -52,10 +52,6 @@ Shader "Unlit/ColorIndicator"
                                     dot(dist, dist) * 4.0);
             }
 
-            float circularGradient(float2 samplePosition, float radius){
-                return length(samplePosition) - radius;
-            }
-
             struct appdata
             {
                 float4 vertexColor: COLOR; // Vertex color
