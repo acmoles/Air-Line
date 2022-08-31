@@ -268,6 +268,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual1
       objectReference: {fileID: 0}
+    - target: {fileID: 8163778188299079876, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724960778331203699, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2367141158710124385, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e12fabb17aa4440b1a9dde8d7a8c3c3a, type: 3}

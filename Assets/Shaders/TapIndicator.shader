@@ -4,6 +4,7 @@ Shader "Unlit/TapIndicator"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Border("Border Width", float) = 0.2
+        _Color ("Tint", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -13,7 +14,7 @@ Shader "Unlit/TapIndicator"
         Lighting Off
         ZWrite Off
         ZTest Always
-        Blend One OneMinusSrcAlpha
+        Blend DstColor OneMinusSrcAlpha
 
         Pass
         {
@@ -48,12 +49,13 @@ Shader "Unlit/TapIndicator"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             uniform float _Border;
+            uniform fixed4 _Color;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.vertexColor = v.vertexColor;
+                o.vertexColor = v.vertexColor * _Color;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }

@@ -37,9 +37,9 @@ Material:
     - _Size: 8
     - _SpecularAmount: 0.32
     m_Colors:
-    - _Color: {r: 0.63529414, g: 0.34901962, b: 1, a: 1}
-    - _ColorBackground: {r: 0.49791312, g: 0.08962262, b: 1, a: 1}
-    - _ColorSecondary: {r: 0.976716, g: 0.2688679, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.49019608, b: 0, a: 1}
+    - _ColorBackground: {r: 1, g: 0.4633488, b: 0.1273585, a: 1}
+    - _ColorSecondary: {r: 0.8745098, g: 1, b: 0.015686275, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

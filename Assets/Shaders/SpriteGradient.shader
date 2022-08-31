@@ -1,7 +1,8 @@
 Shader "Custom/SpriteGradient" {
 Properties {
     [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-    _Color ("Left Color", Color) = (1,1,1,1)
+    _Color ("Tint", Color) = (1,1,1,1)
+    _Color1 ("Left Color", Color) = (1,1,1,1)
     _Color2 ("Right Color", Color) = (1,1,1,1)
     _Scale ("Scale", Float) = 1
 
@@ -52,6 +53,7 @@ SubShader {
     #include "UnityUI.cginc"
 
     fixed4 _Color;
+    fixed4 _Color1;
     fixed4 _Color2;
     fixed  _Scale;
     sampler2D _MainTex;
@@ -82,13 +84,14 @@ SubShader {
         UNITY_SETUP_INSTANCE_ID(v);
         UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
         o.position = UnityObjectToClipPos (v.vertex);
-        o.color = lerp(_Color2,_Color, v.texcoord.y );
+        o.color = lerp(_Color2,_Color1, v.texcoord.y ) * _Color;
         o.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
         return o;
     }
 
     float4 frag (v2f i) : COLOR {
         half4 color = (tex2D(_MainTex, i.texcoord) + _TextureSampleAdd) * i.color;
+        //color.rgb *= color.a;
 
         #ifdef UNITY_UI_ALPHACLIP
         clip (color.a - 0.001);

@@ -17,8 +17,8 @@ public class ToggleButtonVisual : ToggleResponder
     [SerializeField]
     private StringEvent toggleEvent = null;
 
-    [SerializeField]
-    private float transitionTime = 0.4f;
+    // [SerializeField]
+    // private float transitionTime = 0.4f;
 
 
     //TODO animation

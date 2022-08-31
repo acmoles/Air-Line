@@ -23,6 +23,18 @@ public partial class SROptions
     }
 
     [Category("Utilities")]
+    public void ToggleVisibleUI()
+    {
+        Debug.Log("Toggling visible UI");
+        if (cachedManager == null) cachedManager = GameObject.FindObjectOfType<UIManager>();
+        if (cachedManager == null) { Debug.LogError("UI manager not found!"); return; }
+        GameObject bottomButtons = GetChildGameObject(cachedManager.gameObject, "BottomButtons");
+        GameObject topButtons = GetChildGameObject(cachedManager.gameObject, "TopButtons");
+        bottomButtons.SetActive(!bottomButtons.activeSelf);
+        topButtons.SetActive(!topButtons.activeSelf);
+    }
+
+    [Category("Utilities")]
     public void ForceAnchorPlacement()
     {
         Debug.Log("Placing anchor");
@@ -38,5 +50,12 @@ public partial class SROptions
         if (cachedPlacement == null) cachedPlacement = GameObject.FindObjectOfType<PlaceOnPlane>();
         if (cachedPlacement == null) { Debug.LogError("PlaceOnPlane not found!"); return; }
         cachedPlacement.RemovePlacements();
+    }
+
+    static public GameObject GetChildGameObject(GameObject fromGameObject, string withName)
+    {
+        Transform[] transforms = fromGameObject.transform.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in transforms) if (t.gameObject.name == withName) return t.gameObject;
+        return null;
     }
 }
