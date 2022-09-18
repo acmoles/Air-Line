@@ -92,8 +92,19 @@ public class WaypointManager : MonoBehaviour
         points.Add(point);
         if (!fakeManager && updatedEvent != null) updatedEvent.Trigger("update");
 
-        WaypointVisual visual = Instantiate(waypointVisual, position, Quaternion.identity);
-        visual.transform.parent = transform;
+        WaypointVisual visual = Instantiate(waypointVisual, Vector3.zero, Quaternion.identity);
+        visual.transform.parent = waypointSingleton.LocalManager.transform;
+
+        if (fakeManager)
+        {
+            // use local position
+            visual.transform.localPosition = position;
+        }
+        else
+        {
+            visual.transform.position = position;
+        }
+
         point.visual = visual;
         visual.SetColor(brushStyles.BrushColor);
 
@@ -112,7 +123,8 @@ public class WaypointManager : MonoBehaviour
         // For networked fake waypoint manager
         if (!fakeManager && networkingSingleton != null)
         {
-            networkingSingleton.OnPlaceFakeWaypoint(position);
+            // Send local position of waypoint visual
+            networkingSingleton.OnPlaceFakeWaypoint(visual.transform.localPosition);
         }
     }
 

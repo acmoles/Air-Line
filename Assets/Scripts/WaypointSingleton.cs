@@ -15,11 +15,16 @@ public class WaypointSingleton : Singleton<WaypointSingleton>
         {
             if (managers.Count > 0)
             {
-                return managers[0];
+                for (int i = 0; i < managers.Count; i++)
+                {
+                    if (!managers[i].FakeManager) return managers[i];
+                }
+                if (logging) Debug.Log("No local managers added to singleton, not placing waypoint.");
+                return null;
             }
             else
             {
-                if(logging) Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
+                if (logging) Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
                 return null;
             }
         }
@@ -33,14 +38,14 @@ public class WaypointSingleton : Singleton<WaypointSingleton>
             {
                 for (int i = 0; i < managers.Count; i++)
                 {
-                    if(managers[i].FakeManager) return managers[i];
+                    if (managers[i].FakeManager) return managers[i];
                 }
-                if(logging) Debug.Log("No fake managers added to singleton, not placing waypoint.");
+                if (logging) Debug.Log("No fake managers added to singleton, not placing waypoint.");
                 return null;
             }
             else
             {
-                if(logging) Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
+                if (logging) Debug.Log("No waypoint managers added to singleton, not placing waypoint.");
                 return null;
             }
         }
