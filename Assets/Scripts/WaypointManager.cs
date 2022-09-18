@@ -194,7 +194,7 @@ public class WaypointManager : MonoBehaviour
         Gizmos.color = Color.red;
         for (int i = 0; i < points.Count; i++)
         {
-            Gizmos.DrawWireSphere(points[i].position, .2f);
+            Gizmos.DrawWireSphere(points[i].position, .05f);
         }
     }
 

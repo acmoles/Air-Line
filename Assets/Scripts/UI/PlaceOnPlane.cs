@@ -125,7 +125,10 @@ public class PlaceOnPlane : Singleton<PlaceOnPlane>
         {
             Debug.Log("Not planes hit");
 #if UNITY_EDITOR
-            spawnedObject = Instantiate(placedPrefab, Vector3.zero, Quaternion.identity);
+            if (spawnedObject == null)
+            {
+                spawnedObject = Instantiate(placedPrefab, Vector3.zero, Quaternion.identity);
+            }
 #endif
         }
     }
